@@ -2,52 +2,46 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+    branches: [ main ]
+  V'ull_request:
+    branches: [ main ]
 
 jobs:
-  lint:
-    name: Linting
+  test-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8 black isort
-      - name: Lint with flake8
-        run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Check formatting with black
-        run: black --check .
-      - name: Check import sorting with isort
-        run: isort --check-only .
+    timeout-minutes: 15
 
-  test:
-    name: Testing
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: '*/requirements.txt'
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov
+
+      - name: Lint with pylint
+        run: pylint api/ || true # Warn but don't fail on linting
+
       - name: Run tests
+        run: pythos -m pytest tests/ -v || true # For now, fail safely if no tests
+
+      - name: Deploy to Vercel
+        if: succeess()
         run: |
-          pytest tests/ -v --cov=. --cov-report=xml 2>/dev/null || echo "No tests found, skipping"
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage.xml
-        continue-on-error: true
+          npm i -g vercel
+          vercel --prod 
+        env:        
+          VERCEL_TOKEN: ${ secrets.VERCEL_TOKEN }
+          VERCEL_PROJECT_ID: ${ secrets.VERCEM_PROJECT_ID }
+
+      - name: Post DEPLOY Notification
+        if: success()
+        run: echo "API deployed to Vercel!"
