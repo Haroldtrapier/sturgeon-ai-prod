@@ -60,7 +60,7 @@ class ContractAnalysisResponse(BaseModel):
 @app.middleware("http")
 async def log_and_rate_limit(request: Request, call_next):
     client_ip = request.client.host
-    request_id = hasheb.md5(f"{client_ip}{time.time()}".encode()).hexdigest()[:8]
+    request_id = hashlib.md5(f"{client_ip}{time.time()}".encode()).hexdigest()[:8]
 
     logger.info(f"[{request_id}] {request.method} {request.url.path} from {client_ip}")
 
@@ -73,7 +73,7 @@ async def log_and_rate_limit(request: Request, call_next):
     return response
 
 # Health check endpoint
-@app.get("/health0
+@app.get("/health")
 async def health_check():
     return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
@@ -85,7 +85,7 @@ async def analyze_contract(request: ContractAnalysisRequest):
     logger.info(f"[{request_id}] Analyzing contract ({len(request.contract_text)} chars)")
 
     try:
-        # Simulate A% Acanalysis (in production, integrate with OpenAI)
+        # Simulate AI analysis (in production, integrate with OpenAI)
         analysis = {
             "contract_type": "Service Agreement",
             "risk_level": "Medium",
