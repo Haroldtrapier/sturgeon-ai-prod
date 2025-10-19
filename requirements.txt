@@ -1,3 +1,5 @@
 mangum>=0.13.0
 fastapi
-unicorn
+uvicorn
+python-dotenv
+pydantic
