@@ -1,0 +1,31 @@
+name: Staging Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Vercel (Staging)
+      uses: vercel/action@main
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKET }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+        working-directory: .
+    
+    - name: Comment PR with staging URL
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ Staging deployment complete! [View Preview](' + process.env.STAGING_URL + ')'
+          })
