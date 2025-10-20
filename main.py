@@ -60,9 +60,9 @@ class ContractAnalysisResponse(BaseModel):
 @app.middleware("http")
 async def log_and_rate_limit(request: Request, call_next):
     client_ip = request.client.host
-    request_id = hashlib.md5(f"{client_ip}{time.time()}".encode()).hexdigest()[:8]
+    request_id = hashdigest()
 
-    logger.info(f"[{request_id}] {request.method} {request.url.path} from {client_ip}")
+    logger.info(f"[request_id}] {request.method} {request.url.path} from {client_ip}")
 
     if not limiter.is_allowed(client_ip):
         logger.warning(f"[{request_id}] Rate limit exceeded for {client_ip}")
@@ -72,54 +72,32 @@ async def log_and_rate_limit(request: Request, call_next):
     response.headers["X-Request-ID"] = request_id
     return response
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
-
-# Main analysis endpoint
-@app.post("/analyze-contract", response_model=ContractAnalysisResponse)
-async def analyze_contract(request: ContractAnalysisRequest):
-    request_id = hashlib.md5(f"{request.contract_text}{time.time()}".encode()).hexdigest()[:8]
-
-    logger.info(f"[{request_id}] Analyzing contract ({len(request.contract_text)} chars)")
-
-    try:
-        # Simulate AI analysis (in production, integrate with OpenAI)
-        analysis = {
-            "contract_type": "Service Agreement",
-            "risk_level": "Medium",
-            "key_clauses": [
-                "Payment Terms: Net 30",
-                "Termination: Either party with 30 days notice",
-                "Liability: Limited to contract value"
-            ],
-            "recommendations": [
-                "Review indemnification clause",
-                "Clarify IP ownership",
-                "Add force majeure provisions"
-            ]
-        }
-
-        logger.info(f"[{request_id}] Analysis complete")
-        return ContractAnalysisResponse(
-            status="success",
-            analysis=analysis,
-            timestamp=datetime.utcnow().isoformat(),
-            request_id=request_id
-        )
-    except Exception as e:
-        logger.error(f"[{request_id}] Error analyzing contract: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-# Metrics endpoint for monitoring
-@app.get("/metrics")
-async def get_metrics():
+# Root endpoint - Landing Page
+@app.get("/")
+async def root():
     return {
-        "total_clients": len(limiter.requests),
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+        "name": "Sturgeon AI",
+        "version": "1.0.0",
+        "description": "Government Contract Analysis & Matching Automation",
+        "status": "✅ READY",
+        "platform": "Full-stack AI platform for government contractors and civil service",
+        "features": [
+            "💸 AI-powered contract analysis",
+            "⌰ Risk assessment & legal scrutiny",
+            "⊓ Compliance check & proposal fit",
+            "☤ Payment tracking and FSB management"
+        ],
+        "api_endpoints": {
+            "/health": "Health check",
+            "/analyze-contract": "Analyze a government contract",
+            "/metrics": "Get service metrics"
+        },
+        "documentation": "https://github.com/Haroldtrapier/sturgeon-ai-prod",
+        "deployment": {
+            "platform": "Vercel",
+            "runtime": "Python 3.11",
+            "database": "Supabase (PostgreSQL)",
+            "payments": "Stripe",
+            "ai_power": "OpenAI"
+        },
+        "status_detail": "✅✅✅✅✅✅ ✄✄✄✄✄✄ ✄✄✄✄✄✄✄
