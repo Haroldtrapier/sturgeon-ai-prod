@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
@@ -59,10 +59,10 @@ class ContractAnalysisResponse(BaseModel):
 # Middleware for request logging and rate limiting
 @app.middleware("http")
 async def log_and_rate_limit(request: Request, call_next):
-    client_ip = request.client.host
-    request_id = hashdigest()
+    client_ip = request.client.host if request.client else "unknown"
+    request_id = hashlib.md5(str(time.time()).encode()).hexdigest()
 
-    logger.info(f"[request_id}] {request.method} {request.url.path} from {client_ip}")
+    logger.info(f"[{request_id}] {request.method} {request.url.path} from {client_ip}")
 
     if not limiter.is_allowed(client_ip):
         logger.warning(f"[{request_id}] Rate limit exceeded for {client_ip}")
@@ -99,5 +99,49 @@ async def root():
             "database": "Supabase (PostgreSQL)",
             "payments": "Stripe",
             "ai_power": "OpenAI"
-        },
-        "status_detail": "✅✅✅✅✅✅ ✄✄✄✄✄✄ ✄✄✄✄✄✄✄
+        }
+    }
+
+# Health check endpoint
+@app.get("/health")
+async def health():
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "version": "1.0.0"
+    }
+
+# Metrics endpoint
+@app.get("/metrics")
+async def metrics():
+    return {
+        "status": "available",
+        "uptime": "active",
+        "api_version": "1.0.0",
+        "ready": True
+    }
+
+# Analysis endpoint
+@app.post("/analyze-contract")
+async def analyze_contract(request: ContractAnalysisRequest):
+    try:
+        analysis_result = {
+            "contract_summary": "Contract analysis placeholder",
+            "key_terms": [],
+            "risk_factors": [],
+            "compliance_status": "pending"
+        }
+        return ContractAnalysisResponse(
+            status="success",
+            analysis=analysis_result,
+            timestamp=datetime.now().isoformat(),
+            request_id=hashlib.md5(str(time.time()).encode()).hexdigest()
+        )
+    except Exception as e:
+        logger.error(f"Error analyzing contract: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Vercel entry point
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
