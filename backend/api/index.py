@@ -1,5 +1,5 @@
 from mangum import Mangum
-from main import app
+from backend.main import app
 
 # Vercel serverless handler
 handler = Mangum(app)
