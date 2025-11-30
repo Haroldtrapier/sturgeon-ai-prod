@@ -1,11 +1,11 @@
 import sys
 import os
 
-# Add parent directory to Python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add root directory to Python path for Vercel serverless
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from mangum import Mangum
-from main import app
+from backend.main import app
 
 # Vercel serverless handler
 handler = Mangum(app)
