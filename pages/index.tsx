@@ -1,37 +1,13 @@
-import { useEffect, useState } from 'react'
-
-interface ApiStatus {
-  service: string
-  version: string
-  status: string
-  endpoints: Record<string, string>
-}
-
 export default function Home() {
-  const [apiStatus, setApiStatus] = useState<ApiStatus | null>(null)
-
-  useEffect(() => {
-    fetch('/api')
-      .then(res => res.json())
-      .then(data => setApiStatus(data))
-      .catch(() => {
-        // Fallback if API is not available
-        setApiStatus({
-          service: 'Sturgeon AI API',
-          version: '2.0.0',
-          status: 'operational',
-          endpoints: {
-            opportunities: '/api/opportunities/search',
-            grants: '/api/grants/search',
-            analysis: '/api/ai/analyze-contract',
-            proposals: '/api/ai/generate-proposal',
-            matching: '/api/ai/match-opportunities',
-            documents: '/api/documents/upload',
-            health: '/api/health'
-          }
-        })
-      })
-  }, [])
+  const endpoints = {
+    opportunities: '/api/opportunities/search',
+    grants: '/api/grants/search',
+    analysis: '/api/ai/analyze-contract',
+    proposals: '/api/ai/generate-proposal',
+    matching: '/api/ai/match-opportunities',
+    documents: '/api/documents/upload',
+    health: '/api/health'
+  }
 
   return (
     <div style={{ 
@@ -47,24 +23,20 @@ export default function Home() {
         Government Contracting & Grants Ecosystem
       </p>
 
-      {apiStatus && (
-        <div style={{
-          background: '#f7fafc',
-          borderRadius: '8px',
-          padding: '24px',
-          marginBottom: '24px'
-        }}>
-          <h2 style={{ color: '#2d3748', marginTop: 0 }}>API Status</h2>
-          <p>
-            <strong>Service:</strong> {apiStatus.service}<br />
-            <strong>Version:</strong> {apiStatus.version}<br />
-            <strong>Status:</strong>{' '}
-            <span style={{ color: apiStatus.status === 'operational' ? '#38a169' : '#e53e3e' }}>
-              {apiStatus.status}
-            </span>
-          </p>
-        </div>
-      )}
+      <div style={{
+        background: '#f7fafc',
+        borderRadius: '8px',
+        padding: '24px',
+        marginBottom: '24px'
+      }}>
+        <h2 style={{ color: '#2d3748', marginTop: 0 }}>API Status</h2>
+        <p>
+          <strong>Service:</strong> Sturgeon AI API<br />
+          <strong>Version:</strong> 2.0.0<br />
+          <strong>Status:</strong>{' '}
+          <span style={{ color: '#38a169' }}>operational</span>
+        </p>
+      </div>
 
       <div style={{
         background: '#edf2f7',
@@ -73,7 +45,7 @@ export default function Home() {
       }}>
         <h2 style={{ color: '#2d3748', marginTop: 0 }}>Available Endpoints</h2>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {apiStatus?.endpoints && Object.entries(apiStatus.endpoints).map(([name, path]) => (
+          {Object.entries(endpoints).map(([name, path]) => (
             <li key={name} style={{ marginBottom: '8px' }}>
               <strong>{name}:</strong>{' '}
               <code style={{ 
