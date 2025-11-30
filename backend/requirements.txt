@@ -4,3 +4,4 @@ uvicorn
 python-dotenv
 pydantic
 httpx
+mangum>=0.17.0
