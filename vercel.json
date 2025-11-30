@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/((?!((?:\\/|(^.*)/)?(api|_next|_vercel|static))).*)",
+      "source": "/api/(.*)",
+      "destination": "/backend/api/index.py"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/backend/api/index.py"
     }
   ]
