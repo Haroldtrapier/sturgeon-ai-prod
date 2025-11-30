@@ -1,14 +1,8 @@
 {
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/api/index.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/((?!((?:\\/|(^.*)/)?(api|_next|_vercel|static))).*)",
-      "dest": "/backend/api/index.py"
+      "source": "/((?!((?:\\/|(^.*)/)?(api|_next|_vercel|static))).*)",
+      "destination": "/backend/api/index.py"
     }
   ]
 }
