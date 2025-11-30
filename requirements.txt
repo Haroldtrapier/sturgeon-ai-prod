@@ -1,0 +1,6 @@
+mangum>=0.13.0
+fastapi
+uvicorn
+python-dotenv
+pydantic
+httpx
