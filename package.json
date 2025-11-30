@@ -1,8 +1,23 @@
 {
-  "name": "sturgeon-ai-prod",
-  "version": "1.0.0",
+  "name": "sturgeon-ai",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "echo Skipping Node build"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   }
 }
