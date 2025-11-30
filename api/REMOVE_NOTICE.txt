@@ -1,0 +1,1 @@
+Please only add js (Node.js) api endpoints.
