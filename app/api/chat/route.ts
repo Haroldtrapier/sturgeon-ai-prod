@@ -7,7 +7,16 @@ Short, clear answers; focus on government contracting, Sturgeon features, and ne
 `;
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => ({}));
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 },
+    );
+  }
+
   const message = (body.message as string) ?? "";
 
   if (!message.trim()) {
@@ -17,6 +26,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const reply = await chatCompletion(SYSTEM_CHAT, message);
-  return NextResponse.json({ reply });
+  try {
+    const reply = await chatCompletion(SYSTEM_CHAT, message);
+    return NextResponse.json({ reply });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json(
+      { error: `Chat completion failed: ${errorMessage}` },
+      { status: 500 },
+    );
+  }
 }

@@ -44,5 +44,10 @@ export async function chatCompletion(
   }
 
   const data: OpenAIResponse = await response.json();
+  
+  if (!data.choices || data.choices.length === 0) {
+    throw new Error("OpenAI API returned no response");
+  }
+  
   return data.choices[0]?.message?.content ?? "";
 }
