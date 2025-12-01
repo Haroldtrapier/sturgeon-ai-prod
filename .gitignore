@@ -20,7 +20,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ - commented out to allow TypeScript lib files
 lib64/
 parts/
 sdist/
