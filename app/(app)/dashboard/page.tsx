@@ -3,7 +3,11 @@
 import useSWR from "swr";
 import { Card } from "@/components/ui/Card";
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = (url: string) => 
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error('Failed to fetch');
+    return r.json();
+  });
 
 export default function DashboardPage() {
   const { data: wins } = useSWR("/api/wins", fetcher);

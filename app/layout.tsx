@@ -1,4 +1,5 @@
 import React from "react";
+import "./globals.css";
 
 export default function RootLayout({
   children,
@@ -7,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-slate-900 min-h-screen p-8">{children}</body>
     </html>
   );
 }
