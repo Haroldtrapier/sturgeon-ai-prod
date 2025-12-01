@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,64 +15,64 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <h2 style={{ marginBottom: '30px' }}>Sturgeon AI</h2>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>
               Dashboard
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/proposals" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/proposals" style={{ color: 'white', textDecoration: 'none' }}>
               Proposals
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/contractmatch" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/contractmatch" style={{ color: 'white', textDecoration: 'none' }}>
               Contract Match
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/documents" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/documents" style={{ color: 'white', textDecoration: 'none' }}>
               Documents
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/capability" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/capability" style={{ color: 'white', textDecoration: 'none' }}>
               Capability
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/certifications" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/certifications" style={{ color: 'white', textDecoration: 'none' }}>
               Certifications
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/wins" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/wins" style={{ color: 'white', textDecoration: 'none' }}>
               Wins
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/opportunities" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/opportunities" style={{ color: 'white', textDecoration: 'none' }}>
               Opportunities
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/alerts" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/alerts" style={{ color: 'white', textDecoration: 'none' }}>
               Alerts
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/marketplaces" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/marketplaces" style={{ color: 'white', textDecoration: 'none' }}>
               Marketplaces
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/billing" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/billing" style={{ color: 'white', textDecoration: 'none' }}>
               Billing
-            </a>
+            </Link>
           </li>
           <li style={{ marginBottom: '10px' }}>
-            <a href="/settings" style={{ color: 'white', textDecoration: 'none' }}>
+            <Link href="/settings" style={{ color: 'white', textDecoration: 'none' }}>
               Settings
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
