@@ -21,7 +21,16 @@ Use professional but plain language. Don't invent pricing.
 `;
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => ({}));
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 },
+    );
+  }
+
   const rawRequirements = (body.rawRequirements as string) ?? "";
   const title = (body.title as string) ?? "Untitled Opportunity";
   const companyProfile =

@@ -4,6 +4,9 @@ let openaiClient: OpenAI | null = null;
 
 function getOpenAI(): OpenAI {
   if (!openaiClient) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY environment variable is not configured");
+    }
     openaiClient = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -24,5 +27,9 @@ export async function chatCompletion(
     ],
   });
 
-  return response.choices[0]?.message?.content ?? "";
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("OpenAI API returned no content in response");
+  }
+  return content;
 }
