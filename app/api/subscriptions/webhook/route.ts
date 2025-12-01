@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { stripe } from "@/lib/stripe";
-import { prisma } from "@/lib/db";
+import { stripe } from "@/src/lib/stripe";
+import { prisma } from "@/src/lib/db";
 
 async function rawBody(req: Request): Promise<Buffer> {
   const arr = await req.arrayBuffer();
