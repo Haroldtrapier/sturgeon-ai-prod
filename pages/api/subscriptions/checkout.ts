@@ -28,8 +28,8 @@ export default async function handler(
     }
 
     // In a real implementation, this would create a Stripe checkout session
-    // For now, we'll return a mock URL
-    const mockCheckoutUrl = `https://checkout.stripe.com/pay/${plan}`;
+    // For now, we'll return a mock URL for development/testing
+    const mockCheckoutUrl = `https://example.com/mock-checkout/${plan}`;
 
     return res.status(200).json({ url: mockCheckoutUrl });
   } catch (error) {
