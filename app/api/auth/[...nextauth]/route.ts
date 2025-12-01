@@ -15,8 +15,13 @@ const handler = NextAuth({
       from: process.env.EMAIL_FROM,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: "/signin",
+    error: "/signin",
   },
 });
 
