@@ -34,9 +34,8 @@ export async function requirePlan(
  * Get the user's current plan.
  * In a real implementation, this would fetch from a database.
  */
-async function getUserPlan(userId: string): Promise<PlanType> {
+async function getUserPlan(_userId: string): Promise<PlanType> {
   // Placeholder: In production, fetch from database
   // For now, return "free" as default
-  void userId; // Acknowledge the parameter to avoid unused variable warning
   return "free";
 }

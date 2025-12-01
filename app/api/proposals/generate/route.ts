@@ -17,7 +17,23 @@ export async function POST(request: Request) {
   }
 
   // Parse the request body
-  const body = await request.json();
+  let body: { opportunity_id?: string };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 }
+    );
+  }
+
+  // Validate required fields
+  if (!body.opportunity_id || typeof body.opportunity_id !== "string") {
+    return NextResponse.json(
+      { error: "opportunity_id is required and must be a string" },
+      { status: 400 }
+    );
+  }
 
   // Generate proposal (placeholder implementation)
   return NextResponse.json({
