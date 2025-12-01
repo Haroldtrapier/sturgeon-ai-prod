@@ -16,7 +16,12 @@ Use concise, federal-market language.
 `;
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => ({}));
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
 
   const companyName = (body.companyName as string) ?? "Your Company";
   const naics = (body.naics as string[]) ?? [];

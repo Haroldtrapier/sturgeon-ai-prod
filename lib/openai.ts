@@ -4,9 +4,11 @@ let openaiClient: OpenAI | null = null;
 
 function getOpenAIClient(): OpenAI {
   if (!openaiClient) {
-    openaiClient = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error("OPENAI_API_KEY environment variable is not set");
+    }
+    openaiClient = new OpenAI({ apiKey });
   }
   return openaiClient;
 }
@@ -24,5 +26,9 @@ export async function chatCompletion(
     ],
   });
 
-  return response.choices[0]?.message?.content ?? "";
+  const content = response.choices[0]?.message?.content;
+  if (!content) {
+    throw new Error("OpenAI API returned no content");
+  }
+  return content;
 }
