@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import mammoth from "mammoth";
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
+
 async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   const pdfParse = (await import("pdf-parse")).default;
   const data = await pdfParse(buffer);
@@ -27,19 +29,33 @@ async function extractText(file: File): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData();
-  const file = formData.get("file");
+  try {
+    const formData = await req.formData();
+    const file = formData.get("file");
 
-  if (!(file instanceof File)) {
+    if (!(file instanceof File)) {
+      return NextResponse.json(
+        { error: "file is required" },
+        { status: 400 },
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: "file size exceeds 10MB limit" },
+        { status: 400 },
+      );
+    }
+
+    const text = await extractText(file);
+    return NextResponse.json({
+      filename: file.name,
+      textExcerpt: text.slice(0, 1000),
+    });
+  } catch (error) {
     return NextResponse.json(
-      { error: "file is required" },
-      { status: 400 },
+      { error: "failed to extract text from file" },
+      { status: 500 },
     );
   }
-
-  const text = await extractText(file);
-  return NextResponse.json({
-    filename: file.name,
-    textExcerpt: text.slice(0, 1000),
-  });
 }
