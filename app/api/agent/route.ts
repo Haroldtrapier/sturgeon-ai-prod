@@ -18,6 +18,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const answer = await chatCompletion(SYSTEM_PROMPT, message);
-  return NextResponse.json({ response: answer });
+  try {
+    const answer = await chatCompletion(SYSTEM_PROMPT, message);
+    return NextResponse.json({ response: answer });
+  } catch (error) {
+    console.error("Error calling OpenAI:", error);
+    return NextResponse.json(
+      { error: "Failed to generate response" },
+      { status: 500 },
+    );
+  }
 }
