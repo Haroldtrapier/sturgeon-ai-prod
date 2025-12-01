@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// For SQLite, use: DATABASE_URL="file:./dev.db"
+// For PostgreSQL, use: DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Placeholder model - add your models here
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
