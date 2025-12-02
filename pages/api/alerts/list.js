@@ -1,38 +1,40 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
 const ALERTS_FILE = path.join(process.cwd(), 'data', 'alerts.json');
 
 // Ensure data directory exists
-function ensureDataDir() {
+async function ensureDataDir() {
   const dataDir = path.join(process.cwd(), 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  try {
+    await fs.mkdir(dataDir, { recursive: true });
+  } catch (error) {
+    // Ignore if already exists
   }
 }
 
 // Load alerts from file
-function loadAlerts() {
-  ensureDataDir();
-  if (!fs.existsSync(ALERTS_FILE)) {
-    return [];
-  }
+async function loadAlerts() {
+  await ensureDataDir();
   try {
-    const data = fs.readFileSync(ALERTS_FILE, 'utf-8');
+    const data = await fs.readFile(ALERTS_FILE, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
     console.error('Error reading alerts file:', error);
     return [];
   }
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const alerts = loadAlerts();
+    const alerts = await loadAlerts();
     res.status(200).json({ savedSearches: alerts });
   } catch (error) {
     console.error('Error loading alerts:', error);

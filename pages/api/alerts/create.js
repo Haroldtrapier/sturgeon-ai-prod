@@ -1,39 +1,54 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { randomUUID } from 'crypto';
 
 const ALERTS_FILE = path.join(process.cwd(), 'data', 'alerts.json');
+const MAX_NAME_LENGTH = 200;
+const MAX_QUERY_LENGTH = 500;
+const MAX_MARKETPLACE_LENGTH = 50;
 
 // Ensure data directory exists
-function ensureDataDir() {
+async function ensureDataDir() {
   const dataDir = path.join(process.cwd(), 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  try {
+    await fs.mkdir(dataDir, { recursive: true });
+  } catch (error) {
+    // Ignore if already exists
   }
 }
 
 // Load alerts from file
-function loadAlerts() {
-  ensureDataDir();
-  if (!fs.existsSync(ALERTS_FILE)) {
-    return [];
-  }
+async function loadAlerts() {
+  await ensureDataDir();
   try {
-    const data = fs.readFileSync(ALERTS_FILE, 'utf-8');
+    const data = await fs.readFile(ALERTS_FILE, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
     console.error('Error reading alerts file:', error);
     return [];
   }
 }
 
 // Save alerts to file
-function saveAlerts(alerts) {
-  ensureDataDir();
-  fs.writeFileSync(ALERTS_FILE, JSON.stringify(alerts, null, 2), 'utf-8');
+async function saveAlerts(alerts) {
+  await ensureDataDir();
+  await fs.writeFile(ALERTS_FILE, JSON.stringify(alerts, null, 2), 'utf-8');
 }
 
-export default function handler(req, res) {
+// Sanitize string input
+function sanitizeString(str, maxLength) {
+  if (typeof str !== 'string') return '';
+  // Remove potential XSS characters and trim
+  return str
+    .trim()
+    .slice(0, maxLength)
+    .replace(/[<>]/g, '');
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -41,20 +56,31 @@ export default function handler(req, res) {
   try {
     const { name, query, marketplace } = req.body;
 
-    // Validate input
-    if (!name || !query) {
-      return res.status(400).json({ error: 'Name and query are required' });
+    // Validate input types
+    if (typeof name !== 'string' || typeof query !== 'string') {
+      return res.status(400).json({ error: 'Name and query must be strings' });
+    }
+
+    // Sanitize and validate input
+    const sanitizedName = sanitizeString(name, MAX_NAME_LENGTH);
+    const sanitizedQuery = sanitizeString(query, MAX_QUERY_LENGTH);
+    const sanitizedMarketplace = marketplace 
+      ? sanitizeString(marketplace, MAX_MARKETPLACE_LENGTH) 
+      : null;
+
+    if (!sanitizedName || !sanitizedQuery) {
+      return res.status(400).json({ error: 'Name and query cannot be empty' });
     }
 
     // Load existing alerts
-    const alerts = loadAlerts();
+    const alerts = await loadAlerts();
 
     // Create new alert
     const newAlert = {
       id: randomUUID(),
-      name,
-      query,
-      marketplace: marketplace || null,
+      name: sanitizedName,
+      query: sanitizedQuery,
+      marketplace: sanitizedMarketplace || null,
       createdAt: new Date().toISOString(),
     };
 
@@ -62,7 +88,7 @@ export default function handler(req, res) {
     alerts.push(newAlert);
 
     // Save to file
-    saveAlerts(alerts);
+    await saveAlerts(alerts);
 
     res.status(201).json({ savedSearch: newAlert });
   } catch (error) {
