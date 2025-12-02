@@ -1,16 +1,27 @@
 /**
  * Get the current authenticated user
- * This is a placeholder implementation for authentication
- * In production, this would integrate with your auth provider (e.g., NextAuth, Supabase Auth, etc.)
+ * 
+ * IMPORTANT: This is a placeholder implementation for development/testing purposes.
+ * In production, this MUST be replaced with proper authentication logic.
+ * 
+ * TODO: Implement real authentication logic:
+ * - Integrate with auth provider (e.g., NextAuth, Supabase Auth, Clerk, etc.)
+ * - Check for session/token in cookies or headers
+ * - Validate the token against your auth service
+ * - Return user data or null based on authentication status
+ * - Handle token refresh and expiration
  */
 export async function getCurrentUser() {
-  // TODO: Implement real authentication logic
-  // For now, return a mock user to allow development
-  // In production, this should:
-  // 1. Check for session/token
-  // 2. Validate the token
-  // 3. Return user data or null
+  // SECURITY WARNING: This mock implementation bypasses authentication
+  // Replace with real authentication before deploying to production
   
+  // Example implementation with NextAuth:
+  // import { getServerSession } from "next-auth/next";
+  // import { authOptions } from "@/lib/auth";
+  // const session = await getServerSession(authOptions);
+  // return session?.user ?? null;
+  
+  // For now, return a mock user to allow development
   return {
     id: "user-1",
     email: "user@example.com",
