@@ -20,7 +20,9 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# Python lib directory (but not Next.js lib folder with TypeScript files)
+/lib/*.py
+/lib/*.so
 lib64/
 parts/
 sdist/
@@ -211,3 +213,5 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+/lib/generated/prisma
