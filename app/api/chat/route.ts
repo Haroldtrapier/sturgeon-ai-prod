@@ -13,7 +13,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "message is required" }, { status: 400 });
   }
 
-  const reply = await chatCompletion("You are a helpful assistant.", message);
-
-  return NextResponse.json({ reply });
+  try {
+    const reply = await chatCompletion("You are a helpful assistant.", message);
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("Chat completion failed:", error);
+    return NextResponse.json(
+      { error: "Failed to generate response" },
+      { status: 500 }
+    );
+  }
 }

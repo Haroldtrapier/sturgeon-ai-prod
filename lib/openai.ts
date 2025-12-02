@@ -29,7 +29,17 @@ export async function chatCompletion(systemPrompt: string, userMessage: string):
     }
     
     const data = await response.json();
-    return data.choices[0]?.message?.content || "No response generated";
+    
+    if (!data.choices || data.choices.length === 0) {
+      throw new Error("No response choices returned from OpenAI API");
+    }
+    
+    const content = data.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error("No content in OpenAI API response");
+    }
+    
+    return content;
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
     throw new Error("Failed to generate chat completion");
