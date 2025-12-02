@@ -46,8 +46,8 @@ export default async function handler(
         return res.status(500).json({ error: 'Failed to parse upload' })
       }
 
-      const fileArray = files.file
-      const file = Array.isArray(fileArray) ? fileArray[0] : fileArray
+      const fileOrFiles = files.file
+      const file = Array.isArray(fileOrFiles) ? fileOrFiles[0] : fileOrFiles
 
       if (!file) {
         return res.status(400).json({ error: 'No file uploaded' })
@@ -57,31 +57,37 @@ export default async function handler(
       const filepath = file.filepath
       const mimetype = file.mimetype || ''
 
-      // Extract text from the file
-      const text = await extractTextFromFile(filepath, mimetype)
+      try {
+        // Extract text from the file
+        const text = await extractTextFromFile(filepath, mimetype)
 
-      // Insert into database
-      const { data, error } = await supabase
-        .from('documents')
-        .insert({
-          filename,
-          text,
+        // Insert into database
+        const { data, error } = await supabase
+          .from('documents')
+          .insert({
+            filename,
+            text,
+          })
+          .select()
+          .single()
+
+        if (error) {
+          console.error('Error inserting document:', error)
+          return res.status(500).json({ error: 'Failed to save document' })
+        }
+
+        return res.status(200).json({ 
+          success: true, 
+          document: data 
         })
-        .select()
-        .single()
-
-      // Clean up uploaded file
-      fs.unlinkSync(filepath)
-
-      if (error) {
-        console.error('Error inserting document:', error)
-        return res.status(500).json({ error: 'Failed to save document' })
+      } finally {
+        // Clean up uploaded file
+        try {
+          fs.unlinkSync(filepath)
+        } catch (cleanupError) {
+          console.error('Error cleaning up file:', cleanupError)
+        }
       }
-
-      return res.status(200).json({ 
-        success: true, 
-        document: data 
-      })
     })
   } catch (error) {
     console.error('Unexpected error:', error)

@@ -20,7 +20,7 @@ CREATE TABLE users (
     deleted_at TIMESTAMP
     
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_oauth ON tuparters((jzth_provider, oauth_id);
+CREATE INDEX idx_users_oauth ON users(oauth_provider, oauth_id);
 
 -- Documents Table
 CREATE TABLE documents (
