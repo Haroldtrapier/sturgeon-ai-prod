@@ -235,7 +235,7 @@ async def create_win(win: WinCreate):
         if win.dateWon:
             try:
                 date_won_parsed = datetime.fromisoformat(win.dateWon).date()
-            except:
+            except (ValueError, TypeError):
                 pass
         
         async with db_pool.acquire() as conn:

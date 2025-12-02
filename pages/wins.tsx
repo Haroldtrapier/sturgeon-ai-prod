@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -27,6 +25,7 @@ export default function WinsPage() {
     dateWon: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function loadWins() {
     const res = await fetch("/api/wins");
@@ -44,6 +43,7 @@ export default function WinsPage() {
 
   async function handleCreate() {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/wins", {
         method: "POST",
@@ -54,7 +54,7 @@ export default function WinsPage() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
+      if (!res.ok) throw new Error(data.error || "Failed to save win");
       setForm({
         opportunityTitle: "",
         agency: "",
@@ -66,7 +66,7 @@ export default function WinsPage() {
       await loadWins();
     } catch (e) {
       console.error(e);
-      alert("Error saving win");
+      setError(e instanceof Error ? e.message : "Error saving win");
     } finally {
       setLoading(false);
     }
@@ -79,6 +79,11 @@ export default function WinsPage() {
         <div className="text-sm text-slate-300">
           Log every award to build past performance and track revenue.
         </div>
+        {error && (
+          <div className="rounded-md border border-red-800 bg-red-900/20 p-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
         <Input
           placeholder="Opportunity title"
           value={form.opportunityTitle}
