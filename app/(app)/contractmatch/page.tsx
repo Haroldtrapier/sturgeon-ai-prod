@@ -31,7 +31,8 @@ export default function ContractMatchPage() {
       setRecs(data.recommendations ?? []);
     } catch (e) {
       console.error(e);
-      alert("Error running ContractMatch");
+      const errorMessage = e instanceof Error ? e.message : "Unknown error occurred";
+      alert(`Error running ContractMatch: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
