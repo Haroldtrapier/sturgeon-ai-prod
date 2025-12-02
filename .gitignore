@@ -20,7 +20,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# Exclude Python lib directories but not Next.js lib/
 lib64/
 parts/
 sdist/
