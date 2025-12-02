@@ -33,7 +33,8 @@ export default function ProposalsPage() {
       setResult(data);
     } catch (e) {
       console.error(e);
-      alert("Error generating proposal");
+      const errorMessage = e instanceof Error ? e.message : "Failed to generate proposal. Please try again.";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }

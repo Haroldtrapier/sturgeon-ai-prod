@@ -25,10 +25,14 @@ export default async function handler(
   }
 
   try {
-    const { rawRequirements, title } = req.body as GenerateRequestBody;
+    const { rawRequirements, title } = req.body || {};
 
-    if (!rawRequirements || rawRequirements.trim().length === 0) {
+    if (!rawRequirements || typeof rawRequirements !== 'string' || rawRequirements.trim().length === 0) {
       return res.status(400).json({ error: 'Requirements are required' });
+    }
+
+    if (title !== undefined && typeof title !== 'string') {
+      return res.status(400).json({ error: 'Title must be a string' });
     }
 
     // Simulate processing delay
