@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { q = "" } = req.query;
-  const query = Array.isArray(q) ? q[0] : q;
+  const query = Array.isArray(q) ? q[0] ?? "" : String(q);
 
   const results = [
     {
