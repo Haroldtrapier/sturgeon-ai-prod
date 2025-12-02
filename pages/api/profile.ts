@@ -12,8 +12,9 @@ type ProfileResponse = {
   error?: string;
 };
 
-// In-memory storage for demo purposes
-// In a production app, this would be stored in a database
+// In-memory storage for demo purposes only
+// WARNING: In a production app, this would be stored in a database with proper user authentication
+// Current implementation is shared across all users and resets on server restart
 let profileData: ProfileData = {
   companyName: '',
   naicsCodes: [],

@@ -19,13 +19,18 @@ export default function CapabilityPage() {
   useEffect(() => {
     // Load profile to pre-fill basics
     (async () => {
-      const res = await fetch("/api/profile");
-      const data = await res.json();
-      if (res.ok && data.profile) {
-        setCompanyName(data.profile.companyName ?? "");
-        setNaicsCodes((data.profile.naicsCodes ?? []).join(", "));
-        setPscCodes((data.profile.pscCodes ?? []).join(", "));
-        setCertifications((data.profile.certifications ?? []).join(", "));
+      try {
+        const res = await fetch("/api/profile");
+        const data = await res.json();
+        if (res.ok && data.profile) {
+          setCompanyName(data.profile.companyName ?? "");
+          setNaicsCodes((data.profile.naicsCodes ?? []).join(", "));
+          setPscCodes((data.profile.pscCodes ?? []).join(", "));
+          setCertifications((data.profile.certifications ?? []).join(", "));
+        }
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+        // Silently fail - user can still fill form manually
       }
     })();
   }, []);
@@ -48,11 +53,12 @@ export default function CapabilityPage() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
+      if (!res.ok) throw new Error(data.error || "Failed to generate capability statement");
       setResult(data.capabilityStatement ?? "");
     } catch (e) {
       console.error(e);
-      alert("Error generating capability statement");
+      const errorMessage = e instanceof Error ? e.message : "Error generating capability statement";
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
