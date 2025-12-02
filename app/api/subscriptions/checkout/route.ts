@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
     }
 
     // TODO: Implement actual payment gateway integration (e.g., Stripe)
-    // For now, return a mock checkout URL
-    const mockCheckoutUrl = `https://checkout.example.com/${plan}`;
+    // For now, return a mock checkout URL for development/testing
+    const mockCheckoutUrl = `https://mock-payment.local/${plan}`;
 
     return NextResponse.json({ url: mockCheckoutUrl }, { status: 200 });
   } catch (error) {

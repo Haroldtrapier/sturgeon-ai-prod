@@ -20,7 +20,8 @@ export default function BillingPage() {
       window.location.href = data.url;
     } catch (e) {
       console.error(e);
-      alert("Error starting checkout");
+      // TODO: Replace with proper toast notification system
+      alert("Error starting checkout. Please try again.");
       setLoading(null);
     }
   }
