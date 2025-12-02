@@ -8,8 +8,23 @@ export interface User {
 
 /**
  * Get the currently authenticated user from the session.
- * This is a placeholder implementation that should be replaced with
- * your actual authentication logic (e.g., NextAuth, Supabase Auth, etc.)
+ * 
+ * ⚠️ WARNING: This is a placeholder implementation that currently returns null.
+ * This means the /api/agent endpoint will always return 401 Unauthorized.
+ * 
+ * You MUST replace this with your actual authentication logic before use:
+ * - NextAuth: https://next-auth.js.org/
+ * - Supabase Auth: https://supabase.com/docs/guides/auth
+ * - Clerk: https://clerk.com/
+ * - Custom JWT validation
+ * 
+ * Example implementation with Supabase:
+ * ```typescript
+ * import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+ * const supabase = createServerComponentClient({ cookies })
+ * const { data: { user } } = await supabase.auth.getUser()
+ * return user ? { id: user.id, email: user.email, name: user.user_metadata?.name } : null
+ * ```
  */
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -27,7 +42,7 @@ export async function getCurrentUser(): Promise<User | null> {
     // - Query database for user
     // - Check with your auth provider (NextAuth, Supabase, etc.)
     
-    // Placeholder: In production, this should validate the session and return actual user data
+    // ⚠️ PLACEHOLDER: Currently always returns null - implement actual auth logic here
     return null;
   } catch (error) {
     console.error("Error getting current user:", error);

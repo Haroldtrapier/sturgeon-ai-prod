@@ -24,7 +24,14 @@ You help the user:
 Always answer clearly and practically for a small SDVOSB.
   `.trim();
 
-  const reply = await chatCompletion(systemPrompt, message);
-
-  return NextResponse.json({ reply });
+  try {
+    const reply = await chatCompletion(systemPrompt, message);
+    return NextResponse.json({ reply });
+  } catch (error) {
+    console.error("Error generating AI response:", error);
+    return NextResponse.json(
+      { error: "Failed to generate response" },
+      { status: 500 }
+    );
+  }
 }

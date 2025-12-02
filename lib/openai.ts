@@ -5,8 +5,11 @@ let openaiInstance: OpenAI | null = null;
 
 function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY environment variable is not set");
+    }
     openaiInstance = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || "sk-placeholder",
+      apiKey: process.env.OPENAI_API_KEY,
     });
   }
   return openaiInstance;
@@ -23,10 +26,6 @@ export async function chatCompletion(
   userMessage: string
 ): Promise<string> {
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error("OPENAI_API_KEY is not configured");
-    }
-
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
