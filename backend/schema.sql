@@ -21,3 +21,13 @@ CREATE TABLE users (
     
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_oauth ON tuparters((jzth_provider, oauth_id);
+
+-- Documents Table
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    filename VARCHAR(255) NOT NULL,
+    text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_documents_created_at ON documents(created_at DESC);
