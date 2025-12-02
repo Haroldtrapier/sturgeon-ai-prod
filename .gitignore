@@ -4,6 +4,9 @@ node_modules/
 package-lock.json
 .eslintrc.json
 
+# Data storage
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
