@@ -20,7 +20,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -31,6 +30,11 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# Allow TypeScript lib directory but ignore Python lib
+!lib/
+lib/*.py
+lib/__pycache__/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -211,3 +215,5 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+/generated/prisma
