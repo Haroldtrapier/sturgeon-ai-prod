@@ -6,7 +6,10 @@ export async function GET(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q") ?? "";
+  const rawQuery = searchParams.get("q") ?? "";
+  
+  // Sanitize and validate the query parameter
+  const q = rawQuery.trim().slice(0, 200); // Limit length and trim whitespace
 
   const results = [
     {
