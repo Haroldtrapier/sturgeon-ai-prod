@@ -12,7 +12,10 @@ type Opp = {
   title: string;
   agency: string | null;
   status: string;
-  metadata: any;
+  metadata: {
+    notes?: string;
+    [key: string]: unknown;
+  };
 };
 
 export default function OpportunitiesPage() {

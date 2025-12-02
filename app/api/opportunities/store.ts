@@ -1,13 +1,18 @@
 // In-memory storage for demonstration purposes
 // In production, this would be a database
 
+type OpportunityMetadata = {
+  notes?: string;
+  [key: string]: unknown;
+};
+
 type Opportunity = {
   id: string;
   title: string;
   agency: string | null;
   source: string;
   status: string;
-  metadata: any;
+  metadata: OpportunityMetadata;
   createdAt: string;
 };
 

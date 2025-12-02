@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     // Create new opportunity
     const newOpportunity = {
-      id: Date.now().toString(), // Simple ID generation
+      id: crypto.randomUUID(),
       title: body.title,
       agency: body.agency || null,
       source: body.source,
