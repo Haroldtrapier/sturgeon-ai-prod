@@ -1,7 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+type Certification = {
+  id: string;
+  certType: string;
+  status: string;
+  notes: string | null;
+  checklist: Record<string, boolean>;
+  createdAt: string;
+};
+
 // In-memory storage for certifications (replace with database later)
-let certifications: any[] = [];
+let certifications: Certification[] = [];
 let nextId = 1;
 
 type CertificationData = {
@@ -28,7 +37,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       }
 
-      const newCert = {
+      const newCert: Certification = {
         id: String(nextId++),
         certType,
         status,

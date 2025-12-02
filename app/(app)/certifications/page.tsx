@@ -11,7 +11,7 @@ type Cert = {
   certType: string;
   status: string;
   notes: string | null;
-  checklist: any;
+  checklist: Record<string, boolean>;
 };
 
 export default function CertificationsPage() {
@@ -22,6 +22,7 @@ export default function CertificationsPage() {
     notes: "",
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function loadCerts() {
     const res = await fetch("/api/certifications");
@@ -39,6 +40,7 @@ export default function CertificationsPage() {
 
   async function handleCreate() {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/certifications", {
         method: "POST",
@@ -55,7 +57,7 @@ export default function CertificationsPage() {
       await loadCerts();
     } catch (e) {
       console.error(e);
-      alert("Error creating certification tracker");
+      setError(e instanceof Error ? e.message : "Error creating certification tracker");
     } finally {
       setLoading(false);
     }
@@ -71,6 +73,11 @@ export default function CertificationsPage() {
           Track SBA and VA certifications like 8(a), HUBZone, SDVOSB, WOSB,
           EDWOSB.
         </div>
+        {error && (
+          <div className="rounded-md border border-red-800 bg-red-900/20 p-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
         <Input
           placeholder="Certification type (8(a), HUBZone, SDVOSB, WOSB, EDWOSB, etc.)"
           value={form.certType}
