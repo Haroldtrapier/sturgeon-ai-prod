@@ -43,7 +43,7 @@ export default function SettingsPage() {
             certifications: (p.certifications ?? []).join(", "),
             phone: p.phone ?? "",
             website: p.website ?? "",
-          } as any);
+          });
         }
       } finally {
         setLoading(false);

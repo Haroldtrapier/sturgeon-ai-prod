@@ -1,8 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+interface Profile {
+  companyName: string;
+  naicsCodes: string[];
+  pscCodes: string[];
+  cageCode: string;
+  duns: string;
+  capabilitiesSummary: string;
+  certifications: string[];
+  phone: string;
+  website: string;
+}
+
 // In-memory storage for demo purposes
 // In production, this would connect to a database
-let profileStore: any = null;
+let profileStore: Profile | null = null;
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
