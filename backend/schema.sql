@@ -12,12 +12,29 @@ CREATE TABLE users (
     oauth_provider VARCHAR(50),
     oauth_id VARCHAR(255),
     is_active BOOLEAN DEFAULT true,
-    email_verified BOOLDAM DEFAU0U rNUSt  CURREUNT_TIMESTAMP,
+    email_verified BOOLEAN DEFAULT false,
     subscription_plan VARCHAR(50) DEFAULT 'free',
-    credits INT DEGAULT 100,
+    credits INT DEFAULT 100,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEGAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP
+);
     
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_oauth ON tuparters((jzth_provider, oauth_id);
+CREATE INDEX idx_users_oauth ON users(oauth_provider, oauth_id);
+
+-- Wins Table
+CREATE TABLE wins (
+    id SERIAL PRIMARY KEY,
+    opportunity_title VARCHAR(500) NOT NULL,
+    agency VARCHAR(255),
+    amount DECIMAL(15, 2),
+    contract_number VARCHAR(255),
+    description TEXT,
+    date_won DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_wins_date_won ON wins(date_won);
+CREATE INDEX idx_wins_agency ON wins(agency);

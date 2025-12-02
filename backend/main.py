@@ -6,9 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import os
-from datetime import datetime
+from datetime import datetime, date
 import httpx
 import json
+import asyncpg
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -23,6 +24,19 @@ app.add_middleware(
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Database connection pool
+db_pool = None
+
+@app.on_event("startup")
+async def startup():
+    global db_pool
+    if DATABASE_URL:
+        try:
+            db_pool = await asyncpg.create_pool(DATABASE_URL, min_size=1, max_size=10)
+        except Exception as e:
+            print(f"Database connection failed: {e}")
 
 # ==================== MODELS ====================
 
@@ -34,6 +48,14 @@ class ProposalRequest(BaseModel):
     opportunity_id: str
     company_info: Dict[str, Any]
     technical_approach: Optional[str] = None
+
+class WinCreate(BaseModel):
+    opportunityTitle: str
+    agency: Optional[str] = None
+    amount: Optional[float] = None
+    contractNumber: Optional[str] = None
+    description: Optional[str] = None
+    dateWon: Optional[str] = None
 
 # ==================== ENDPOINTS ====================
 
@@ -168,3 +190,76 @@ async def dashboard(user_id: str):
             "win_rate": 0.0
         }
     }
+
+@app.get("/api/wins")
+async def get_wins():
+    """Get all wins"""
+    if not db_pool:
+        return {"wins": []}
+    
+    try:
+        async with db_pool.acquire() as conn:
+            rows = await conn.fetch("""
+                SELECT id, opportunity_title, agency, amount, contract_number, 
+                       description, date_won, created_at
+                FROM wins
+                ORDER BY date_won DESC NULLS LAST, created_at DESC
+            """)
+            
+            wins = []
+            for row in rows:
+                wins.append({
+                    "id": str(row["id"]),
+                    "opportunityTitle": row["opportunity_title"],
+                    "agency": row["agency"],
+                    "amount": float(row["amount"]) if row["amount"] else None,
+                    "contractNumber": row["contract_number"],
+                    "description": row["description"],
+                    "dateWon": row["date_won"].isoformat() if row["date_won"] else None
+                })
+            
+            return {"wins": wins}
+    except Exception as e:
+        print(f"Error fetching wins: {e}")
+        return {"wins": []}
+
+@app.post("/api/wins")
+async def create_win(win: WinCreate):
+    """Create a new win"""
+    if not db_pool:
+        raise HTTPException(status_code=503, detail="Database not available")
+    
+    try:
+        # Parse date if provided
+        date_won_parsed = None
+        if win.dateWon:
+            try:
+                date_won_parsed = datetime.fromisoformat(win.dateWon).date()
+            except:
+                pass
+        
+        async with db_pool.acquire() as conn:
+            row = await conn.fetchrow("""
+                INSERT INTO wins (opportunity_title, agency, amount, contract_number, 
+                                description, date_won)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING id, opportunity_title, agency, amount, contract_number, 
+                          description, date_won, created_at
+            """, win.opportunityTitle, win.agency, win.amount, win.contractNumber,
+                win.description, date_won_parsed)
+            
+            return {
+                "success": True,
+                "win": {
+                    "id": str(row["id"]),
+                    "opportunityTitle": row["opportunity_title"],
+                    "agency": row["agency"],
+                    "amount": float(row["amount"]) if row["amount"] else None,
+                    "contractNumber": row["contract_number"],
+                    "description": row["description"],
+                    "dateWon": row["date_won"].isoformat() if row["date_won"] else None
+                }
+            }
+    except Exception as e:
+        print(f"Error creating win: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
