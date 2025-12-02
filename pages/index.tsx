@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -16,11 +17,11 @@ export default function Home() {
       <div style={{ marginTop: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
         <h3>Features:</h3>
         <ul>
-          <li><a href="/proposals">Proposal Builder</a></li>
+          <li><Link href="/proposals">Proposal Builder</Link></li>
         </ul>
         <h3>API Status:</h3>
         <ul>
-          <li><a href="/api">Check API Status (/api)</a></li>
+          <li><Link href="/api">Check API Status (/api)</Link></li>
         </ul>
       </div>
     </div>
