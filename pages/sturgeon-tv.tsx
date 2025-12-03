@@ -26,7 +26,11 @@ function VideoCard({ title, url }: { title: string; url: string }) {
       <div className="text-sm mb-2">{title}</div>
       <iframe
         src={url}
+        title={title}
         className="w-full aspect-video rounded-xl border border-slate-700"
+        sandbox="allow-scripts allow-same-origin allow-presentation"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
       />
     </div>
   );
