@@ -22,12 +22,18 @@ async def stripe_webhook(request: Request):
     payload = await request.body()
     sig = request.headers.get("stripe-signature")
 
+    # Validate that stripe-signature header is present
+    if not sig:
+        raise HTTPException(status_code=400, detail="Missing stripe-signature header")
+
     try:
         event = stripe.Webhook.construct_event(
             payload, sig, config.STRIPE_WEBHOOK_SECRET
         )
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid webhook")
+    except stripe.error.SignatureVerificationError:
+        raise HTTPException(status_code=400, detail="Invalid webhook signature")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Webhook error: {str(e)}")
 
     # Handle subscription events
     if event["type"] == "checkout.session.completed":
