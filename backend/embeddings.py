@@ -1,12 +1,24 @@
 """
 Embedding utilities for text vectorization and storage.
 """
-import openai
 import os
+from openai import OpenAI
 from backend.database import SessionLocal
 from backend.models.embeddings import EmbeddingRecord
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Lazy-initialize OpenAI client
+_client = None
+
+
+def _get_client():
+    """Get or create OpenAI client instance."""
+    global _client
+    if _client is None:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        _client = OpenAI(api_key=api_key)
+    return _client
 
 
 def embed(text: str):
@@ -18,12 +30,19 @@ def embed(text: str):
         
     Returns:
         List of floats representing the embedding vector (3072 dimensions)
+        
+    Raises:
+        Exception: If the OpenAI API call fails
     """
-    response = openai.embeddings.create(
-        model="text-embedding-3-large",
-        input=text
-    )
-    return response.data[0].embedding
+    try:
+        client = _get_client()
+        response = client.embeddings.create(
+            model="text-embedding-3-large",
+            input=text
+        )
+        return response.data[0].embedding
+    except Exception as e:
+        raise Exception(f"Failed to generate embedding: {str(e)}") from e
 
 
 def store_embedding(user_id: str, proposal_id: str, text: str):
@@ -34,6 +53,9 @@ def store_embedding(user_id: str, proposal_id: str, text: str):
         user_id: Identifier for the user
         proposal_id: Identifier for the proposal
         text: The text content to embed and store
+        
+    Raises:
+        Exception: If embedding generation or database storage fails
     """
     vector = embed(text)
     db = SessionLocal()
@@ -44,5 +66,8 @@ def store_embedding(user_id: str, proposal_id: str, text: str):
             vector=vector
         ))
         db.commit()
+    except Exception as e:
+        db.rollback()
+        raise Exception(f"Failed to store embedding: {str(e)}") from e
     finally:
         db.close()
