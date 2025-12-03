@@ -30,7 +30,8 @@ async def generate_proposal_text(proposal_id: str, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail=f"Proposal with id {proposal_id} not found")
     
     # Load company profile from database
-    # For now, get the first company profile or use default
+    # Note: This implementation uses the first company profile found.
+    # Future enhancement: Add company_profile_id to Proposal model or accept as parameter
     company_profile_obj = db.query(CompanyProfile).first()
     
     if company_profile_obj:

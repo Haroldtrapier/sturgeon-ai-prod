@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 # Create SQLAlchemy engine
-engine = create_engine(DATABASE_URL) if DATABASE_URL else None
+engine = create_engine(DATABASE_URL) if DATABASE_URL and DATABASE_URL.strip() else None
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) if engine else None

@@ -10,8 +10,6 @@ from datetime import datetime
 import httpx
 import json
 
-from backend.routers import proposals
-
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
 app.add_middleware(
@@ -21,9 +19,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Include routers
-app.include_router(proposals.router)
 
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
