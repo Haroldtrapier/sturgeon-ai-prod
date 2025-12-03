@@ -2,6 +2,7 @@
 Sturgeon AI Government Contracting Assistant Agent
 """
 import os
+from typing import Optional
 from openai import AsyncOpenAI
 
 
@@ -25,7 +26,7 @@ You help users:
 """
 
 
-async def run_agent(message: str, user_id: str | None = None):
+async def run_agent(message: str, user_id: Optional[str] = None):
     """
     Run the Sturgeon AI agent with the given message.
 
