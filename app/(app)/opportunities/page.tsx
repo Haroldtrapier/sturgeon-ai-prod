@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
@@ -26,9 +27,18 @@ export default function OpportunitiesPage() {
   const [loading, setLoading] = useState(false);
 
   async function loadOpps() {
-    const res = await fetch("/api/opportunities/list");
-    const data = await res.json();
-    if (res.ok) setOpps(data.opportunities ?? []);
+    try {
+      const res = await fetch("/api/opportunities/list");
+      const data = await res.json();
+      if (res.ok) {
+        setOpps(data.opportunities ?? []);
+      } else {
+        toast.error("Failed to load opportunities");
+      }
+    } catch (error) {
+      console.error("Error loading opportunities:", error);
+      toast.error("Error loading opportunities");
+    }
   }
 
   useEffect(() => {
@@ -55,6 +65,8 @@ export default function OpportunitiesPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
+      
+      toast.success("Opportunity saved successfully!");
       setForm({
         title: "",
         agency: "",
@@ -62,19 +74,21 @@ export default function OpportunitiesPage() {
         notes: "",
       });
       await loadOpps();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      alert("Error saving opportunity");
+      toast.error(e.message || "Error saving opportunity");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-xl font-semibold text-slate-50">
-        Saved Opportunities
-      </h1>
+    <>
+      <Toaster position="top-right" />
+      <div className="space-y-6">
+        <h1 className="text-xl font-semibold text-slate-50">
+          Saved Opportunities
+        </h1>
       <Card className="space-y-3">
         <div className="text-sm text-slate-300">
           Save opportunities you want to track across SAM, Unison, GovWin,
@@ -140,5 +154,6 @@ export default function OpportunitiesPage() {
         )}
       </Card>
     </div>
+    </>
   );
 }

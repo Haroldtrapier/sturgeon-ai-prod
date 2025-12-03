@@ -9,6 +9,9 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  // TODO: Add authentication middleware to verify user session
+  // and filter opportunities by authenticated user_id
+
   try {
     const { data, error } = await supabaseAdmin
       .from("opportunities")
