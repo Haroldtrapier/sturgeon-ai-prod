@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { Button } from "@/components/ui/Button";
+import toast, { Toaster } from "react-hot-toast";
 
 type Win = {
   id: string;
@@ -43,18 +44,34 @@ export default function WinsPage() {
   }
 
   async function handleCreate() {
+    // Validate required field
+    if (!form.opportunityTitle.trim()) {
+      toast.error("Opportunity title is required");
+      return;
+    }
+
+    // Validate amount if provided
+    if (form.amount && isNaN(Number(form.amount))) {
+      toast.error("Amount must be a valid number");
+      return;
+    }
+
     setLoading(true);
     try {
+      const amount = form.amount ? parseFloat(form.amount) : undefined;
+
       const res = await fetch("/api/wins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          amount: form.amount ? Number(form.amount) : undefined,
+          amount,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
+      
+      toast.success("Win logged successfully!");
       setForm({
         opportunityTitle: "",
         agency: "",
@@ -66,7 +83,9 @@ export default function WinsPage() {
       await loadWins();
     } catch (e) {
       console.error(e);
-      alert("Error saving win");
+      toast.error(
+        e instanceof Error ? e.message : "Error saving win. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -74,6 +93,7 @@ export default function WinsPage() {
 
   return (
     <div className="space-y-6">
+      <Toaster position="top-right" />
       <h1 className="text-xl font-semibold text-slate-50">Wins Tracker</h1>
       <Card className="space-y-3">
         <div className="text-sm text-slate-300">

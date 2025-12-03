@@ -35,21 +35,28 @@ export default async function handler(
         dateWon,
       } = req.body;
 
-      if (!opportunityTitle) {
+      // Validate required fields
+      if (!opportunityTitle || typeof opportunityTitle !== "string") {
         return res
           .status(400)
           .json({ error: "Opportunity title is required" });
       }
 
+      // Validate and sanitize optional fields
+      const sanitizedAmount =
+        amount && !isNaN(Number(amount)) ? Number(amount) : null;
+
       const { data, error } = await supabase
         .from("wins")
         .insert([
           {
-            opportunityTitle,
-            agency: agency || null,
-            amount: amount || null,
-            contractNumber: contractNumber || null,
-            description: description || null,
+            opportunityTitle: String(opportunityTitle).trim(),
+            agency: agency ? String(agency).trim() : null,
+            amount: sanitizedAmount,
+            contractNumber: contractNumber
+              ? String(contractNumber).trim()
+              : null,
+            description: description ? String(description).trim() : null,
             dateWon: dateWon || null,
           },
         ])
@@ -57,6 +64,10 @@ export default async function handler(
 
       if (error) {
         console.error("Error creating win:", error);
+        return res.status(500).json({ error: "Failed to create win" });
+      }
+
+      if (!data || data.length === 0) {
         return res.status(500).json({ error: "Failed to create win" });
       }
 
