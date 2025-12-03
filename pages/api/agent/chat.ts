@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface Message {
-  role: string;
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
@@ -64,7 +64,9 @@ export default async function handler(
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      const errorData = await response.json().catch(() => ({
+        error: "Failed to parse error response",
+      }));
       console.error("OpenAI API error:", errorData);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
