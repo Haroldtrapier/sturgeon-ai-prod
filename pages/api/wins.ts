@@ -1,10 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-// In-memory storage for demonstration purposes
-// In production, this would use a database like Supabase
-let winsStore: any[] = [];
-let nextId = 1;
-
 type Win = {
   id: string;
   opportunityTitle: string;
@@ -15,6 +10,11 @@ type Win = {
   dateWon: string | null;
   createdAt: string;
 };
+
+// In-memory storage for demonstration purposes
+// In production, this would use a database like Supabase
+let winsStore: Win[] = [];
+let nextId = 1;
 
 export default async function handler(
   req: NextApiRequest,

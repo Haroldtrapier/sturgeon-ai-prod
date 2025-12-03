@@ -50,7 +50,7 @@ export default function WinsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          amount: form.amount ? Number(form.amount) : undefined,
+          amount: form.amount ? Number(form.amount) : null,
         }),
       });
       const data = await res.json();
