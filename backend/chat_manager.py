@@ -31,7 +31,9 @@ class ChatSessionManager:
                     {"role": "user", "content": text}
                 ]
             )
-            return response.choices[0].message.content
+            if response.choices and len(response.choices) > 0:
+                return response.choices[0].message.content
+            return "Sorry, I received an empty response from the AI."
         except Exception as e:
             # Return error message to user in case of API failure
             return f"Sorry, I encountered an error: {str(e)}"
