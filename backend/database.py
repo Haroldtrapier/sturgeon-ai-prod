@@ -17,11 +17,16 @@ class SessionLocal:
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
+        self.close()
     
     def query(self, model):
         """Placeholder query method"""
         return QueryPlaceholder()
+    
+    def close(self):
+        """Close the database session"""
+        # In a real implementation, this would close the database connection
+        pass
 
 
 class QueryPlaceholder:

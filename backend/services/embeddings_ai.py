@@ -34,4 +34,4 @@ async def rebuild_all_embeddings() -> None:
         print(f"[embeddings_ai] Processed {len(proposals)} proposals")
     finally:
         # Clean up database session
-        pass
+        db.close()
