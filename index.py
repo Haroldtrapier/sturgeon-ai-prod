@@ -25,8 +25,10 @@ app.add_middleware(
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
 
-# Initialize OpenAI client
-openai.api_key = OPENAI_API_KEY
+# Validate and initialize OpenAI client
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is required")
+openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # ==================== MODELS ====================
 
@@ -151,7 +153,7 @@ Return a structured, compliant proposal.
 """
         
         # Call OpenAI API with corrected model name and response access
-        response = openai.chat.completions.create(
+        response = openai_client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You create compliant, professional government proposals."},
