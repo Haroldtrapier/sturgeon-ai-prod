@@ -1,5 +1,4 @@
 """GovSpend search service."""
-import httpx
 from typing import List, Dict, Any
 import logging
 
