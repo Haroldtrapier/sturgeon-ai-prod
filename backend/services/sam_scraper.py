@@ -18,6 +18,9 @@ async def search_sam(query: str) -> Dict[str, Any]:
     """
     sam_api_key = os.getenv("SAM_GOV_API_KEY", "")
     
+    if not sam_api_key:
+        print(f"[sam_scraper] Warning: SAM_GOV_API_KEY not set - API requests may fail")
+    
     try:
         async with httpx.AsyncClient() as client:
             url = "https://api.sam.gov/opportunities/v2/search"

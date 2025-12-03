@@ -3,8 +3,6 @@ from datetime import datetime
 
 from services.sam_scraper import search_sam
 from services.embeddings_ai import rebuild_all_embeddings
-from database import SessionLocal
-from models.proposal import Proposal
 
 
 async def nightly_sam_scan():
