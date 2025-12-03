@@ -22,10 +22,13 @@ async def generate_full_proposal(
     """
     openai_api_key = os.getenv("OPENAI_API_KEY")
     
+    # Constants
+    MOCK_REQUIREMENTS_PREVIEW_LENGTH = 200
+    
     # If OpenAI API key is not available, return a mock response
     if not openai_api_key:
         return {
-            "draft": f"[MOCK PROPOSAL]\n\nBased on requirements:\n{raw_requirements[:200]}...\n\nCompany: {company_profile}\n\nThis is a placeholder. Configure OPENAI_API_KEY to generate real proposals.",
+            "draft": f"[MOCK PROPOSAL]\n\nBased on requirements:\n{raw_requirements[:MOCK_REQUIREMENTS_PREVIEW_LENGTH]}...\n\nCompany: {company_profile}\n\nThis is a placeholder. Configure OPENAI_API_KEY to generate real proposals.",
             "status": "mock",
             "message": "OpenAI API key not configured"
         }
@@ -59,6 +62,13 @@ async def generate_full_proposal(
             
             if response.status_code == 200:
                 data = response.json()
+                # Validate response structure
+                if "choices" not in data or not data["choices"]:
+                    return {
+                        "draft": "",
+                        "status": "error",
+                        "message": "Invalid response from OpenAI API"
+                    }
                 draft = data["choices"][0]["message"]["content"]
                 return {
                     "draft": draft,

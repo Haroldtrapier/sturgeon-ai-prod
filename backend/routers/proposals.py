@@ -9,6 +9,9 @@ from database import get_db
 
 router = APIRouter(prefix="/api/proposals", tags=["proposals"])
 
+# Default company profile - TODO: load from database or environment variable
+DEFAULT_COMPANY_PROFILE = "Trapier Management LLC – SDVOSB, logistics & AI solutions."
+
 
 @router.post("/{proposal_id}/generate-full")
 async def generate_full_proposal_endpoint(proposal_id: str, db: Session = Depends(get_db)):
@@ -27,7 +30,7 @@ async def generate_full_proposal_endpoint(proposal_id: str, db: Session = Depend
         raise HTTPException(status_code=404, detail="Proposal not found")
 
     # TODO: load real company profile from DB
-    company_profile = "Trapier Management LLC – SDVOSB, logistics & AI solutions."
+    company_profile = DEFAULT_COMPANY_PROFILE
 
     result = await generate_full_proposal(
         raw_requirements=proposal.raw_text or "",
