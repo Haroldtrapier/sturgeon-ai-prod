@@ -30,9 +30,19 @@ export default function WinsPage() {
   const [loading, setLoading] = useState(false);
 
   async function loadWins() {
-    const res = await fetch("/api/wins");
-    const data = await res.json();
-    if (res.ok) setWins(data.wins ?? []);
+    try {
+      const res = await fetch("/api/wins");
+      const data = await res.json();
+      if (res.ok) {
+        setWins(data.wins ?? []);
+      } else {
+        console.error("Failed to load wins:", data.error);
+        toast.error("Failed to load wins. Please refresh the page.");
+      }
+    } catch (error) {
+      console.error("Error loading wins:", error);
+      toast.error("Failed to load wins. Please check your connection.");
+    }
   }
 
   useEffect(() => {
@@ -51,14 +61,18 @@ export default function WinsPage() {
     }
 
     // Validate amount if provided
-    if (form.amount && isNaN(Number(form.amount))) {
-      toast.error("Amount must be a valid number");
-      return;
+    let amount: number | undefined = undefined;
+    if (form.amount) {
+      const parsedAmount = parseFloat(form.amount);
+      if (isNaN(parsedAmount)) {
+        toast.error("Amount must be a valid number");
+        return;
+      }
+      amount = parsedAmount;
     }
 
     setLoading(true);
     try {
-      const amount = form.amount ? parseFloat(form.amount) : undefined;
 
       const res = await fetch("/api/wins", {
         method: "POST",
