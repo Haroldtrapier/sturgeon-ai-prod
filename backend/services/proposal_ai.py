@@ -1,7 +1,7 @@
 import os
-import openai
+from openai import AsyncOpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 SYSTEM_ANALYZER = """
 You are a government contracting requirements analyst.
@@ -22,13 +22,15 @@ Use professional but plain language.
 """
 
 async def analyze_requirements(raw_requirements: str) -> str:
-    resp = openai.chat.completions.create(
+    resp = await client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": SYSTEM_ANALYZER},
             {"role": "user", "content": raw_requirements},
         ],
     )
+    if not resp.choices or not resp.choices[0].message.content:
+        raise ValueError("No response received from OpenAI API")
     return resp.choices[0].message.content
 
 
@@ -43,13 +45,15 @@ COMPANY PROFILE:
 Create a detailed section-by-section outline for the proposal.
 Include suggested headings and subheadings mapped to evaluation factors.
 """
-    resp = openai.chat.completions.create(
+    resp = await client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": SYSTEM_OUTLINER},
             {"role": "user", "content": prompt},
         ],
     )
+    if not resp.choices or not resp.choices[0].message.content:
+        raise ValueError("No response received from OpenAI API")
     return resp.choices[0].message.content
 
 
@@ -65,13 +69,15 @@ Write a full narrative proposal following the outline.
 Do NOT invent pricing; focus on technical / management approach, past performance,
 and capabilities. Use headings from the outline.
 """
-    resp = openai.chat.completions.create(
+    resp = await client.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": SYSTEM_WRITER},
             {"role": "user", "content": prompt},
         ],
     )
+    if not resp.choices or not resp.choices[0].message.content:
+        raise ValueError("No response received from OpenAI API")
     return resp.choices[0].message.content
 
 
