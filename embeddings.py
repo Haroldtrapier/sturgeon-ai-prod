@@ -41,7 +41,18 @@ def embed(text: str):
             model="text-embedding-3-large",
             input=text
         )
-        return response.data[0].embedding
+        
+        # Validate response has data
+        if not response.data or len(response.data) == 0:
+            raise ValueError("OpenAI API returned empty response")
+        
+        embedding = response.data[0].embedding
+        
+        # Validate embedding dimensions
+        if len(embedding) != 3072:
+            raise ValueError(f"Expected 3072 dimensions, got {len(embedding)}")
+        
+        return embedding
     except Exception as e:
         raise Exception(f"Failed to generate embedding: {str(e)}") from e
 

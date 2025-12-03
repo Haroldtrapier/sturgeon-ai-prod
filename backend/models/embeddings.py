@@ -1,8 +1,9 @@
 """
 Database model for storing embeddings with vector support.
 """
-from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy import Column, String, DateTime, Integer, event
 from sqlalchemy.sql import func
+from sqlalchemy.orm import validates
 from pgvector.sqlalchemy import Vector
 from backend.database import Base
 
@@ -20,6 +21,13 @@ class EmbeddingRecord(Base):
     vector = Column(Vector(3072), nullable=False)  # text-embedding-3-large has 3072 dimensions
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    @validates('vector')
+    def validate_vector(self, key, vector):
+        """Validate that the vector has exactly 3072 dimensions."""
+        if vector is not None and len(vector) != 3072:
+            raise ValueError(f"Vector must have exactly 3072 dimensions, got {len(vector)}")
+        return vector
 
     def __repr__(self):
         return f"<EmbeddingRecord(id={self.id}, user_id={self.user_id}, proposal_id={self.proposal_id})>"
