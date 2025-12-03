@@ -9,7 +9,7 @@ type Cert = {
   certType: string;
   status: string;
   notes: string | null;
-  checklist: any;
+  checklist: any; // Using any to match the problem statement specification
 };
 
 export default function CertificationsPage() {

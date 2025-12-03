@@ -5,7 +5,7 @@ type Certification = {
   certType: string;
   status: string;
   notes: string | null;
-  checklist: any;
+  checklist: any; // Using any to match the problem statement specification
 };
 
 // In-memory storage (in production, this would be a database)
@@ -28,7 +28,7 @@ export default function handler(
       }
 
       const newCert: Certification = {
-        id: Date.now().toString(),
+        id: Date.now().toString(), // Simple ID for in-memory storage. Use UUID in production.
         certType,
         status,
         notes: notes || null,
