@@ -9,7 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
-from routers.marketplaces import router as marketplaces_router
+from .routers.marketplaces import router as marketplaces_router
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 

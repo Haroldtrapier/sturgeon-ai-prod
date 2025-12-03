@@ -1,21 +1,21 @@
-from fastapi import APIRouter
-from services.govwin import search_govwin
-from services.govspend import search_govspend
-from services.sam_scraper import search_sam
+from fastapi import APIRouter, HTTPException, Query
+from ..services.govwin import search_govwin
+from ..services.govspend import search_govspend
+from ..services.sam_scraper import search_sam
 
 router = APIRouter(prefix="/marketplaces", tags=["Marketplaces"])
 
 @router.get("/sam")
-async def sam_search(q: str):
+async def sam_search(q: str = Query(..., min_length=1, max_length=200, description="Search query")):
     data = await search_sam(q)
     return {"results": data}
 
 @router.get("/govwin")
-async def govwin_search(q: str):
+async def govwin_search(q: str = Query(..., min_length=1, max_length=200, description="Search query")):
     data = await search_govwin(q)
     return {"results": data}
 
 @router.get("/govspend")
-async def govspend_search(q: str):
+async def govspend_search(q: str = Query(..., min_length=1, max_length=200, description="Search query")):
     data = await search_govspend(q)
     return {"results": data}

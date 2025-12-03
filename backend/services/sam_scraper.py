@@ -1,6 +1,10 @@
 """SAM.gov search service."""
 import httpx
+import os
+import logging
 from typing import List, Dict, Any
+
+logger = logging.getLogger(__name__)
 
 
 async def search_sam(query: str) -> List[Dict[str, Any]]:
@@ -21,13 +25,20 @@ async def search_sam(query: str) -> List[Dict[str, Any]]:
                 "keywords": query,
                 "limit": 10
             }
+            
+            # Add API key if available
+            api_key = os.getenv("SAM_GOV_API_KEY")
+            if api_key:
+                params["api_key"] = api_key
+            
             response = await client.get(url, params=params, timeout=30.0)
             
             if response.status_code == 200:
                 data = response.json()
                 return data.get("opportunitiesData", [])
             else:
+                logger.warning(f"SAM.gov API returned status {response.status_code}")
                 return []
     except Exception as e:
-        print(f"Error searching SAM: {e}")
+        logger.error(f"Error searching SAM: {e}")
         return []
