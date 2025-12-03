@@ -1,6 +1,6 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 
-async def search_govspend(query: str) -> List[Dict]:
+async def search_govspend(query: str) -> List[Dict[str, Any]]:
     """
     Stub for GovSpend integration.
 
