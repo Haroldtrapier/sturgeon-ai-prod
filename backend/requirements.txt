@@ -1,7 +1,8 @@
 mangum>=0.13.0
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
 pydantic
 httpx
+python-multipart
 mangum>=0.17.0
