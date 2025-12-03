@@ -1,7 +1,7 @@
 """
 Sturgeon AI - Government Contracting & Grants Ecosystem API
 """
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
+from backend.chat_manager import ChatSessionManager
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -23,6 +24,9 @@ app.add_middleware(
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
+
+# Initialize Chat Session Manager
+chat_manager = ChatSessionManager()
 
 # ==================== MODELS ====================
 
@@ -168,3 +172,20 @@ async def dashboard(user_id: str):
             "win_rate": 0.0
         }
     }
+
+@app.websocket("/ws/chat")
+async def websocket_chat_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for AI chat assistant"""
+    await chat_manager.connect(websocket)
+    try:
+        while True:
+            # Receive message from client
+            data = await websocket.receive_text()
+            
+            # Process message through AI
+            response = await chat_manager.handle_message(data)
+            
+            # Send response back to client
+            await chat_manager.send_personal_message(response, websocket)
+    except WebSocketDisconnect:
+        chat_manager.disconnect(websocket)
