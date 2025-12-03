@@ -189,3 +189,8 @@ async def websocket_chat_endpoint(websocket: WebSocket):
             await chat_manager.send_personal_message(response, websocket)
     except WebSocketDisconnect:
         chat_manager.disconnect(websocket)
+    except Exception as e:
+        # Handle any other exceptions and ensure cleanup
+        chat_manager.disconnect(websocket)
+        # Log error if needed
+        print(f"WebSocket error: {e}")
