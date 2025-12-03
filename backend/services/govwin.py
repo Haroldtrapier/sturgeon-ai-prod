@@ -1,6 +1,9 @@
 """GovWin search service."""
 import httpx
 from typing import List, Dict, Any
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def search_govwin(query: str) -> List[Dict[str, Any]]:
@@ -28,5 +31,5 @@ async def search_govwin(query: str) -> List[Dict[str, Any]]:
             }
         ]
     except Exception as e:
-        print(f"Error searching GovWin: {e}")
+        logger.error(f"Error searching GovWin: {e}", exc_info=True)
         return []

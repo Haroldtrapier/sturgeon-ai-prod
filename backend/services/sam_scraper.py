@@ -2,6 +2,9 @@
 import httpx
 from typing import List, Dict, Any
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def search_sam(query: str) -> List[Dict[str, Any]]:
@@ -16,6 +19,10 @@ async def search_sam(query: str) -> List[Dict[str, Any]]:
     """
     try:
         api_key = os.getenv("SAM_GOV_API_KEY", "")
+        if not api_key:
+            logger.warning("SAM_GOV_API_KEY not configured")
+            return []
+        
         async with httpx.AsyncClient() as client:
             url = "https://api.sam.gov/opportunities/v2/search"
             params = {
@@ -28,7 +35,8 @@ async def search_sam(query: str) -> List[Dict[str, Any]]:
             if response.status_code == 200:
                 data = response.json()
                 return data.get("opportunitiesData", [])
+            logger.warning(f"SAM.gov API returned status code {response.status_code}")
             return []
     except Exception as e:
-        print(f"Error searching SAM.gov: {e}")
+        logger.error(f"Error searching SAM.gov: {e}", exc_info=True)
         return []
