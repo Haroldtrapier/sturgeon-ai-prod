@@ -21,3 +21,17 @@ CREATE TABLE users (
     
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_oauth ON tuparters((jzth_provider, oauth_id);
+
+-- Saved Searches Table (Alerts)
+CREATE TABLE saved_searches (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    query TEXT NOT NULL,
+    marketplace VARCHAR(50),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_saved_searches_user_id ON saved_searches(user_id);
+CREATE INDEX idx_saved_searches_marketplace ON saved_searches(marketplace);
