@@ -23,8 +23,10 @@ export class APIClient {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Failed to create checkout session' }));
-      throw new Error(error.message || 'Failed to create checkout session');
+      const error = await response.json().catch(() => ({ 
+        message: `Failed to create checkout session (HTTP ${response.status})` 
+      }));
+      throw new Error(error.message || `Failed to create checkout session (HTTP ${response.status})`);
     }
 
     return response.json();

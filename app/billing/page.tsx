@@ -47,8 +47,9 @@ export default function BillingPage() {
         cancel_url: window.location.href,
       });
       window.location.href = session.url;
-    } catch (err: any) {
-      setError(err.message || "Error creating checkout session");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Error creating checkout session";
+      setError(errorMessage);
       setLoadingId(null);
     }
   }
