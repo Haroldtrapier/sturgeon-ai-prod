@@ -51,5 +51,13 @@ class ChatSessionManager:
         Args:
             message: The message to broadcast
         """
+        disconnected = []
         for connection in self.active_connections:
-            await connection.send_text(message)
+            try:
+                await connection.send_text(message)
+            except Exception:
+                disconnected.append(connection)
+        
+        # Remove disconnected connections
+        for connection in disconnected:
+            self.disconnect(connection)
