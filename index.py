@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
+import openai
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -23,6 +24,9 @@ app.add_middleware(
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
+
+# Initialize OpenAI client
+openai.api_key = OPENAI_API_KEY
 
 # ==================== MODELS ====================
 
@@ -128,12 +132,44 @@ async def analyze_contract(request: ContractAnalysis):
 @app.post("/api/ai/generate-proposal")
 async def generate_proposal(request: ProposalRequest):
     """AI-powered proposal generation"""
-    return {
-        "success": True,
-        "proposal": "Proposal generation ready - OpenAI integration pending",
-        "opportunity_id": request.opportunity_id,
-        "generated_at": datetime.utcnow().isoformat()
-    }
+    try:
+        # Extract company profile and requirements from the request
+        company_profile = json.dumps(request.company_info, indent=2)
+        raw_requirements = request.technical_approach or f"Opportunity ID: {request.opportunity_id}"
+        
+        # Build the prompt
+        prompt = f"""
+Build a government proposal based on the user's information.
+
+COMPANY PROFILE:
+{company_profile}
+
+REQUIREMENTS:
+{raw_requirements}
+
+Return a structured, compliant proposal.
+"""
+        
+        # Call OpenAI API with corrected model name and response access
+        response = openai.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You create compliant, professional government proposals."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        
+        # Access response content correctly using dot notation
+        proposal_content = response.choices[0].message.content
+        
+        return {
+            "success": True,
+            "proposal": proposal_content,
+            "opportunity_id": request.opportunity_id,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating proposal: {str(e)}")
 
 @app.post("/api/ai/match-opportunities")
 async def match_opportunities(company_profile: Dict[str, Any]):
