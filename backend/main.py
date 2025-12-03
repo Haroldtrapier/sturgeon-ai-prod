@@ -54,6 +54,9 @@ async def root():
             "proposals": "/api/ai/generate-proposal",
             "matching": "/api/ai/match-opportunities",
             "documents": "/api/documents/upload",
+            "sam_marketplace": "/marketplaces/sam",
+            "govwin_marketplace": "/marketplaces/govwin",
+            "govspend_marketplace": "/marketplaces/govspend",
             "health": "/health"
         }
     }
