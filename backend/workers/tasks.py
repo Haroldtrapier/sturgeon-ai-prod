@@ -3,7 +3,7 @@ Daily worker tasks for Sturgeon AI
 """
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Setup logging
 logging.basicConfig(
@@ -21,7 +21,7 @@ async def daily_worker_cycle():
     Can be scheduled via cron:
     0 3 * * * /usr/bin/python -m backend.workers.worker
     """
-    logger.info("Starting daily worker cycle at %s", datetime.utcnow().isoformat())
+    logger.info("Starting daily worker cycle at %s", datetime.now(timezone.utc).isoformat())
 
     try:
         # Example tasks that would run daily:
@@ -36,7 +36,7 @@ async def daily_worker_cycle():
         # Placeholder for actual implementation
         await asyncio.sleep(0.1)  # Simulate work
 
-        logger.info("Daily worker cycle completed successfully at %s", datetime.utcnow().isoformat())
+        logger.info("Daily worker cycle completed successfully at %s", datetime.now(timezone.utc).isoformat())
 
     except Exception as e:
         logger.error("Error in daily worker cycle: %s", str(e), exc_info=True)
