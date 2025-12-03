@@ -3,6 +3,7 @@ node_modules/
 .next/
 package-lock.json
 .eslintrc.json
+tsconfig.tsbuildinfo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -20,7 +21,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ - Python distribution directory (but we need lib/ for Next.js utilities)
 lib64/
 parts/
 sdist/
