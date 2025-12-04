@@ -50,9 +50,10 @@ export default function Register() {
 
       if (data.user) {
         setSuccess('Account created successfully! Redirecting to chat...');
+        // Navigate after showing success message
         setTimeout(() => {
           router.push('/chat');
-        }, 2000);
+        }, 1500);
       }
     } catch (error: any) {
       setError(error.message || 'Failed to create account');
