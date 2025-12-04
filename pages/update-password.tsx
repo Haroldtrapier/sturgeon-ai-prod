@@ -61,9 +61,9 @@ export default function UpdatePassword() {
 
       if (response.ok) {
         setSuccess(true);
-        // Redirect to login after 3 seconds
+        // Redirect to home page after 3 seconds
         setTimeout(() => {
-          router.push('/login');
+          router.push('/');
         }, 3000);
       } else {
         setError(data.error || 'Failed to update password. Please try again.');
@@ -101,10 +101,10 @@ export default function UpdatePassword() {
             </p>
             <div className="mt-6">
               <Link
-                href="/reset-password"
+                href="/"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Request a new password reset link →
+                Return to home page →
               </Link>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function UpdatePassword() {
                   Password updated successfully!
                 </h3>
                 <div className="mt-2 text-sm text-green-700">
-                  <p>Redirecting you to login...</p>
+                  <p>Redirecting you to the home page...</p>
                 </div>
               </div>
             </div>

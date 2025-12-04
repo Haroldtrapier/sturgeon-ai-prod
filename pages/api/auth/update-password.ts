@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,6 +11,12 @@ export default async function handler(
 ) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Check for required environment variables
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    return res.status(500).json({ error: 'Server configuration error. Please contact support.' });
   }
 
   try {
@@ -64,6 +70,7 @@ export default async function handler(
 
   } catch (error) {
     console.error('Update password error:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
     return res.status(500).json({ 
       error: 'Internal server error. Please try again.' 
     });
