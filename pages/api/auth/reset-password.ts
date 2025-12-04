@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Update the user's password
     const { error: updateError } = await supabase.auth.updateUser({
-      password: password,
+      password,
     });
 
     if (updateError) {

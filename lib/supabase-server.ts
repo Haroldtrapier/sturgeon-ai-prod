@@ -2,6 +2,34 @@ import { createServerClient } from '@supabase/ssr';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+interface CookieOptions {
+  httpOnly?: boolean;
+  secure?: boolean;
+  sameSite?: 'Lax' | 'Strict' | 'None';
+  maxAge?: number;
+  path?: string;
+}
+
+function formatCookieString(name: string, value: string, options: CookieOptions): string {
+  const parts = [`${name}=${value}`, `Path=${options.path || '/'}`];
+  
+  if (options.httpOnly) {
+    parts.push('HttpOnly');
+  }
+  
+  if (options.secure) {
+    parts.push('Secure');
+  }
+  
+  parts.push(`SameSite=${options.sameSite || 'Lax'}`);
+  
+  if (options.maxAge !== undefined) {
+    parts.push(`Max-Age=${options.maxAge}`);
+  }
+  
+  return parts.join('; ');
+}
+
 export function createServerSupabaseClient({
   req,
   res,
@@ -17,11 +45,11 @@ export function createServerSupabaseClient({
         get(name: string) {
           return req.cookies[name];
         },
-        set(name: string, value: string, options: any) {
-          res.setHeader('Set-Cookie', `${name}=${value}; Path=/; ${options.httpOnly ? 'HttpOnly;' : ''} ${options.secure ? 'Secure;' : ''} SameSite=${options.sameSite || 'Lax'}`);
+        set(name: string, value: string, options: CookieOptions) {
+          res.setHeader('Set-Cookie', formatCookieString(name, value, options));
         },
-        remove(name: string, options: any) {
-          res.setHeader('Set-Cookie', `${name}=; Path=/; Max-Age=0; ${options.httpOnly ? 'HttpOnly;' : ''} ${options.secure ? 'Secure;' : ''} SameSite=${options.sameSite || 'Lax'}`);
+        remove(name: string, options: CookieOptions) {
+          res.setHeader('Set-Cookie', formatCookieString(name, '', { ...options, maxAge: 0 }));
         },
       },
     }
