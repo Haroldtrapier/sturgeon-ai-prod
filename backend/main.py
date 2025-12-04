@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
+from openai import OpenAI
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -23,6 +24,9 @@ app.add_middleware(
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
+
+# Initialize OpenAI client
+openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 # ==================== MODELS ====================
 
@@ -113,36 +117,137 @@ async def search_grants(keywords: Optional[str] = None, limit: int = 50):
 @app.post("/api/ai/analyze-contract")
 async def analyze_contract(request: ContractAnalysis):
     """AI-powered contract analysis"""
-    return {
-        "success": True,
-        "analysis": {
-            "summary": "Contract analysis complete",
-            "requirements": ["Requirement extraction pending OpenAI integration"],
-            "risks": ["Risk assessment ready"],
-            "compliance": ["Compliance check ready"]
-        },
-        "analysis_type": request.analysis_type,
-        "timestamp": datetime.utcnow().isoformat()
-    }
+    if not openai_client:
+        return {
+            "success": False,
+            "error": "OpenAI API key not configured"
+        }
+    
+    try:
+        system_prompt = """You are Sturgeon AI Assistant, a specialized AI for analyzing government contracts. 
+        Provide detailed, accurate analysis of contract requirements, risks, and compliance considerations."""
+        
+        response = openai_client.chat.completions.create(
+            model="gpt-4-turbo-preview",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Analyze this contract with {request.analysis_type} analysis:\n\n{request.contract_text}"}
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+        
+        analysis_text = response.choices[0].message.content
+        
+        return {
+            "success": True,
+            "analysis": {
+                "summary": analysis_text,
+                "requirements": [analysis_text],
+                "risks": ["Detailed in summary"],
+                "compliance": ["Detailed in summary"]
+            },
+            "analysis_type": request.analysis_type,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
 
 @app.post("/api/ai/generate-proposal")
 async def generate_proposal(request: ProposalRequest):
     """AI-powered proposal generation"""
-    return {
-        "success": True,
-        "proposal": "Proposal generation ready - OpenAI integration pending",
-        "opportunity_id": request.opportunity_id,
-        "generated_at": datetime.utcnow().isoformat()
-    }
+    if not openai_client:
+        return {
+            "success": False,
+            "error": "OpenAI API key not configured"
+        }
+    
+    try:
+        system_prompt = """You are Sturgeon AI Assistant, a specialized AI for generating government contract proposals. 
+        Create professional, compliant, and competitive proposals tailored to specific opportunities."""
+        
+        user_prompt = f"""Generate a proposal for opportunity ID: {request.opportunity_id}
+        
+Company Information:
+{json.dumps(request.company_info, indent=2)}
+
+Technical Approach:
+{request.technical_approach or 'To be determined based on opportunity requirements'}
+
+Please generate a comprehensive proposal."""
+        
+        response = openai_client.chat.completions.create(
+            model="gpt-4-turbo-preview",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7,
+            max_tokens=3000
+        )
+        
+        proposal_text = response.choices[0].message.content
+        
+        return {
+            "success": True,
+            "proposal": proposal_text,
+            "opportunity_id": request.opportunity_id,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "opportunity_id": request.opportunity_id,
+            "generated_at": datetime.utcnow().isoformat()
+        }
 
 @app.post("/api/ai/match-opportunities")
 async def match_opportunities(company_profile: Dict[str, Any]):
     """AI opportunity matching"""
-    return {
-        "success": True,
-        "recommendations": "Matching algorithm ready",
-        "timestamp": datetime.utcnow().isoformat()
-    }
+    if not openai_client:
+        return {
+            "success": False,
+            "error": "OpenAI API key not configured"
+        }
+    
+    try:
+        system_prompt = """You are Sturgeon AI Assistant, a specialized AI for matching companies with government contract opportunities. 
+        Analyze company profiles and recommend the most suitable opportunities based on capabilities, experience, and strategic fit."""
+        
+        user_prompt = f"""Analyze this company profile and provide opportunity matching recommendations:
+
+{json.dumps(company_profile, indent=2)}
+
+Provide specific recommendations for government contract opportunities that would be a good fit."""
+        
+        response = openai_client.chat.completions.create(
+            model="gpt-4-turbo-preview",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+        
+        recommendations_text = response.choices[0].message.content
+        
+        return {
+            "success": True,
+            "recommendations": recommendations_text,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
 
 @app.post("/api/documents/upload")
 async def upload_document(file: UploadFile = File(...), document_type: str = "general"):

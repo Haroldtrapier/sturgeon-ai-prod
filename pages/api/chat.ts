@@ -36,7 +36,8 @@ export default async function handler(
       try {
         console.log('Attempting to use Claude (Anthropic)...');
 
-        const anthropicResponse = await anthropic.messages.create({
+        const anthropicClient = anthropic;
+        const anthropicResponse = await anthropicClient.messages.create({
           model: 'claude-3-5-sonnet-20241022',
           max_tokens: 1024,
           messages: [
