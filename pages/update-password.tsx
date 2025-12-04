@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export default function UpdatePassword() {
   const router = useRouter();
@@ -9,30 +13,36 @@ export default function UpdatePassword() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [token, setToken] = useState('');
+  const [accessToken, setAccessToken] = useState('');
   const [hasToken, setHasToken] = useState(false);
 
   useEffect(() => {
-    // Get token from URL path or query
-    const { token: urlToken } = router.query;
+    // Extract access token from URL hash (Supabase sends it this way)
+    const hash = window.location.hash;
 
-    if (urlToken && typeof urlToken === 'string') {
-      setToken(urlToken);
-      setHasToken(true);
-    } else {
-      // Check if there's a token in the URL hash (from some email links)
-      const hash = window.location.hash;
-      if (hash && hash.includes('token=')) {
-        const hashToken = hash.split('token=')[1]?.split('&')[0];
-        if (hashToken) {
-          setToken(hashToken);
-          setHasToken(true);
-        }
+    if (hash && hash.includes('access_token')) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get('access_token');
+
+      if (token) {
+        setAccessToken(token);
+        setHasToken(true);
+
+        // Verify the token with Supabase
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        supabase.auth.getUser(token).then(({ data, error }) => {
+          if (error || !data.user) {
+            setError('Invalid or expired reset link. Please request a new password reset.');
+            setHasToken(false);
+          }
+        });
       } else {
         setError('Invalid or expired reset link. Please request a new password reset.');
       }
+    } else {
+      setError('Invalid or expired reset link. Please request a new password reset.');
     }
-  }, [router.query]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +64,11 @@ export default function UpdatePassword() {
     try {
       const response = await fetch('/api/auth/update-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password }),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ password }),
       });
 
       const data = await response.json();
@@ -75,14 +88,6 @@ export default function UpdatePassword() {
       setLoading(false);
     }
   };
-
-  if (!hasToken && !router.isReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
-  }
 
   if (!hasToken) {
     return (
