@@ -1,67 +1,45 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createServerSupabaseClient } from '../../../lib/supabase-server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: 'Password is required' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  }
+
   try {
-    const { password } = req.body;
+    const supabase = createServerSupabaseClient({ req, res });
 
-    if (!password || typeof password !== 'string' || password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    // Get the current session (set by the magic link from the email)
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError || !session) {
+      console.error('Session error:', sessionError);
+      return res.status(401).json({ error: 'Invalid or expired reset token' });
     }
-
-    // Get the access token from the request
-    // This should come from the URL hash that Supabase sends
-    const authHeader = req.headers.authorization;
-    const accessToken = authHeader?.replace('Bearer ', '');
-
-    if (!accessToken) {
-      return res.status(401).json({ 
-        error: 'No authentication token found. Please use the link from your email.' 
-      });
-    }
-
-    // Create Supabase client with the user's access token
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    });
 
     // Update the user's password
-    const { error } = await supabase.auth.updateUser({
+    const { error: updateError } = await supabase.auth.updateUser({
       password: password,
     });
 
-    if (error) {
-      console.error('Update password error:', error);
-      return res.status(400).json({ 
-        error: error.message || 'Failed to update password. Please request a new reset link.' 
-      });
+    if (updateError) {
+      console.error('Password update error:', updateError);
+      return res.status(400).json({ error: 'Failed to update password' });
     }
 
-    console.log('Password updated successfully');
-
-    return res.status(200).json({ 
-      success: true,
-      message: 'Password updated successfully'
-    });
-  } catch (error: any) {
-    console.error('Update password error:', error);
-    return res.status(500).json({
-      error: 'Failed to update password',
-      details: error.message,
-    });
+    return res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    return res.status(500).json({ error: 'An unexpected error occurred' });
   }
 }
