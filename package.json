@@ -36,7 +36,9 @@
     "@tiptap/react": "^2.1.13",
     "@tiptap/starter-kit": "^2.1.13",
     "jspdf": "^2.5.1",
-    "papaparse": "^5.4.1"
+    "papaparse": "^5.4.1",
+    "@anthropic-ai/sdk": "^0.71.0",
+    "openai": "^6.9.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
