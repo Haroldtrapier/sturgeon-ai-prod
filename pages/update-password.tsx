@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export default function UpdatePassword() {
   const router = useRouter();
@@ -13,34 +9,20 @@ export default function UpdatePassword() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [accessToken, setAccessToken] = useState('');
   const [hasToken, setHasToken] = useState(false);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    // Extract access token from URL hash (Supabase sends it this way)
+    // Check if there's a token in the URL hash (from Supabase email link)
     const hash = window.location.hash;
 
     if (hash && hash.includes('access_token')) {
-      const params = new URLSearchParams(hash.substring(1));
-      const token = params.get('access_token');
-
-      if (token) {
-        setAccessToken(token);
-        setHasToken(true);
-
-        // Verify the token with Supabase
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        supabase.auth.getUser(token).then(({ data, error }) => {
-          if (error || !data.user) {
-            setError('Invalid or expired reset link. Please request a new password reset.');
-            setHasToken(false);
-          }
-        });
-      } else {
-        setError('Invalid or expired reset link. Please request a new password reset.');
-      }
+      setHasToken(true);
+      setChecking(false);
     } else {
       setError('Invalid or expired reset link. Please request a new password reset.');
+      setHasToken(false);
+      setChecking(false);
     }
   }, []);
 
@@ -65,8 +47,7 @@ export default function UpdatePassword() {
       const response = await fetch('/api/auth/update-password', {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ password }),
       });
@@ -88,6 +69,17 @@ export default function UpdatePassword() {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!hasToken) {
     return (
