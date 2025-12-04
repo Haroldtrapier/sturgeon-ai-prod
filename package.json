@@ -35,7 +35,7 @@
     "recharts": "^2.10.3",
     "@tiptap/react": "^2.1.13",
     "@tiptap/starter-kit": "^2.1.13",
-    "jspdf": "^2.5.1",
+    "jspdf": "^3.0.2",
     "papaparse": "^5.4.1",
     "@anthropic-ai/sdk": "^0.71.0",
     "openai": "^6.9.1"
