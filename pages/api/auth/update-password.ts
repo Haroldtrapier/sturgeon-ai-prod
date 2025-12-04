@@ -1,17 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
-// In-memory storage for reset tokens (use database in production!)
-// This should be the same storage used in reset-password.ts
-const resetTokens = new Map<string, { email: string; expires: number }>();
-
-// In-memory user storage (use database in production!)
-// This is just for demo - in production, update your actual database
-const users = new Map<string, { email: string; password: string }>();
-
-function hashPassword(password: string): string {
-  return crypto.createHash('sha256').update(password).digest('hex');
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,53 +13,45 @@ export default async function handler(
   }
 
   try {
-    const { token, password } = req.body;
-
-    if (!token || typeof token !== 'string') {
-      return res.status(400).json({ error: 'Reset token is required' });
-    }
+    const { password } = req.body;
 
     if (!password || typeof password !== 'string' || password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
 
-    // Verify token
-    const tokenData = resetTokens.get(token);
+    // Get the access token from the request
+    // This should come from the URL hash that Supabase sends
+    const authHeader = req.headers.authorization;
+    const accessToken = authHeader?.replace('Bearer ', '');
 
-    if (!tokenData) {
-      return res.status(400).json({ 
-        error: 'Invalid or expired reset token. Please request a new password reset.' 
+    if (!accessToken) {
+      return res.status(401).json({ 
+        error: 'No authentication token found. Please use the link from your email.' 
       });
     }
 
-    // Check if token is expired
-    if (tokenData.expires < Date.now()) {
-      resetTokens.delete(token);
-      return res.status(400).json({ 
-        error: 'Reset token has expired. Please request a new password reset.' 
-      });
-    }
-
-    // Hash the new password
-    const hashedPassword = hashPassword(password);
-
-    // Update user password in your database
-    // For demo purposes, we're using in-memory storage
-    users.set(tokenData.email, {
-      email: tokenData.email,
-      password: hashedPassword,
+    // Create Supabase client with the user's access token
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
     });
 
-    // Invalidate the token
-    resetTokens.delete(token);
+    // Update the user's password
+    const { error } = await supabase.auth.updateUser({
+      password: password,
+    });
 
-    console.log(`Password updated successfully for: ${tokenData.email}`);
+    if (error) {
+      console.error('Update password error:', error);
+      return res.status(400).json({ 
+        error: error.message || 'Failed to update password. Please request a new reset link.' 
+      });
+    }
 
-    // In production, you might want to:
-    // 1. Update the password in your database
-    // 2. Send a confirmation email
-    // 3. Invalidate all existing sessions
-    // 4. Log the password change for security audit
+    console.log('Password updated successfully');
 
     return res.status(200).json({ 
       success: true,
