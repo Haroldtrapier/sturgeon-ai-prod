@@ -14,7 +14,7 @@ export default function ChatInterface() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I'm Sturgeon AI Assistant. How can I help you today?',
+      content: 'Hello! I am Sturgeon AI Assistant. How can I help you today?',
       timestamp: new Date(),
     },
   ]);
@@ -93,7 +93,6 @@ export default function ChatInterface() {
 
   return (
     <div className="flex flex-col h-[600px] max-w-4xl mx-auto bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
-      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
         {messages.map((message) => (
           <div
@@ -131,7 +130,6 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
       <div className="border-t border-gray-200 bg-white p-4">
         <div className="flex gap-3">
           <input
