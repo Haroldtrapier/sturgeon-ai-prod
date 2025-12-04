@@ -137,7 +137,7 @@ async def analyze_contract(request: ContractAnalysis):
             max_tokens=2000
         )
         
-        analysis_text = response.choices[0].message.content
+        analysis_text = response.choices[0].message.content or "No analysis generated"
         
         return {
             "success": True,
@@ -190,7 +190,7 @@ Please generate a comprehensive proposal."""
             max_tokens=3000
         )
         
-        proposal_text = response.choices[0].message.content
+        proposal_text = response.choices[0].message.content or "No proposal generated"
         
         return {
             "success": True,
@@ -235,7 +235,7 @@ Provide specific recommendations for government contract opportunities that woul
             max_tokens=2000
         )
         
-        recommendations_text = response.choices[0].message.content
+        recommendations_text = response.choices[0].message.content or "No recommendations generated"
         
         return {
             "success": True,
