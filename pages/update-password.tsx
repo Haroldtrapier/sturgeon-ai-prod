@@ -13,13 +13,15 @@ export default function UpdatePassword() {
 
   useEffect(() => {
     // Get access token from URL hash (Supabase sends it this way)
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const token = hashParams.get('access_token');
-    
-    if (token) {
-      setAccessToken(token);
-    } else {
-      setError('Invalid or expired reset link. Please request a new one.');
+    if (typeof window !== 'undefined') {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const token = hashParams.get('access_token');
+      
+      if (token) {
+        setAccessToken(token);
+      } else {
+        setError('Invalid or expired reset link. Please request a new one.');
+      }
     }
   }, []);
 

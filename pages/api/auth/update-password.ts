@@ -30,19 +30,17 @@ export default async function handler(
   try {
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-    // Set the session with the access token
-    const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: '', // Not needed for password update
+    // Create a Supabase client with the access token for this specific request
+    const supabaseWithToken = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
     });
 
-    if (sessionError) {
-      console.error('Session error:', sessionError);
-      return res.status(401).json({ error: 'Invalid or expired reset token' });
-    }
-
-    // Update the password
-    const { error: updateError } = await supabase.auth.updateUser({
+    // Update the password using the authenticated client
+    const { error: updateError } = await supabaseWithToken.auth.updateUser({
       password,
     });
 

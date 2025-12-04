@@ -41,9 +41,11 @@ export default async function handler(
     }
 
     // Set the session cookie
+    const isProduction = process.env.NODE_ENV === 'production';
+    const secureFlag = isProduction ? ' Secure;' : '';
     res.setHeader('Set-Cookie', [
-      `sb-access-token=${data.session.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=3600`,
-      `sb-refresh-token=${data.session.refresh_token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`,
+      `sb-access-token=${data.session.access_token}; Path=/; HttpOnly;${secureFlag} SameSite=Lax; Max-Age=3600`,
+      `sb-refresh-token=${data.session.refresh_token}; Path=/; HttpOnly;${secureFlag} SameSite=Lax; Max-Age=604800`,
     ]);
 
     return res.status(200).json({
