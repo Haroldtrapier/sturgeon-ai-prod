@@ -63,7 +63,9 @@ export function predictWinProbability(
   if (opp.pastPerformanceSimilarity !== undefined) {
     const boost = 0.2 * opp.pastPerformanceSimilarity
     prob += boost
-    drivers.push(`Past performance similarity: +${boost.toFixed(2)}`)
+    if (boost > 0) {
+      drivers.push(`Past performance similarity: +${boost.toFixed(2)}`)
+    }
   }
 
   // Small business edge
@@ -76,7 +78,9 @@ export function predictWinProbability(
   if (opp.strategicFitScore !== undefined) {
     const boost = 0.15 * opp.strategicFitScore
     prob += boost
-    drivers.push(`Strategic fit: +${boost.toFixed(2)}`)
+    if (boost > 0) {
+      drivers.push(`Strategic fit: +${boost.toFixed(2)}`)
+    }
   }
 
   // Clamp
@@ -114,7 +118,7 @@ export function analyzeAwardTrends(
     return {
       segment: agency,
       direction,
-      confidence: 0.6,
+      confidence: 0.6, // Fixed confidence for v1 model; replace with data-driven calculation later
       notes: `Agency ${agency} represents ${(share * 100).toFixed(
         1
       )}% of recent award value`,
