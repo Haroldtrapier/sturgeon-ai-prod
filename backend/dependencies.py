@@ -7,14 +7,21 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from typing import Optional
 import os
-from database import get_db
-from models import User
+
+try:
+    from database import get_db
+    from models import User
+except ImportError:
+    from .database import get_db
+    from .models import User
 
 # Security scheme
 security = HTTPBearer()
 
 # JWT configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET_KEY environment variable must be set")
 ALGORITHM = "HS256"
 
 

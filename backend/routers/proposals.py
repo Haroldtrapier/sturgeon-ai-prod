@@ -3,14 +3,19 @@ Proposals router - API endpoints for managing proposals
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import sys
-import os
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database import get_db
-from models import User, Proposal
-from schemas import ProposalUpdate, ProposalOut
-from dependencies import get_current_user
+
+# Import using absolute imports (works when backend is run from backend directory)
+try:
+    from database import get_db
+    from models import User, Proposal
+    from schemas import ProposalUpdate, ProposalOut
+    from dependencies import get_current_user
+except ImportError:
+    # Fallback for when running as a package
+    from ..database import get_db
+    from ..models import User, Proposal
+    from ..schemas import ProposalUpdate, ProposalOut
+    from ..dependencies import get_current_user
 
 router = APIRouter(prefix="/proposals", tags=["proposals"])
 

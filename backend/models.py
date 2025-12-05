@@ -6,7 +6,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
-from database import Base
+
+try:
+    from database import Base
+except ImportError:
+    from .database import Base
 
 
 class User(Base):
