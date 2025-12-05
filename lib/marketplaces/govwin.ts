@@ -1,15 +1,4 @@
-export interface SearchParams {
-  query: string
-  naics?: string
-}
-
-export interface SearchResult {
-  id: string
-  title: string
-  description: string
-  naics?: string
-  marketplace: 'govwin'
-}
+import { SearchParams, SearchResult } from './types'
 
 export async function searchGovwin(params: SearchParams): Promise<SearchResult[]> {
   const { query, naics } = params

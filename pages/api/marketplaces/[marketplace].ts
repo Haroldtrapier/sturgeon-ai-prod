@@ -39,7 +39,7 @@ export default async function handler(
     }
 
     return res.status(200).json({ data: results })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error(`[marketplaces/${marketplace}]`, err)
     return res.status(500).json({
       error: 'Marketplace search failed'
