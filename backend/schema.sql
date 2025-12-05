@@ -436,6 +436,39 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
 -- ============================================================================
+-- 11. SUBSCRIPTIONS (Stripe subscription management)
+-- ============================================================================
+CREATE TABLE subscriptions (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    stripe_subscription_id TEXT UNIQUE,
+    stripe_customer_id TEXT,
+    status TEXT DEFAULT 'inactive' CHECK (status IN ('active', 'inactive', 'cancelled', 'past_due')),
+    plan TEXT CHECK (plan IN ('basic', 'pro', 'enterprise')),
+    current_period_start TIMESTAMPTZ,
+    current_period_end TIMESTAMPTZ,
+    cancel_at_period_end TEXT DEFAULT 'false',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for subscriptions
+CREATE INDEX idx_subscriptions_user ON subscriptions(user_id);
+CREATE INDEX idx_subscriptions_stripe_sub ON subscriptions(stripe_subscription_id);
+CREATE INDEX idx_subscriptions_status ON subscriptions(status);
+
+-- RLS for subscriptions
+ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY subscriptions_select ON subscriptions FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY subscriptions_insert ON subscriptions FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY subscriptions_update ON subscriptions FOR UPDATE USING (auth.uid() = user_id);
+
+-- Trigger for subscriptions
+CREATE TRIGGER update_subscriptions_updated_at BEFORE UPDATE ON subscriptions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
 -- COMMENTS (Documentation)
 -- ============================================================================
 
@@ -449,3 +482,4 @@ COMMENT ON TABLE saved_searches IS 'User saved searches with alert capabilities'
 COMMENT ON TABLE opportunity_interactions IS 'User interaction tracking for analytics';
 COMMENT ON TABLE analytics_events IS 'Platform-wide analytics and usage tracking';
 COMMENT ON TABLE user_analytics IS 'Aggregated user metrics and statistics';
+COMMENT ON TABLE subscriptions IS 'Stripe subscription tracking and management';

@@ -20,6 +20,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Import and include billing router
+try:
+    from .routers.billing import router as billing_router
+    app.include_router(billing_router, prefix="/api/billing", tags=["billing"])
+except ImportError:
+    # Gracefully handle if routers package is not available
+    pass
+
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
@@ -50,6 +58,8 @@ async def root():
             "proposals": "/api/ai/generate-proposal",
             "matching": "/api/ai/match-opportunities",
             "documents": "/api/documents/upload",
+            "billing": "/api/billing/checkout-session",
+            "webhook": "/api/billing/webhook",
             "health": "/health"
         }
     }
