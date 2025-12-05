@@ -11,6 +11,8 @@ export type Alert = {
   dueDate?: string
 }
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24
+
 export function generateAlerts(
   opportunities: Opportunity[],
   company: CompanyProfile,
@@ -22,7 +24,7 @@ export function generateAlerts(
   for (const opp of opportunities) {
     if (opp.dueDate) {
       const dueMs = new Date(opp.dueDate).getTime()
-      const diffDays = (dueMs - todayMs) / (1000 * 60 * 60 * 24)
+      const diffDays = (dueMs - todayMs) / MS_PER_DAY
 
       if (diffDays <= 7 && diffDays >= 0) {
         alerts.push({
@@ -40,7 +42,7 @@ export function generateAlerts(
 
     // high-fit based on simple rules: NAICS + target agency
     const isNaicsFit =
-      company.primaryNaics?.includes(opp.naics ?? '') ?? false
+      opp.naics && company.primaryNaics?.includes(opp.naics)
     const isAgencyFit =
       company.targetAgencies?.includes(opp.agency) ?? false
 
