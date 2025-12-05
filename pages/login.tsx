@@ -23,11 +23,16 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        // Store authentication token in localStorage
+        if (data.session?.access_token) {
+          localStorage.setItem('auth_token', data.session.access_token);
+        }
         // Redirect to dashboard or home page
         router.push('/');
       } else {
-        const data = await response.json();
         setError(data.error || 'Invalid login credentials');
       }
     } catch (err) {

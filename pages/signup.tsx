@@ -43,6 +43,10 @@ export default function Signup() {
 
       if (response.ok) {
         setSuccess(true);
+        // Store authentication token in localStorage if available
+        if (data.session?.access_token) {
+          localStorage.setItem('auth_token', data.session.access_token);
+        }
         // Redirect to login after 3 seconds
         setTimeout(() => {
           router.push('/login');

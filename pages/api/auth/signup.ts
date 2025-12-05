@@ -70,6 +70,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         created_at: data.user.created_at,
       },
       emailConfirmationRequired,
+      session: data.session ? {
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      } : undefined,
     });
   } catch (error) {
     console.error('Unexpected signup error:', error);
