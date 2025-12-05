@@ -17,24 +17,42 @@ def rebuild_all_embeddings():
     
     This task iterates through all opportunities and proposals in the database
     and generates/updates their embeddings for similarity search and matching.
+    Uses chunked processing to avoid memory issues with large datasets.
     """
     db: Session = SessionLocal()
     try:
-        # Process all opportunities
-        for opp in db.query(Opportunity).all():
-            text = f"{opp.title}\n{opp.description or ''}"
-            embed_text(db, "opportunity", str(opp.id), text)
+        # Process opportunities in chunks to avoid memory issues
+        chunk_size = 100
+        offset = 0
+        while True:
+            opportunities = db.query(Opportunity).limit(chunk_size).offset(offset).all()
+            if not opportunities:
+                break
+            
+            for opp in opportunities:
+                text = f"{opp.title}\n{opp.description or ''}"
+                embed_text(db, "opportunity", str(opp.id), text)
+            
+            offset += chunk_size
 
-        # Process all proposals
-        for prop in db.query(Proposal).all():
-            # Combine title, executive_summary, and technical_approach
-            text_parts = [prop.title]
-            if prop.executive_summary:
-                text_parts.append(prop.executive_summary)
-            if prop.technical_approach:
-                text_parts.append(prop.technical_approach)
-            text = "\n".join(text_parts)
-            embed_text(db, "proposal", str(prop.id), text)
+        # Process proposals in chunks to avoid memory issues
+        offset = 0
+        while True:
+            proposals = db.query(Proposal).limit(chunk_size).offset(offset).all()
+            if not proposals:
+                break
+            
+            for prop in proposals:
+                # Combine title, executive_summary, and technical_approach
+                text_parts = [prop.title]
+                if prop.executive_summary:
+                    text_parts.append(prop.executive_summary)
+                if prop.technical_approach:
+                    text_parts.append(prop.technical_approach)
+                text = "\n".join(text_parts)
+                embed_text(db, "proposal", str(prop.id), text)
+            
+            offset += chunk_size
     finally:
         db.close()
 

@@ -1,8 +1,8 @@
 """
 SQLAlchemy models for Opportunities and Proposals
 """
-from sqlalchemy import Column, String, Text, Integer, DateTime, TIMESTAMP, Boolean, ARRAY, JSON, Numeric
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Text, Integer, TIMESTAMP, Boolean, ARRAY, Numeric
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from .database import Base
 import uuid
 
@@ -28,7 +28,7 @@ class Opportunity(Base):
     contract_type = Column(Text)
     source = Column(Text, default='SAM.gov')
     url = Column(Text)
-    attachments = Column(JSON, default=[])
+    attachments = Column(JSONB, default=[])
     keywords = Column(ARRAY(Text))
     status = Column(Text, default='active')
     match_score = Column(Integer)
@@ -47,10 +47,10 @@ class Proposal(Base):
     title = Column(Text, nullable=False)
     version = Column(Integer, default=1)
     status = Column(Text, default='draft')
-    content = Column(JSON, nullable=False)
+    content = Column(JSONB, nullable=False)
     executive_summary = Column(Text)
     technical_approach = Column(Text)
-    pricing = Column(JSON)
+    pricing = Column(JSONB)
     generated_by_ai = Column(Boolean, default=True)
     ai_provider = Column(Text)
     document_url = Column(Text)
