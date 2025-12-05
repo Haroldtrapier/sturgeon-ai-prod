@@ -447,7 +447,7 @@ CREATE TABLE subscriptions (
     plan TEXT CHECK (plan IN ('basic', 'pro', 'enterprise')),
     current_period_start TIMESTAMPTZ,
     current_period_end TIMESTAMPTZ,
-    cancel_at_period_end TEXT DEFAULT 'false',
+    cancel_at_period_end BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

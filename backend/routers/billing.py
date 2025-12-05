@@ -1,10 +1,16 @@
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from enum import Enum
+from typing import Literal
+import logging
 from ..auth import get_current_user
 from ..config import settings
 from ..database import get_db
 from ..models import User, Subscription
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -16,6 +22,18 @@ PLAN_PRICE_MAP = {
 }
 
 
+class PlanType(str, Enum):
+    """Valid subscription plans"""
+    BASIC = "basic"
+    PRO = "pro"
+    ENTERPRISE = "enterprise"
+
+
+class CheckoutSessionRequest(BaseModel):
+    """Request model for checkout session creation"""
+    plan: Literal["basic", "pro", "enterprise"]
+
+
 def map_plan_to_price_id(plan: str) -> str:
     try:
         return PLAN_PRICE_MAP[plan]
@@ -25,11 +43,11 @@ def map_plan_to_price_id(plan: str) -> str:
 
 @router.post("/checkout-session")
 def create_checkout_session(
-    plan: str,
+    request: CheckoutSessionRequest,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    price_id = map_plan_to_price_id(plan)
+    price_id = map_plan_to_price_id(request.plan)
 
     session = stripe.checkout.Session.create(
         mode="subscription",
@@ -37,6 +55,10 @@ def create_checkout_session(
         line_items=[{"price": price_id, "quantity": 1}],
         success_url=f"{settings.FRONTEND_URL}/billing/success",
         cancel_url=f"{settings.FRONTEND_URL}/billing/cancel",
+        metadata={
+            "user_id": str(user.id),
+            "plan": request.plan,
+        },
     )
 
     return {"checkout_url": session.url}
@@ -51,15 +73,30 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    except ValueError as e:
+        # Invalid payload
+        logger.error(f"Invalid webhook payload: {e}")
+        raise HTTPException(status_code=400, detail="Invalid payload")
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        logger.error(f"Invalid webhook signature: {e}")
+        raise HTTPException(status_code=400, detail="Invalid signature")
 
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
-        customer_email = session.get("customer_details", {}).get("email")
+        metadata = session.get("metadata", {})
+        user_id = metadata.get("user_id")
+        plan = metadata.get("plan")
         sub_id = session.get("subscription")
+        customer_email = session.get("customer_details", {}).get("email")
 
-        user = db.query(User).filter(User.email == customer_email).one_or_none()
+        # Prefer user_id from metadata, fallback to email lookup
+        user = None
+        if user_id:
+            user = db.query(User).filter(User.id == user_id).one_or_none()
+        if not user and customer_email:
+            user = db.query(User).filter(User.email == customer_email).one_or_none()
+
         if user:
             sub = (
                 db.query(Subscription)
@@ -72,7 +109,11 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
             sub.stripe_subscription_id = sub_id
             sub.status = "active"
+            if plan:
+                sub.plan = plan
             db.commit()
+        else:
+            logger.warning(f"User not found for subscription {sub_id}")
 
     elif event["type"] == "invoice.payment_failed":
         # Handle failed payment
@@ -88,6 +129,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             if sub:
                 sub.status = "past_due"
                 db.commit()
+                logger.info(f"Subscription {sub_id} marked as past_due")
 
     elif event["type"] == "customer.subscription.deleted":
         # Handle subscription cancellation
@@ -103,5 +145,6 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             if sub:
                 sub.status = "cancelled"
                 db.commit()
+                logger.info(f"Subscription {sub_id} marked as cancelled")
 
     return {"received": True}
