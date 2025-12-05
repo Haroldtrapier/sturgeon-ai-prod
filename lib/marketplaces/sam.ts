@@ -1,4 +1,4 @@
-import type { Opportunity, SamSearchParams } from './types';
+import type { Opportunity } from './types';
 
 /**
  * Search for opportunities on SAM.gov
@@ -33,27 +33,32 @@ export async function searchSam(params: {
     }
 
     // Add posted date filter (opportunities from the last 30 days)
+    // Format: MM/DD/YYYY to match Python backend format
     const postedFrom = new Date();
     postedFrom.setDate(postedFrom.getDate() - 30);
-    searchParams.postedFrom = postedFrom.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric'
-    });
+    const month = (postedFrom.getMonth() + 1).toString().padStart(2, '0');
+    const day = postedFrom.getDate().toString().padStart(2, '0');
+    const year = postedFrom.getFullYear();
+    searchParams.postedFrom = `${month}/${day}/${year}`;
 
     const url = new URL(baseUrl);
     Object.entries(searchParams).forEach(([key, value]) => {
       url.searchParams.append(key, value);
     });
 
+    // Set up abort controller for request timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
       },
-      // Add timeout for the request (10 seconds)
-      signal: AbortSignal.timeout(10000),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error(`SAM.gov API error: ${response.status} ${response.statusText}`);
