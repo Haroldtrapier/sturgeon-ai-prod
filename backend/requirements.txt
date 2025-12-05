@@ -5,3 +5,5 @@ python-dotenv
 pydantic
 httpx
 mangum>=0.17.0
+sqlalchemy>=2.0.0
+openai>=1.0.0
