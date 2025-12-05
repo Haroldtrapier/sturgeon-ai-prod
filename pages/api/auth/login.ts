@@ -48,10 +48,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email: data.user.email,
         created_at: data.user.created_at,
       },
-      session: {
+      session: data.session ? {
         access_token: data.session.access_token,
         refresh_token: data.session.refresh_token,
-      },
+      } : undefined,
     });
   } catch (error) {
     console.error('Unexpected login error:', error);
