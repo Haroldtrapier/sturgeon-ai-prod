@@ -2,7 +2,7 @@
 Authentication utilities
 """
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthCredential
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from .database import get_db
 from .models import User
@@ -11,7 +11,7 @@ security = HTTPBearer()
 
 
 def get_current_user(
-    credentials: HTTPAuthCredential = Depends(security),
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ) -> User:
     """
@@ -23,9 +23,8 @@ def get_current_user(
     """
     # For now, this is a placeholder that returns a mock user
     # In production, decode JWT and fetch user from database
-    token = credentials.credentials
-    
     # Placeholder: In real implementation, decode JWT and get user_id
+    # token = credentials.credentials
     # For now, return first user or raise error
     user = db.query(User).first()
     if not user:

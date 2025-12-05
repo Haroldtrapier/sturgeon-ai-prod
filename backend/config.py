@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Config:
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -34,7 +35,9 @@ class Config:
     # Frontend URL for Stripe redirects
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
+
 config = Config()
+
 
 # Create an alias for settings to match the code in problem statement
 settings = config

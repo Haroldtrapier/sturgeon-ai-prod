@@ -7,3 +7,4 @@ httpx
 stripe
 sqlalchemy
 psycopg2-binary
+python-multipart
