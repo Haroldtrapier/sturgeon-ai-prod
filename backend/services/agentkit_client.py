@@ -4,10 +4,10 @@ AgentKit client for streaming AI agent responses using OpenAI
 import os
 from typing import AsyncGenerator
 from sqlalchemy.orm import Session
-import openai
+from openai import AsyncOpenAI
 
-# Configure OpenAI client
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize OpenAI client
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 async def stream_agent_response(
@@ -28,7 +28,7 @@ async def stream_agent_response(
     """
     try:
         # Create a streaming chat completion
-        response = await openai.ChatCompletion.acreate(
+        response = await client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {
@@ -48,7 +48,7 @@ async def stream_agent_response(
         async for chunk in response:
             if chunk.choices and len(chunk.choices) > 0:
                 delta = chunk.choices[0].delta
-                if hasattr(delta, 'content') and delta.content:
+                if delta.content:
                     yield delta.content
     
     except Exception as e:
