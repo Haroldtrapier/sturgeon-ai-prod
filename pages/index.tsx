@@ -16,7 +16,7 @@ export default function Home() {
       <div style={{ marginTop: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
         <h3>API Status:</h3>
         <ul>
-          <li><a href="/api">Check API Status (/api)</a></li>
+          <li><a href="/api" target="_blank" rel="noopener noreferrer">Check API Status (/api)</a></li>
         </ul>
       </div>
     </div>
