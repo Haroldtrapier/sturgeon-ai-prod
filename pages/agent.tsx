@@ -9,7 +9,7 @@ export default function AgentPage() {
 
   const sendMessage = async () => {
     if (!input.trim()) return
-    const newMessage: ChatMessage = { id: Date.now().toString(), role: 'user', content: input }
+    const newMessage: ChatMessage = { id: crypto.randomUUID(), role: 'user', content: input }
     setMessages((prev) => [...prev, newMessage])
     setInput('')
     setIsLoading(true)
@@ -37,13 +37,13 @@ export default function AgentPage() {
           // If not JSON, use the text directly or default message
           errorMessage = errorText || errorMessage
         }
-        setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: errorMessage }])
+        setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: errorMessage }])
         setIsLoading(false)
         return
       }
 
       if (!res.body) {
-        setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: 'Error: No response from server.' }])
+        setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'Error: No response from server.' }])
         setIsLoading(false)
         return
       }
@@ -51,7 +51,7 @@ export default function AgentPage() {
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let assistantContent = ''
-      const assistantMessageId = (Date.now() + 1).toString()
+      const assistantMessageId = crypto.randomUUID()
 
       while (true) {
         const { value, done } = await reader.read()
@@ -71,7 +71,7 @@ export default function AgentPage() {
       setIsLoading(false)
     } catch (error) {
       console.error('Error sending message:', error)
-      setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }])
+      setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }])
       setIsLoading(false)
     }
   }
