@@ -1,0 +1,191 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { TextArea } from "@/components/ui/TextArea";
+import { Button } from "@/components/ui/Button";
+import toast, { Toaster } from "react-hot-toast";
+
+type Win = {
+  id: string;
+  opportunityTitle: string;
+  agency: string | null;
+  amount: number | null;
+  contractNumber: string | null;
+  description: string | null;
+  dateWon: string | null;
+};
+
+export default function WinsPage() {
+  const [wins, setWins] = useState<Win[]>([]);
+  const [form, setForm] = useState({
+    opportunityTitle: "",
+    agency: "",
+    amount: "",
+    contractNumber: "",
+    description: "",
+    dateWon: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  async function loadWins() {
+    try {
+      const res = await fetch("/api/wins");
+      const data = await res.json();
+      if (res.ok) {
+        setWins(data.wins ?? []);
+      } else {
+        console.error("Failed to load wins:", data.error);
+        toast.error("Failed to load wins. Please refresh the page.");
+      }
+    } catch (error) {
+      console.error("Error loading wins:", error);
+      toast.error("Failed to load wins. Please check your connection.");
+    }
+  }
+
+  useEffect(() => {
+    loadWins();
+  }, []);
+
+  function updateField(key: keyof typeof form, value: string) {
+    setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  async function handleCreate() {
+    // Validate required field
+    if (!form.opportunityTitle.trim()) {
+      toast.error("Opportunity title is required");
+      return;
+    }
+
+    // Validate amount if provided
+    let amount: number | undefined = undefined;
+    if (form.amount) {
+      const parsedAmount = parseFloat(form.amount);
+      if (isNaN(parsedAmount)) {
+        toast.error("Amount must be a valid number");
+        return;
+      }
+      amount = parsedAmount;
+    }
+
+    setLoading(true);
+    try {
+
+      const res = await fetch("/api/wins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          amount,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed");
+      
+      toast.success("Win logged successfully!");
+      setForm({
+        opportunityTitle: "",
+        agency: "",
+        amount: "",
+        contractNumber: "",
+        description: "",
+        dateWon: "",
+      });
+      await loadWins();
+    } catch (e) {
+      console.error(e);
+      toast.error(
+        e instanceof Error ? e.message : "Error saving win. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      <Toaster position="top-right" />
+      <h1 className="text-xl font-semibold text-slate-50">Wins Tracker</h1>
+      <Card className="space-y-3">
+        <div className="text-sm text-slate-300">
+          Log every award to build past performance and track revenue.
+        </div>
+        <Input
+          placeholder="Opportunity title"
+          value={form.opportunityTitle}
+          onChange={(e) => updateField("opportunityTitle", e.target.value)}
+        />
+        <Input
+          placeholder="Agency"
+          value={form.agency}
+          onChange={(e) => updateField("agency", e.target.value)}
+        />
+        <div className="grid gap-3 md:grid-cols-2">
+          <Input
+            placeholder="Amount (optional)"
+            value={form.amount}
+            onChange={(e) => updateField("amount", e.target.value)}
+          />
+          <Input
+            placeholder="Contract number (optional)"
+            value={form.contractNumber}
+            onChange={(e) => updateField("contractNumber", e.target.value)}
+          />
+        </div>
+        <Input
+          type="date"
+          value={form.dateWon}
+          onChange={(e) => updateField("dateWon", e.target.value)}
+        />
+        <TextArea
+          rows={3}
+          placeholder="Short description (scope, period of performance, key highlights)…"
+          value={form.description}
+          onChange={(e) => updateField("description", e.target.value)}
+        />
+        <Button onClick={handleCreate} disabled={loading}>
+          {loading ? "Saving…" : "Log win"}
+        </Button>
+      </Card>
+      <Card>
+        <h2 className="mb-2 text-sm font-semibold text-slate-50">
+          Logged wins
+        </h2>
+        {wins.length === 0 ? (
+          <div className="text-sm text-slate-400">No wins logged yet.</div>
+        ) : (
+          <div className="space-y-2 text-sm text-slate-100">
+            {wins.map((w) => (
+              <div
+                key={w.id}
+                className="rounded-md border border-slate-800 bg-slate-900/70 p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="font-medium">{w.opportunityTitle}</div>
+                  <div className="text-xs text-slate-400">
+                    {w.dateWon
+                      ? new Date(w.dateWon).toLocaleDateString()
+                      : ""}
+                  </div>
+                </div>
+                <div className="mt-1 text-xs text-slate-400">
+                  {w.agency || ""}
+                  {w.amount != null ? ` • $${w.amount.toLocaleString()}` : ""}
+                  {w.contractNumber ? ` • ${w.contractNumber}` : ""}
+                </div>
+                {w.description && (
+                  <div className="mt-1 text-xs text-slate-300">
+                    {w.description}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
