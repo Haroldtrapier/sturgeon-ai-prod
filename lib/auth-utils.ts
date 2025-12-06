@@ -1,24 +1,35 @@
 import * as jwt from 'jsonwebtoken';
 import { NextApiResponse } from 'next';
 
-// JWT secret from environment variable (ensure this is set in production)
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// JWT secret from environment variable
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required for authentication');
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Token expiration times
 const ACCESS_TOKEN_EXPIRY = '7d'; // 7 days
 const REFRESH_TOKEN_EXPIRY = '30d'; // 30 days
 
 /**
+ * Token payload interface
+ */
+export interface TokenPayload {
+  userId: string;
+  iat?: number;
+  exp?: number;
+}
+
+/**
  * Generates a JWT token for the given user ID
  * @param userId - The user ID to encode in the token
  * @returns A signed JWT token string
  */
-export async function generateToken(userId: string): Promise<string> {
+export function generateToken(userId: string): string {
   try {
     const token = jwt.sign(
       { 
         userId,
-        iat: Math.floor(Date.now() / 1000),
       },
       JWT_SECRET,
       { 
@@ -39,11 +50,11 @@ export async function generateToken(userId: string): Promise<string> {
  * @param token - The JWT token to set as a cookie
  * @param refreshToken - Optional refresh token from Supabase
  */
-export async function setAuthCookie(
+export function setAuthCookie(
   res: NextApiResponse,
   token: string,
   refreshToken?: string
-): Promise<void> {
+): void {
   try {
     // Set the main auth cookie with secure options
     const cookieOptions = [
@@ -83,7 +94,7 @@ export async function setAuthCookie(
  * CORS headers for cross-origin requests
  */
 export const corsHeaders = {
-  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || '*',
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000'),
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Credentials': 'true',
@@ -94,9 +105,9 @@ export const corsHeaders = {
  * @param token - The JWT token to verify
  * @returns The decoded token payload
  */
-export function verifyToken(token: string): any {
+export function verifyToken(token: string): TokenPayload {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, JWT_SECRET) as TokenPayload;
   } catch (error) {
     console.error('Error verifying token:', error);
     throw new Error('Invalid or expired token');

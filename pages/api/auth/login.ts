@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Generate custom JWT token
-    const token = await generateToken(data.user.id);
+    const token = generateToken(data.user.id);
 
     // Set CORS headers
     Object.entries(corsHeaders).forEach(([key, value]) => {
@@ -58,15 +58,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // Set auth cookie (7–30 days expiry as appropriate)
-    await setAuthCookie(res, token, data.session?.refresh_token);
+    setAuthCookie(res, token, data.session?.refresh_token);
 
     // Return success response with user, session, and token data
     return res.status(200).json({
       success: true,
-      user: { id: data.user?.id, email: data.user?.email },
+      user: { id: data.user.id, email: data.user.email },
       session: {
-        access_token: data.session?.access_token,
-        refresh_token: data.session?.refresh_token,
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
       },
       token,
     });
