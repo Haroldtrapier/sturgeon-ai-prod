@@ -1,4 +1,5 @@
 import stripe
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from ..auth import get_current_user
@@ -123,7 +124,6 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                 sub.status = status
                 sub.cancel_at_period_end = cancel_at_period_end
                 if current_period_end:
-                    from datetime import datetime
                     sub.current_period_end = datetime.fromtimestamp(current_period_end)
                 db.commit()
 

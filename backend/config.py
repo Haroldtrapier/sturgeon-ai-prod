@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Config:
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -27,9 +28,12 @@ class Config:
     STRIPE_BASIC_PRICE_ID = os.getenv("STRIPE_BASIC_PRICE_ID", "")
     STRIPE_PRO_PRICE_ID = os.getenv("STRIPE_PRO_PRICE_ID", "")
     STRIPE_ENTERPRISE_PRICE_ID = os.getenv("STRIPE_ENTERPRISE_PRICE_ID", "")
-    
+
     # Frontend URL for redirects
     FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
-settings = Config()
+
+# Create a single config instance
 config = Config()
+# Alias for compatibility with different naming conventions
+settings = config
