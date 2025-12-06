@@ -53,8 +53,9 @@ Add these secrets:
 - VERCEL_TOKEN
 - VERCEL_ORG_ID
 - VERCEL_PROJECT_ID
-OPENAI_API_KEY
-STRIPE_SECRET_KEY
+- OPENAI_API_KEY
+- STRIPE_SECRET_KEY
+- JWT_SECRET (for authentication tokens - generate a secure random string)
 
 ---
 
