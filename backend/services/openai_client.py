@@ -13,7 +13,13 @@ def _get_client() -> OpenAI:
     """Get or create the OpenAI client instance."""
     global _client
     if _client is None:
-        _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "OPENAI_API_KEY environment variable is not set. "
+                "Please set it to use the embedding service."
+            )
+        _client = OpenAI(api_key=api_key)
     return _client
 
 

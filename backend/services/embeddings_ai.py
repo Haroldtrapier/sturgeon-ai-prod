@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, DateTime, Text
 from sqlalchemy.orm import declarative_base, Session
 from datetime import datetime
 from typing import List
-from .openai_client import get_embedding  # you already should have this
+import json
+from .openai_client import get_embedding
 
 Base = declarative_base()
 
@@ -27,7 +28,7 @@ def embed_text(session: Session, object_type: str, object_id: str, text: str) ->
         .one_or_none()
     )
 
-    serialized = ",".join(str(x) for x in vec)  # simple serialization
+    serialized = json.dumps(vec)
 
     if record is None:
         record = EmbeddingRecord(
