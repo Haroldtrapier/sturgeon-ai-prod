@@ -10,7 +10,13 @@ from datetime import datetime
 import httpx
 import json
 
+# Import routers
+from routers import proposals
+
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+
+# Include routers
+app.include_router(proposals.router)
 
 app.add_middleware(
     CORSMiddleware,
