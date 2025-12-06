@@ -4,10 +4,17 @@ AI embeddings service for semantic search and matching.
 import os
 from typing import Optional
 from sqlalchemy.orm import Session
-import openai
+from openai import OpenAI
 
-# Initialize OpenAI client
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize OpenAI client lazily to avoid errors on import
+_client = None
+
+def get_openai_client():
+    """Get or create OpenAI client instance."""
+    global _client
+    if _client is None:
+        _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    return _client
 
 
 def embed_text(
@@ -15,7 +22,7 @@ def embed_text(
     entity_type: str,
     entity_id: str,
     text: str,
-    model: str = "text-embedding-ada-002"
+    model: str = "text-embedding-3-small"
 ) -> Optional[dict]:
     """
     Generate embeddings for text and store them in the database.
@@ -32,12 +39,13 @@ def embed_text(
     """
     try:
         # Generate embedding using OpenAI
-        response = openai.Embedding.create(
+        client = get_openai_client()
+        response = client.embeddings.create(
             input=text,
             model=model
         )
         
-        embedding = response['data'][0]['embedding']
+        embedding = response.data[0].embedding
         
         # In a production system, you would store this in a vector database
         # For now, we'll just log that we generated it
