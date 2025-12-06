@@ -8,7 +8,16 @@ from datetime import datetime, timedelta
 import os
 
 # JWT Configuration
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
+SECRET_KEY = os.getenv("SECRET_KEY")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+# In production, require SECRET_KEY to be explicitly set
+if not SECRET_KEY:
+    if ENVIRONMENT == "production":
+        raise ValueError("SECRET_KEY environment variable is required in production")
+    # Use a warning key for development only
+    SECRET_KEY = "dev-secret-key-change-in-production-WARNING"
+    
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

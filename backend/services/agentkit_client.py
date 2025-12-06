@@ -2,12 +2,23 @@
 AgentKit client for streaming AI agent responses using OpenAI
 """
 import os
+import logging
 from typing import AsyncGenerator
 from sqlalchemy.orm import Session
 from openai import AsyncOpenAI
 
-# Initialize OpenAI client
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
+
+# Validate and initialize OpenAI client
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+if not OPENAI_API_KEY:
+    if ENVIRONMENT == "production":
+        raise ValueError("OPENAI_API_KEY environment variable is required in production")
+    logger.warning("OPENAI_API_KEY not set - API calls will fail")
+
+client = AsyncOpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 
 async def stream_agent_response(
@@ -27,6 +38,9 @@ async def stream_agent_response(
         str: Individual tokens from the agent's response
     """
     try:
+        if not client:
+            raise ValueError("OpenAI client not initialized. Please set OPENAI_API_KEY environment variable.")
+        
         # Create a streaming chat completion
         response = await client.chat.completions.create(
             model="gpt-4",
@@ -52,5 +66,7 @@ async def stream_agent_response(
                     yield delta.content
     
     except Exception as e:
-        # Yield error message as a token
-        yield f"Error: {str(e)}"
+        # Log the actual error for debugging
+        logger.error(f"Error in stream_agent_response: {str(e)}", exc_info=True)
+        # Yield sanitized error message to client
+        yield "An error occurred while processing your request. Please try again later."
