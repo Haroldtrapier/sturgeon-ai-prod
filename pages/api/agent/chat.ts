@@ -57,8 +57,9 @@ export default async function handler(
         res.end();
         console.log('Successfully used Claude with streaming');
         return;
-      } catch (anthropicError: any) {
-        console.error('Claude failed, falling back to OpenAI:', anthropicError.message);
+      } catch (anthropicError) {
+        const errorMessage = anthropicError instanceof Error ? anthropicError.message : 'Unknown error';
+        console.error('Claude failed, falling back to OpenAI:', errorMessage);
         
         // If we've already started streaming, we can't fallback
         if (res.headersSent) {
@@ -95,13 +96,14 @@ export default async function handler(
     }
 
     throw new Error('No AI provider configured. Please set ANTHROPIC_API_KEY or OPENAI_API_KEY');
-  } catch (error: any) {
-    console.error('Chat API error:', error);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Chat API error:', errorMessage);
     
     if (!res.headersSent) {
       return res.status(500).json({
         error: 'Failed to process chat message',
-        details: error.message || 'Unknown error',
+        details: errorMessage,
       });
     }
     
