@@ -1,7 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '../../../lib/supabase-server';
+import { generateToken, setAuthCookie, corsHeaders } from '../../../lib/auth-utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -40,14 +49,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ error: 'Authentication failed' });
     }
 
-    // Session is automatically set via cookies by createServerSupabaseClient
+    // Generate custom JWT token
+    const token = await generateToken(data.user.id);
+
+    // Set CORS headers
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      res.setHeader(key, value);
+    });
+
+    // Set auth cookie (7–30 days expiry as appropriate)
+    await setAuthCookie(res, token, data.session?.refresh_token);
+
+    // Return success response with user, session, and token data
     return res.status(200).json({
-      message: 'Login successful',
-      user: {
-        id: data.user.id,
-        email: data.user.email,
-        created_at: data.user.created_at,
+      success: true,
+      user: { id: data.user?.id, email: data.user?.email },
+      session: {
+        access_token: data.session?.access_token,
+        refresh_token: data.session?.refresh_token,
       },
+      token,
     });
   } catch (error) {
     console.error('Unexpected login error:', error);
