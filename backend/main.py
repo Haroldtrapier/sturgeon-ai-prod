@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
+from .routers import agent_chat
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -19,6 +20,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(agent_chat.router)
 
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

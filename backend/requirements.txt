@@ -1,7 +1,10 @@
-mangum>=0.13.0
-fastapi
+mangum>=0.17.0
+fastapi>=0.109.1
 uvicorn
 python-dotenv
 pydantic
 httpx
-mangum>=0.17.0
+sqlalchemy
+python-jose[cryptography]>=3.4.0
+openai
+python-multipart
