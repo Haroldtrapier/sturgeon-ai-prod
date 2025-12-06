@@ -3,7 +3,6 @@ Database connection and session management
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from .config import config
 import os
 
 # Database URL from environment or use SQLite as default

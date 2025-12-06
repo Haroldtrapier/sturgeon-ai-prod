@@ -2,8 +2,7 @@
 Database models for Sturgeon AI
 """
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
 
 Base = declarative_base()

@@ -79,7 +79,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     elif event["type"] == "invoice.payment_failed":
         invoice = event["data"]["object"]
         subscription_id = invoice.get("subscription")
-        
+
         if subscription_id:
             sub = (
                 db.query(Subscription)
@@ -94,7 +94,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     elif event["type"] == "customer.subscription.deleted":
         subscription = event["data"]["object"]
         subscription_id = subscription.get("id")
-        
+
         if subscription_id:
             sub = (
                 db.query(Subscription)
@@ -112,7 +112,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         status = subscription.get("status")
         cancel_at_period_end = subscription.get("cancel_at_period_end", False)
         current_period_end = subscription.get("current_period_end")
-        
+
         if subscription_id:
             sub = (
                 db.query(Subscription)
