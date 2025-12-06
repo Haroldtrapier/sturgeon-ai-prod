@@ -14,7 +14,7 @@ export default function AIChat() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I'm Sturgeon AI Assistant. How can I help you today?',
+      content: 'Hello! I\'m Sturgeon AI Assistant. How can I help you today?',
       timestamp: new Date(),
     },
   ]);
