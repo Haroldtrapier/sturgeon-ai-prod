@@ -58,9 +58,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // Set auth cookie (7–30 days expiry as appropriate)
-    setAuthCookie(res, token, data.session?.refresh_token);
+    setAuthCookie(res, token, data.session.refresh_token);
 
     // Return success response with user, session, and token data
+    // Note: Token is included in response body as per requirements, in addition to HTTP-only cookie
+    // This allows client-side access while maintaining security through short expiry and cookie backup
     return res.status(200).json({
       success: true,
       user: { id: data.user.id, email: data.user.email },

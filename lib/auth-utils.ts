@@ -7,9 +7,8 @@ if (!process.env.JWT_SECRET) {
 }
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Token expiration times
+// Token expiration time
 const ACCESS_TOKEN_EXPIRY = '7d'; // 7 days
-const REFRESH_TOKEN_EXPIRY = '30d'; // 30 days
 
 /**
  * Token payload interface
@@ -94,7 +93,7 @@ export function setAuthCookie(
  * CORS headers for cross-origin requests
  */
 export const corsHeaders = {
-  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000'),
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Credentials': 'true',
