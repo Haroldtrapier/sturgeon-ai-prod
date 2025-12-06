@@ -1,8 +1,8 @@
 """
 Pydantic schemas for request/response validation
 """
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, field_validator
+from typing import Optional, Literal
 from datetime import datetime
 
 
@@ -33,7 +33,7 @@ class ProposalCreate(ProposalBase):
 class ProposalUpdate(BaseModel):
     title: Optional[str] = None
     body: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[Literal['draft', 'review', 'submitted', 'accepted', 'rejected']] = None
 
 
 class ProposalOut(ProposalBase):

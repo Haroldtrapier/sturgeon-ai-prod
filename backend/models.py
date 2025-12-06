@@ -1,7 +1,7 @@
 """
 SQLAlchemy models
 """
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean, JSON
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Boolean, JSON, func
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -15,7 +15,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     full_name = Column(String)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relationships
     proposals = relationship("Proposal", back_populates="owner")
@@ -29,8 +29,8 @@ class Proposal(Base):
     title = Column(String, nullable=False)
     body = Column(Text)
     status = Column(String, default="draft")
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     # Relationships
     owner = relationship("User", back_populates="proposals")
