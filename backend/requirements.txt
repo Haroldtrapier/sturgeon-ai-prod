@@ -1,7 +1,7 @@
-mangum>=0.13.0
 fastapi
 uvicorn
 python-dotenv
 pydantic
 httpx
 mangum>=0.17.0
+sqlalchemy>=2.0.0
