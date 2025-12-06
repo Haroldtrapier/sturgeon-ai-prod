@@ -62,10 +62,10 @@ def embed_text(
         # TODO: Store embedding in vector database
         # Example with pgvector:
         # db.execute(
-        #     "INSERT INTO embeddings (entity_type, entity_id, embedding) 
-        #      VALUES (:type, :id, :embedding)
-        #      ON CONFLICT (entity_type, entity_id) 
-        #      DO UPDATE SET embedding = :embedding",
+        #     "INSERT INTO embeddings (entity_type, entity_id, embedding) "
+        #     "VALUES (:type, :id, :embedding) "
+        #     "ON CONFLICT (entity_type, entity_id) "
+        #     "DO UPDATE SET embedding = :embedding",
         #     {"type": entity_type, "id": entity_id, "embedding": embedding}
         # )
         # db.commit()
@@ -73,5 +73,8 @@ def embed_text(
         return result
         
     except Exception as e:
-        print(f"Error generating embedding for {entity_type}:{entity_id}: {str(e)}")
+        # Use logging in production instead of print
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error generating embedding for {entity_type}:{entity_id}: {str(e)}")
         return None
