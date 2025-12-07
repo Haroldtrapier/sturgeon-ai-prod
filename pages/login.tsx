@@ -25,7 +25,7 @@ export default function Login() {
 
       if (response.ok) {
         // Redirect to dashboard or home page
-        router.push('/');
+        router.push('/dashboard');
       } else {
         const data = await response.json();
         setError(data.error || 'Invalid login credentials');
