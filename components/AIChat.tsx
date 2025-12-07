@@ -14,7 +14,7 @@ export default function AIChat() {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I'm Sturgeon AI Assistant. How can I help you today?',
+      content: "Hello! I'm Sturgeon AI Assistant. How can I help you today?",
       timestamp: new Date(),
     },
   ]);
@@ -100,7 +100,8 @@ export default function AIChat() {
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[75%] rounded-2xl px-5 py-3 ${
+              className={`max-w[75%] rounded-2xl px-5 py-3 ${
+
                 message.role === 'user'
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-900 border border-gray-200 shadow-sm'
