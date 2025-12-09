@@ -4,3 +4,4 @@ uvicorn
 python-dotenv
 pydantic
 httpx
+openai>=1.0.0
