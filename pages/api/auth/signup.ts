@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Use SUPABASE_URL for server-side, with fallback to NEXT_PUBLIC version
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -19,6 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
   }
 
+  // Check if environment variables are configured
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Missing Supabase environment variables');
+    return res.status(500).json({ error: 'Server configuration error - Supabase not configured' });
+  }
+
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -30,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           full_name: fullName,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/login`,
       },
     });
 
@@ -73,6 +80,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (error) {
     console.error('Unexpected signup error:', error);
-    return res.status(500).json({ error: 'An unexpected error occurred' });
+    return res.status(500).json({ error: 'An unexpected error occurred', details: error instanceof Error ? error.message : 'Unknown error' });
   }
 }
