@@ -11,7 +11,16 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
-const systemPrompt = `You are Sturgeon AI Assistant, a professional, helpful AI designed to provide accurate information and assist users effectively.`;
+// Agent-specific instructions for different use cases
+const agentInstructions = {
+  contractAnalysis: `You are a government contracting expert specializing in analyzing RFPs, RFQs, and federal solicitations. You help identify requirements, evaluate compliance needs, assess risk factors, and provide actionable recommendations for winning government contracts. You understand FAR regulations, NAICS codes, PSC codes, and set-aside requirements.`,
+  
+  proposalGeneration: `You are a proposal writing expert for government contracts. You specialize in creating compelling technical narratives, past performance descriptions, and win-themed proposal content. You understand how to address evaluation criteria, demonstrate capability, and craft persuasive executive summaries that resonate with government evaluators.`,
+  
+  opportunityMatching: `You are a business development advisor for government contracting. You help match companies with relevant opportunities based on their NAICS codes, capabilities, past performance, and strategic goals. You understand SAM.gov, set-aside categories (SDVOSB, 8(a), HUBZone, WOSB), and can advise on capture strategy and teaming opportunities.`,
+  
+  general: `You are Sturgeon AI Assistant, an expert in government contracting intelligence. You help users navigate federal procurement opportunities, understand solicitations, develop winning proposals, and grow their government contracting business. You provide accurate, actionable guidance on SAM.gov opportunities, Grants.gov programs, compliance requirements, and business development strategies.`
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,11 +31,16 @@ export default async function handler(
   }
 
   try {
-    const { message } = req.body;
+    const { message, agentType } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required' });
     }
+
+    // Validate and select appropriate agent instructions
+    const validAgentTypes = ['contractAnalysis', 'proposalGeneration', 'opportunityMatching', 'general'] as const;
+    const selectedAgentType = agentType && validAgentTypes.includes(agentType) ? agentType : 'general';
+    const systemPrompt = agentInstructions[selectedAgentType as keyof typeof agentInstructions];
 
     let responseText = '';
     let usedProvider = '';
