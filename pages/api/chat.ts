@@ -37,8 +37,10 @@ export default async function handler(
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    // Select appropriate agent instructions
-    const systemPrompt = agentInstructions[agentType as keyof typeof agentInstructions] || agentInstructions.general;
+    // Validate and select appropriate agent instructions
+    const validAgentTypes = ['contractAnalysis', 'proposalGeneration', 'opportunityMatching', 'general'] as const;
+    const selectedAgentType = agentType && validAgentTypes.includes(agentType) ? agentType : 'general';
+    const systemPrompt = agentInstructions[selectedAgentType as keyof typeof agentInstructions];
 
     let responseText = '';
     let usedProvider = '';
