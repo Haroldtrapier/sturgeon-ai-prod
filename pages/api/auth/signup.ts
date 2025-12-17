@@ -2,8 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
 // Use SUPABASE_URL for server-side, with fallback to NEXT_PUBLIC version
-const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  ?? process.env.SUPABASE_KEY
+  ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -21,13 +23,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Check if environment variables are configured
-  if (!supabaseUrl || !supabaseServiceKey) {
+  if (!supabaseUrl || !supabaseKey) {
     console.error('Missing Supabase environment variables');
     return res.status(500).json({ error: 'Server configuration error - Supabase not configured' });
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Create the user with Supabase Auth
     const { data, error } = await supabase.auth.signUp({
