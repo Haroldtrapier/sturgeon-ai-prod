@@ -8,9 +8,22 @@ export function createServerSupabaseClient({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
+  // Use server-side env vars with fallbacks
+  // Note: NEXT_PUBLIC_SUPABASE_ANON_KEY fallback is for compatibility only.
+  // Production should use SUPABASE_SERVICE_ROLE_KEY for proper server-side permissions.
+  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    ?? process.env.SUPABASE_KEY
+    ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Validate environment variables
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase environment variables. Please configure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+  }
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         get(name: string) {

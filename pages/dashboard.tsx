@@ -21,6 +21,13 @@ export default function Dashboard() {
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
+    // Validate environment variables on client
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing Supabase configuration');
+      setLoading(false);
+      return;
+    }
+    
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     // Get current user
