@@ -3,9 +3,6 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
 type User = {
   id: string;
   email: string;
@@ -21,6 +18,15 @@ export default function Dashboard() {
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing Supabase configuration');
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     // Get current user
