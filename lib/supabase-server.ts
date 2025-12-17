@@ -9,6 +9,8 @@ export function createServerSupabaseClient({
   res: NextApiResponse;
 }) {
   // Use server-side env vars with fallbacks
+  // Note: NEXT_PUBLIC_SUPABASE_ANON_KEY fallback is for compatibility only.
+  // Production should use SUPABASE_SERVICE_ROLE_KEY for proper server-side permissions.
   const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     ?? process.env.SUPABASE_KEY

@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
+// Use server-side env vars with fallbacks
+// Note: NEXT_PUBLIC_SUPABASE_ANON_KEY fallback is for compatibility only.
+// Production should use SUPABASE_SERVICE_ROLE_KEY for password reset permissions.
 const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   ?? process.env.SUPABASE_KEY
