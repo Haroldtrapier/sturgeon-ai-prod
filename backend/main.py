@@ -20,6 +20,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include billing routes
+try:
+    from backend.routes.billing import router as billing_router
+    app.include_router(billing_router, prefix="/api/billing", tags=["billing"])
+except ImportError:
+    # Routes module not available in this context
+    pass
+
 # Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
