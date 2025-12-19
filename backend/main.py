@@ -9,8 +9,12 @@ import os
 from datetime import datetime
 import httpx
 import json
+from routers import chat
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+
+# Include routers
+app.include_router(chat.router)
 
 app.add_middleware(
     CORSMiddleware,
