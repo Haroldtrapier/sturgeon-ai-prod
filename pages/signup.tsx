@@ -43,10 +43,17 @@ export default function Signup() {
 
       if (response.ok) {
         setSuccess(true);
-        // Redirect to login after 3 seconds
-        setTimeout(() => {
-          router.push('/login');
-        }, 3000);
+        // Store authentication token in localStorage if available
+        if (data.session?.access_token) {
+          localStorage.setItem('auth_token', data.session.access_token);
+          // Redirect to dashboard immediately if authenticated
+          router.push('/');
+        } else {
+          // Redirect to login after 3 seconds if email confirmation is required
+          setTimeout(() => {
+            router.push('/login');
+          }, 3000);
+        }
       } else {
         setError(data.error || 'Failed to create account');
       }
