@@ -1,4 +1,5 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 // Singleton instance to prevent multiple GoTrueClient warnings
 let supabaseClientInstance: SupabaseClient | null = null;
@@ -14,13 +15,11 @@ export function getSupabaseClient(): SupabaseClient {
       );
     }
 
-    supabaseClientInstance = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
-    });
+    // Use createBrowserClient from @supabase/ssr for proper cookie handling
+    supabaseClientInstance = createBrowserClient(
+      supabaseUrl,
+      supabaseAnonKey
+    );
   }
 
   return supabaseClientInstance;
