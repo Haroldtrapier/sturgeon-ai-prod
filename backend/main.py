@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 import httpx
 import json
+from backend.agent import run_agent
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
 
@@ -35,6 +36,10 @@ class ProposalRequest(BaseModel):
     company_info: Dict[str, Any]
     technical_approach: Optional[str] = None
 
+class ChatRequest(BaseModel):
+    message: str
+    user_id: Optional[str] = None
+
 # ==================== ENDPOINTS ====================
 
 @app.get("/")
@@ -49,6 +54,7 @@ async def root():
             "analysis": "/api/ai/analyze-contract",
             "proposals": "/api/ai/generate-proposal",
             "matching": "/api/ai/match-opportunities",
+            "agent": "/api/ai/agent",
             "documents": "/api/documents/upload",
             "health": "/health"
         }
@@ -124,6 +130,19 @@ async def analyze_contract(request: ContractAnalysis):
         "analysis_type": request.analysis_type,
         "timestamp": datetime.utcnow().isoformat()
     }
+
+@app.post("/api/ai/agent")
+async def agent_chat(request: ChatRequest):
+    """Chat with the Sturgeon AI Government Contracting Assistant"""
+    try:
+        response = await run_agent(request.message, request.user_id)
+        return {
+            "success": True,
+            "response": response,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/ai/generate-proposal")
 async def generate_proposal(request: ProposalRequest):
