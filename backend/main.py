@@ -9,8 +9,16 @@ import os
 from datetime import datetime
 import httpx
 import json
+from routers import proposals_router
+from database import engine, Base
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+
+# Include routers
+app.include_router(proposals_router)
 
 app.add_middleware(
     CORSMiddleware,
