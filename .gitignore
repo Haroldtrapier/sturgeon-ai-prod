@@ -223,3 +223,8 @@ backend/.env
 Downloads/
 .env.vercel
 .env*
+
+# env files
+.env
+.env.*
+.env.vercel
