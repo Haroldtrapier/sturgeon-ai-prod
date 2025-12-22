@@ -222,3 +222,4 @@ backend/.env
 .vercel
 Downloads/
 .env.vercel
+.env*
