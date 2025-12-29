@@ -1,6 +1,10 @@
-import { createServerClient } from '@supabase/ssr';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
+/**
+ * Creates a Supabase client for use in API routes with cookie-based session management.
+ * This client properly handles reading and writing auth cookies for server-side authentication.
+ */
 export function createServerSupabaseClient({
   req,
   res,
@@ -8,37 +12,67 @@ export function createServerSupabaseClient({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
-  // Use server-side env vars with proper fallbacks
-  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    ?? process.env.SUPABASE_KEY
-    ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Validate environment variables
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error(
-      'Missing Supabase environment variables. Please configure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.'
-    );
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables');
   }
 
-  return createServerClient(
-    supabaseUrl,
-    supabaseKey,
-    {
-      cookies: {
-        get(name: string) {
-          return req.cookies[name];
-        },
-        set(name: string, value: string, options: any) {
-          res.setHeader(
-            'Set-Cookie',
-            `${name}=${value}; Path=/; ${options.httpOnly ? 'HttpOnly;' : ''} ${options.secure ? 'Secure;' : ''} SameSite=${options.sameSite || 'Lax'}`
-          );
-        },
-        remove(name: string, options: any) {
-          res.setHeader('Set-Cookie', `${name}=; Path=/; Max-Age=0`);
-        },
+  return createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      get(name: string) {
+        return req.cookies[name];
       },
-    }
-  );
+      set(name: string, value: string, options: CookieOptions) {
+        res.setHeader('Set-Cookie', serializeCookie(name, value, options));
+      },
+      remove(name: string, options: CookieOptions) {
+        res.setHeader('Set-Cookie', serializeCookie(name, '', { ...options, maxAge: 0 }));
+      },
+    },
+  });
+}
+
+/**
+ * Serializes a cookie with the given options into a Set-Cookie header value.
+ */
+function serializeCookie(
+  name: string,
+  value: string,
+  options: CookieOptions
+): string {
+  const parts = [`${name}=${encodeURIComponent(value)}`];
+
+  if (options.maxAge !== undefined) {
+    parts.push(`Max-Age=${options.maxAge}`);
+  }
+
+  if (options.domain) {
+    parts.push(`Domain=${options.domain}`);
+  }
+
+  if (options.path) {
+    parts.push(`Path=${options.path}`);
+  } else {
+    parts.push('Path=/');
+  }
+
+  if (options.expires) {
+    parts.push(`Expires=${options.expires.toUTCString()}`);
+  }
+
+  if (options.httpOnly) {
+    parts.push('HttpOnly');
+  }
+
+  if (options.secure) {
+    parts.push('Secure');
+  }
+
+  if (options.sameSite) {
+    parts.push(`SameSite=${options.sameSite}`);
+  }
+
+  return parts.join('; ');
 }

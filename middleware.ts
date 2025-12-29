@@ -46,8 +46,12 @@ export async function middleware(req: NextRequest) {
       }
     );
 
-    // Refresh session if expired
-    const { data: { session } } = await supabase.auth.getSession();
+    // Securely validate the user session using getUser() which verifies the JWT
+    // Note: getSession() is NOT secure as it reads from cookies without verification
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    // User is authenticated if we have a valid user object and no error
+    const isAuthenticated = !!user && !userError;
 
     // Define protected routes
     const protectedRoutes = ['/dashboard', '/profile', '/chat'];
@@ -55,15 +59,15 @@ export async function middleware(req: NextRequest) {
     const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route));
     const isAuthRoute = authRoutes.some(route => req.nextUrl.pathname.startsWith(route));
 
-    // Redirect to login if accessing protected route without session
-    if (isProtectedRoute && !session) {
+    // Redirect to login if accessing protected route without valid authentication
+    if (isProtectedRoute && !isAuthenticated) {
       const redirectUrl = new URL('/login', req.url);
       redirectUrl.searchParams.set('redirect', req.nextUrl.pathname);
       return NextResponse.redirect(redirectUrl);
     }
 
-    // Redirect to dashboard if accessing auth routes with active session
-    if (isAuthRoute && session) {
+    // Redirect to dashboard if accessing auth routes with valid authentication
+    if (isAuthRoute && isAuthenticated) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
