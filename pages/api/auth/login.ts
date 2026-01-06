@@ -2,11 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { createServerSupabaseClient } from '../../../lib/supabase-server';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('Login API called:', req.method);
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { email, password } = req.body;
+  console.log('Login attempt for:', email);
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });

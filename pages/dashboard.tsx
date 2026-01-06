@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+import { getSupabaseClient } from '../lib/supabase-client';
 
 type User = {
   id: string;
@@ -21,7 +18,7 @@ export default function Dashboard() {
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = getSupabaseClient();
 
     // Get current user
     const getUser = async () => {
