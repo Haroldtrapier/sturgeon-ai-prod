@@ -185,12 +185,103 @@ export default function Dashboard() {
             </Link>
 
             <Link
-              href="/reset-password"
+              href="/marketplaces"
+              className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">Marketplaces</p>
+                  <p className="text-xs text-gray-500">SAM, GovWin, DIBBS</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/marketplaces/sam"
+              className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">SAM.gov Search</p>
+                  <p className="text-xs text-gray-500">Federal opportunities</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/agent"
+              className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">AI Agent</p>
+                  <p className="text-xs text-gray-500">GovCon Assistant</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Additional Features */}
+        <div className="mt-8">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">More Tools</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link
+              href="/profile"
               className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <svg className="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">My Profile</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/sturgeon-tv"
+              className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-gray-900">Sturgeon TV</p>
+                  <p className="text-xs text-gray-500">Training & Tutorials</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/reset-password"
+              className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                   </svg>
                 </div>
@@ -204,24 +295,11 @@ export default function Dashboard() {
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-400">Documents (Soon)</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="block p-4 bg-white rounded-lg shadow">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-400">Analytics (Soon)</p>
+                  <p className="text-sm font-medium text-gray-400">Analytics (Coming)</p>
                 </div>
               </div>
             </div>
