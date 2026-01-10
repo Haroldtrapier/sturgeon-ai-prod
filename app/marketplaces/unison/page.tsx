@@ -1,5 +1,5 @@
 // app/unison/page.tsx
-import MarketplacePlaceholder from "../components/MarketplacePlaceholder";
+import MarketplacePlaceholder from "../../components/MarketplacePlaceholder";
 
 export default function UnisonMarketplacePage() {
   return (
