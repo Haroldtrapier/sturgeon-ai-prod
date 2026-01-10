@@ -47,9 +47,6 @@ async def search_govspend(query: str) -> List[Dict]:
             "query": query,
             "results": []
         }]
-            "source": "GovSpend",
-        }
-    ]
 
 
 async def get_agency_spend(agency_name: str, naics: str = None) -> Dict:
