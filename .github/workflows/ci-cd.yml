@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: python -m pytest tests/ -v || true # For now, fail safely if no tests
 
-      - name: Deploy to Vercel
+      - name: Deploy Frontend to Vercel
         if: success()
         uses: amondnet/vercel-action@v25
         with:
@@ -42,6 +42,18 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
-      - name: Post DEPLOY Notification
+      - name: Deploy Backend to Railway
         if: success()
-        run: echo "API deployed to Vercel!"
+        uses: bervProject/railway-deploy@main
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: backend
+        env:
+          RAILWAY_SERVICE: backend
+
+      - name: Post Deployment Notification
+        if: success()
+        run: |
+          echo "✅ Frontend deployed to Vercel!"
+          echo "✅ Backend deployed to Railway!"
+          echo "🚀 Full deployment complete!"
