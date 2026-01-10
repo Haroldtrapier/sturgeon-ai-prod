@@ -10,11 +10,19 @@ from datetime import datetime
 import httpx
 import json
 from dotenv import load_dotenv
+from routers import agent, chat, proposals, billing, marketplaces
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+
+# Include routers
+app.include_router(agent.router)
+app.include_router(chat.router)
+app.include_router(proposals.router)
+app.include_router(billing.router)
+app.include_router(marketplaces.router)
 
 app.add_middleware(
     CORSMiddleware,

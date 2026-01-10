@@ -90,14 +90,47 @@ async def generate_full_proposal_endpoint(proposal_id: str, db: Session = Depend
 
     return result
 @router.put("/{proposal_id}")
-async def update_proposal(proposal_id: str, db: Session = Depends(get_db)):
+async def update_proposal(
+    proposal_id: str,
+    body: dict,
+    db: Session = Depends(get_db)
+):
     """Update proposal details."""
     p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Proposal not found")
-    # TODO: Apply patches from body to update model
+    
+    # Apply patches from body to update model
+    allowed_fields = [
+        "name", "status", "raw_text", "generated_text",
+        "executive_summary", "technical_approach", "management_plan",
+        "past_performance", "cost_proposal", "confidence_score"
+    ]
+    
+    updated_fields = []
+    for field in allowed_fields:
+        if field in body:
+            setattr(p, field, body[field])
+            updated_fields.append(field)
+    
+    # Update word count if text changed
+    if "generated_text" in body or "raw_text" in body:
+        text = p.generated_text or p.raw_text or ""
+        p.word_count = len(text.split())
+    
     db.commit()
-    return {"message": "Proposal updated"}
+    db.refresh(p)
+    
+    return {
+        "message": "Proposal updated",
+        "updated_fields": updated_fields,
+        "proposal": {
+            "id": p.id,
+            "name": p.name,
+            "status": p.status,
+            "word_count": p.word_count
+        }
+    }
 
 @router.delete("/{proposal_id}")
 async def delete_proposal(proposal_id: str, db: Session = Depends(get_db)):

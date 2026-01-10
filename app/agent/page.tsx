@@ -15,13 +15,33 @@ export default function AgentPage() {
 
     setInput("");
 
-    // TODO: Connect to AgentKit backend or OpenAI Agent API
-    const botResponse = {
-      role: "assistant",
-      content: "This is your AI agent (stub). AgentKit connection required.",
-    };
+    try {
+      // Call backend agent API
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/agent/ask`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input.trim() }),
+        }
+      );
 
-    setMessages((m) => [...m, botResponse]);
+      if (!response.ok) throw new Error("Agent API error");
+
+      const data = await response.json();
+      const botResponse = {
+        role: "assistant",
+        content: data.response || "Sorry, I couldn't process that.",
+      };
+
+      setMessages((m) => [...m, botResponse]);
+    } catch (error) {
+      const errorMsg = {
+        role: "assistant",
+        content: "Error connecting to AI agent. Please try again.",
+      };
+      setMessages((m) => [...m, errorMsg]);
+    }
   }
 
   return (

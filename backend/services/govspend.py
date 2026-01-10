@@ -1,23 +1,52 @@
 # backend/services/govspend.py
 
+import httpx
+import os
 from typing import List, Dict
+
+GOVSPEND_API_KEY = os.getenv("GOVSPEND_API_KEY", "")
+GOVSPEND_API_URL = "https://api.govspend.com/v2"
 
 async def search_govspend(query: str) -> List[Dict]:
     """
-    Stub for GovSpend integration.
-
-    Later:
-    - Use GovSpend API or browser automation
-    - Pull historical spend / PO lines for agencies
-
-    Returns a list of simple dict records for now.
+    GovSpend integration for government spending analytics.
+    Requires GovSpend subscription and API key.
     """
-    return [
-        {
-            "id": "GSP-001",
-            "description": f"GovSpend placeholder spend record for '{query}'",
-            "agency": "City of Charlotte",
-            "amount": 125000.00,
+    if not GOVSPEND_API_KEY:
+        return [{
+            "source": "GovSpend",
+            "message": "GovSpend API key not configured",
+            "query": query,
+            "results": []
+        }]
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            headers = {"X-API-Key": GOVSPEND_API_KEY}
+            params = {"query": query, "limit": 20}
+            response = await client.get(
+                f"{GOVSPEND_API_URL}/contracts/search",
+                headers=headers,
+                params=params,
+                timeout=30.0
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("contracts", [])
+            return [{
+                "source": "GovSpend",
+                "error": f"API error: {response.status_code}",
+                "query": query,
+                "results": []
+            }]
+    except Exception as e:
+        return [{
+            "source": "GovSpend",
+            "error": str(e),
+            "query": query,
+            "results": []
+        }]
             "source": "GovSpend",
         }
     ]

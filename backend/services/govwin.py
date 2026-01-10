@@ -1,27 +1,52 @@
 # backend/services/govwin.py
 
+import httpx
+import os
 from typing import List, Dict
+
+GOVWIN_API_KEY = os.getenv("GOVWIN_API_KEY", "")
+GOVWIN_API_URL = "https://api.govwin.com/v1"
 
 async def search_govwin(query: str) -> List[Dict]:
     """
-    Stub for GovWin IQ integration.
-
-    Later:
-    - Use GovWin API or authenticated browser automation
-    - Parse saved searches / agency opportunity lists
-
-    Returns a list of simple dict records for now.
+    GovWin IQ integration for government contract intelligence.
+    Requires GovWin IQ license and API key.
     """
-    # Placeholder fake data:
-    return [
-        {
-            "id": "GWV-001",
-            "title": f"GovWin placeholder opp for '{query}'",
-            "agency": "Dept. of Veterans Affairs",
-            "status": "forecast",
-            "source": "GovWin",
-        }
-    ]
+    if not GOVWIN_API_KEY:
+        return [{
+            "source": "GovWin IQ",
+            "message": "GovWin API key not configured",
+            "query": query,
+            "results": []
+        }]
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            headers = {"Authorization": f"Bearer {GOVWIN_API_KEY}"}
+            params = {"q": query, "limit": 20}
+            response = await client.get(
+                f"{GOVWIN_API_URL}/opportunities",
+                headers=headers,
+                params=params,
+                timeout=30.0
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return data.get("opportunities", [])
+            return [{
+                "source": "GovWin IQ",
+                "error": f"API error: {response.status_code}",
+                "query": query,
+                "results": []
+            }]
+    except Exception as e:
+        return [{
+            "source": "GovWin IQ",
+            "error": str(e),
+            "query": query,
+            "results": []
+        }]
 
 
 async def get_agency_intel(agency_name: str) -> Dict:

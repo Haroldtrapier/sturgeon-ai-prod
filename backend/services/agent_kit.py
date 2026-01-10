@@ -1,25 +1,31 @@
 import os
-import openai
+from anthropic import AsyncAnthropic
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+anthropic_client = AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 SYSTEM_PROMPT = """
 You are the Sturgeon AI Government Contracting Assistant.
 You help users:
-• analyze solicitations
-┢ summarize RFQs
-• answer government contracting questions
-┢ provide NAICS/PSC guidance
-• explain SBA rules
-• assist with proposals and certifications
+• Analyze solicitations and RFPs
+• Summarize RFQs and requirements
+• Answer government contracting questions
+• Provide NAICS/PSC code guidance
+• Explain SBA certification rules
+• Assist with proposal writing and compliance
+• Find contract opportunities
 """
 
 async def run_agent(message: str, user_id: str | None = None):
-    response = openai.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": message}
-        ]
-    )
-    return response.choices[0].message["content"]
+    """Run AI agent using Claude Sonnet 4.5"""
+    try:
+        response = await anthropic_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2048,
+            system=SYSTEM_PROMPT,
+            messages=[
+                {"role": "user", "content": message}
+            ]
+        )
+        return response.content[0].text
+    except Exception as e:
+        return f"Error: {str(e)}"
