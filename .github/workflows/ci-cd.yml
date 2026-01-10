@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main ]
-  V'ull_request:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -31,16 +31,16 @@ jobs:
         run: pylint api/ || true # Warn but don't fail on linting
 
       - name: Run tests
-        run: pythos -m pytest tests/ -v || true # For now, fail safely if no tests
+        run: python -m pytest tests/ -v || true # For now, fail safely if no tests
 
       - name: Deploy to Vercel
-        if: succeess()
+        if: success()
         run: |
           npm i -g vercel
           vercel --prod 
         env:        
-          VERCEL_TOKEN: ${ secrets.VERCEL_TOKEN }
-          VERCEL_PROJECT_ID: ${ secrets.VERCEM_PROJECT_ID }
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Post DEPLOY Notification
         if: success()
