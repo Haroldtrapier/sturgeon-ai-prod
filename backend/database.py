@@ -207,6 +207,18 @@ async def init_models() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+
+# ----------------------------------------------------------------------
+# Dependency for FastAPI routes
+# ----------------------------------------------------------------------
+async def get_db():
+    """
+    Dependency that provides a database session to FastAPI routes.
+    Usage: async def my_route(db: AsyncSession = Depends(get_db))
+    """
+    async for session in get_async_session():
+        yield session
+
 # ----------------------------------------------------------------------
 # Example usage (for reference only, not executed on import)
 # ----------------------------------------------------------------------
