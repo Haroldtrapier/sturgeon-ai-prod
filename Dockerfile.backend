@@ -19,3 +19,6 @@ COPY backend/ .
 
 # Expose port
 EXPOSE 8000
+
+# Expose port
+EXPOSE 8000
