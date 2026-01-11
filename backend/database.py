@@ -3,8 +3,6 @@ import datetime
 from typing import Optional, List
 
 from sqlalchemy import (
-    Column,
-    Integer,
     String,
     Text,
     DateTime,
@@ -13,7 +11,7 @@ from sqlalchemy import (
     UniqueConstraint,
     Index,
 )
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncSession,
@@ -55,7 +53,8 @@ async def get_async_session() -> AsyncSession:
 # ----------------------------------------------------------------------
 # Base model
 # ----------------------------------------------------------------------
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 # ----------------------------------------------------------------------
 # Models
@@ -66,32 +65,30 @@ class User(Base):
         UniqueConstraint("email", name="uq_user_email"),
         Index("ix_user_email", "email"),
     )
-
-    id: int = Column(Integer, primary_key=True, index=True)
-    email: str = Column(String(255), nullable=False, unique=True, index=True)
-    hashed_password: str = Column(String(255), nullable=False)
-    full_name: Optional[str] = Column(String(255))
-    is_active: bool = Column(Boolean, default=True, nullable=False)
-    is_superuser: bool = Column(Boolean, default=False, nullable=False)
-    created_at: datetime.datetime = Column(
-        DateTime, default=datetime.datetime.utcnow, nullable=False
+Mapped[int] = mapped_column(primary_key=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255))
+    full_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow
     )
-    updated_at: datetime.datetime = Column(
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
-        nullable=False,
     )
 
     # Relationships
-    opportunities: List["Opportunity"] = relationship(
-        "Opportunity", back_populates="owner", cascade="all, delete-orphan"
+    opportunities: Mapped[List["Opportunity"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan"
     )
-    saved_opportunities: List["SavedOpportunity"] = relationship(
-        "SavedOpportunity", back_populates="user", cascade="all, delete-orphan"
+    saved_opportunities: Mapped[List["SavedOpportunity"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
     )
-    preferences: List["UserPreference"] = relationship(
-        "UserPreference", back_populates="user", cascade="all, delete-orphan"
+    preferences: Mapped[List["UserPreference"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
@@ -102,23 +99,22 @@ class Agency(Base):
     __tablename__ = "agencies"
     __table_args__ = (UniqueConstraint("name", name="uq_agency_name"),)
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    name: str = Column(String(255), nullable=False, unique=True, index=True)
-    description: Optional[str] = Column(Text)
-    website_url: Optional[str] = Column(String(255))
-    created_at: datetime.datetime = Column(
-        DateTime, default=datetime.datetime.utcnow, nullable=False
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    website_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow
     )
-    updated_at: datetime.datetime = Column(
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
-        nullable=False,
     )
 
     # Relationships
-    opportunities: List["Opportunity"] = relationship(
-        "Opportunity", back_populates="agency", cascade="all, delete-orphan"
+    opportunities: Mapped[List["Opportunity"]] = relationship(
+        back_populates="agency", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
@@ -132,24 +128,26 @@ class Opportunity(Base):
         Index("ix_opportunity_posted_at", "posted_at"),
     )
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    title: str = Column(String(255), nullable=False)
-    description: Optional[str] = Column(Text)
-    location: Optional[str] = Column(String(255))
-    posted_at: datetime.datetime = Column(
-        DateTime, default=datetime.datetime.utcnow, nullable=False
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(255))
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    location: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    posted_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow
     )
-    expires_at: Optional[datetime.datetime] = Column(DateTime)
+    expires_at: Mapped[Optional[datetime.datetime]] = mapped_column(
+        DateTime, nullable=True
+    )
 
     # Foreign keys
-    agency_id: int = Column(Integer, ForeignKey("agencies.id"), nullable=False)
-    owner_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
+    agency_id: Mapped[int] = mapped_column(ForeignKey("agencies.id"))
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     # Relationships
-    agency: Agency = relationship("Agency", back_populates="opportunities")
-    owner: User = relationship("User", back_populates="opportunities")
-    saved_by: List["SavedOpportunity"] = relationship(
-        "SavedOpportunity", back_populates="opportunity", cascade="all, delete-orphan"
+    agency: Mapped["Agency"] = relationship(back_populates="opportunities")
+    owner: Mapped["User"] = relationship(back_populates="opportunities")
+    saved_by: Mapped[List["SavedOpportunity"]] = relationship(
+        back_populates="opportunity", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
@@ -162,18 +160,16 @@ class SavedOpportunity(Base):
         UniqueConstraint("user_id", "opportunity_id", name="uq_user_opportunity"),
     )
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    user_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
-    opportunity_id: int = Column(Integer, ForeignKey("opportunities.id"), nullable=False)
-    saved_at: datetime.datetime = Column(
-        DateTime, default=datetime.datetime.utcnow, nullable=False
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    opportunity_id: Mapped[int] = mapped_column(ForeignKey("opportunities.id"))
+    saved_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow
     )
 
     # Relationships
-    user: User = relationship("User", back_populates="saved_opportunities")
-    opportunity: Opportunity = relationship(
-        "Opportunity", back_populates="saved_by"
-    )
+    user: Mapped["User"] = relationship(back_populates="saved_opportunities")
+    opportunity: Mapped["Opportunity"] = relationship(back_populates="saved_by")
 
     def __repr__(self) -> str:
         return f"<SavedOpportunity user_id={self.user_id} opportunity_id={self.opportunity_id}>"
@@ -183,19 +179,18 @@ class UserPreference(Base):
     __tablename__ = "user_preferences"
     __table_args__ = (UniqueConstraint("user_id", "key", name="uq_user_pref_key"),)
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    user_id: int = Column(Integer, ForeignKey("users.id"), nullable=False)
-    key: str = Column(String(100), nullable=False)
-    value: str = Column(Text, nullable=False)
-    updated_at: datetime.datetime = Column(
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    key: Mapped[str] = mapped_column(String(100))
+    value: Mapped[str] = mapped_column(Text)
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
         default=datetime.datetime.utcnow,
         onupdate=datetime.datetime.utcnow,
-        nullable=False,
     )
 
     # Relationships
-    user: User = relationship("User", back_populates="preferences")
+    user: Mapped["User"] = relationship(back_populates="preferences")
 
     def __repr__(self) -> str:
         return f"<UserPreference user_id={self.user_id} key={self.key}>"
