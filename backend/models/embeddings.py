@@ -27,7 +27,7 @@ class EmbeddingRecord(Base):
     embedding_model = Column(String(100), nullable=False, default="text-embedding-3-small")
     
     vector = Column(JSON, nullable=False)  # Vector representation
-    metadata = Column(JSON, nullable=True)  # Additional metadata
+    meta_data = Column(JSON, nullable=True)  # Additional metadata (renamed from 'metadata' to avoid SQLAlchemy conflict)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
