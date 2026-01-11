@@ -215,3 +215,4 @@ __marimo__/
 .env.local
 backend/.env
 .vercel
+.env*.local
