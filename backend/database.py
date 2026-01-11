@@ -25,7 +25,9 @@ DATABASE_URL = os.getenv(
     "STURGEON_DATABASE_URL",
     "postgresql+asyncpg://postgres:postgres@localhost:5432/sturgeon_ai",
 )
-
+# Convert postgresql:// to postgresql+asyncpg:// if needed for Railway
+if DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith("postgresql+asyncpg://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,  # set True for SQL debugging
