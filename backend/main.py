@@ -11,11 +11,22 @@ import httpx
 import json
 from dotenv import load_dotenv
 from routers import agent, chat, proposals, billing, marketplaces
+from database import init_models
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+
+# Initialize database tables on startup
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database tables on application startup"""
+    try:
+        await init_models()
+        print("✅ Database tables initialized successfully")
+    except Exception as e:
+        print(f"⚠️ Database initialization warning: {e}")
 
 # Include routers
 app.include_router(agent.router)
