@@ -6,6 +6,10 @@ load_dotenv()
 class Config:
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
+
+    # Database
+    DATABASE_URL = os.getenv("DATABASE_URL")  # PostgreSQL connection string (from Supabase or Railway)
 
     # Rate Limiting
     RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
@@ -20,5 +24,8 @@ class Config:
 
     # CORS
     ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
+    # Server
+    PORT = int(os.getenv("PORT", "8000"))
 
 config = Config()

@@ -75,6 +75,7 @@ async def root():
             "proposals": "/api/ai/generate-proposal",
             "matching": "/api/ai/match-opportunities",
             "documents": "/api/documents/upload",
+            "profile": "/me",
             "health": "/health"
         }
     }
@@ -179,6 +180,18 @@ async def upload_document(file: UploadFile = File(...), document_type: str = "ge
         "size": len(content),
         "type": document_type,
         "uploaded_at": datetime.utcnow().isoformat()
+    }
+
+@app.get("/me")
+async def get_current_user():
+    """Get current user profile"""
+    # TODO: Add proper authentication middleware
+    # For now, return a basic response
+    # In production, extract user from JWT token or session
+    return {
+        "email": "user@example.com",  # Will be replaced with actual user data
+        "name": "User",
+        "message": "Profile endpoint - authentication integration pending"
     }
 
 @app.get("/api/analytics/dashboard")
