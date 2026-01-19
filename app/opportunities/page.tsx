@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 
 /*
@@ -19,7 +21,7 @@ import { createClient } from '@supabase/supabase-js';
 // function and will throw if omitted.
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL!;
+const backendUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 // Define a minimal shape for an opportunity as returned from the
 // backend API.  Properties may be optional depending on the API
@@ -70,7 +72,8 @@ export default function Opportunities() {
       const params = new URLSearchParams();
       if (searchTerm) params.set('keywords', searchTerm);
       params.set('limit', '50');
-      const response = await fetch(`${backendUrl}/api/opportunities/search?${params.toString()}`);
+      const url = backendUrl ? `${backendUrl}/api/opportunities/search?${params.toString()}` : `/api/opportunities/search?${params.toString()}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (response.ok) {
         setResults(data.opportunities || data.opportunitiesData || []);
