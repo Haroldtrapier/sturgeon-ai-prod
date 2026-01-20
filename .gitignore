@@ -21,7 +21,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ - Commented out: we need lib/ for TypeScript utilities
+# Only ignore Python lib directories, not our TypeScript lib/
 lib64/
 parts/
 sdist/
