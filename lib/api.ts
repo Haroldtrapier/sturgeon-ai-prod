@@ -3,7 +3,8 @@ export const API_URL =
 
 export async function apiFetch<T>(
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  authToken?: string
 ): Promise<T> {
   if (!API_URL) {
     throw new Error(
@@ -15,12 +16,18 @@ export async function apiFetch<T>(
     ? path 
     : `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  if (authToken) {
+    headers["Authorization"] = `Bearer ${authToken}`;
+  }
+
   const res = await fetch(url, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers,
     cache: "no-store",
   });
 
@@ -30,4 +37,26 @@ export async function apiFetch<T>(
   }
 
   return (await res.json()) as T;
+}
+
+export async function apiGet<T>(
+  path: string,
+  authToken?: string
+): Promise<T> {
+  return apiFetch<T>(path, { method: "GET" }, authToken);
+}
+
+export async function apiPost<T>(
+  path: string,
+  body?: unknown,
+  authToken?: string
+): Promise<T> {
+  return apiFetch<T>(
+    path,
+    {
+      method: "POST",
+      body: body ? JSON.stringify(body) : undefined,
+    },
+    authToken
+  );
 }

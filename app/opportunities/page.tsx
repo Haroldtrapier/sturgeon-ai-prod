@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/client';
+import { apiFetch } from '@/lib/api';
 
 /*
  * Opportunities List Page
@@ -14,14 +15,6 @@ import { createClient } from '@supabase/supabase-js';
  * saved records with the current user.  If no session exists the
  * user is redirected to the login page.
  */
-
-// Read Supabase and backend credentials from environment.  The
-// `NEXT_PUBLIC_` prefix ensures these values are exposed to the
-// browser during build time.  They are required for the app to
-// function and will throw if omitted.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const backendUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 // Define a minimal shape for an opportunity as returned from the
 // backend API.  Properties may be optional depending on the API
@@ -52,7 +45,7 @@ export default function Opportunities() {
     // On mount, verify that a user session exists.  If not, redirect
     // to the login page.  Otherwise store the user ID for later
     // inserts into the opportunities table.
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = createClient();
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -72,19 +65,16 @@ export default function Opportunities() {
       const params = new URLSearchParams();
       if (searchTerm) params.set('keywords', searchTerm);
       params.set('limit', '50');
-      const url = backendUrl ? `${backendUrl}/api/opportunities/search?${params.toString()}` : `/api/opportunities/search?${params.toString()}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      if (response.ok) {
-        setResults(data.opportunities || data.opportunitiesData || []);
-        if ((data.opportunities || data.opportunitiesData || []).length === 0) {
-          setMessage('No opportunities found for your search.');
-        }
-      } else {
-        setMessage(data.error || 'Failed to search opportunities.');
+      const data = await apiFetch<{ opportunities?: Opportunity[]; opportunitiesData?: Opportunity[] }>(
+        `/api/opportunities/search?${params.toString()}`
+      );
+      const opportunities = data.opportunities || data.opportunitiesData || [];
+      setResults(opportunities);
+      if (opportunities.length === 0) {
+        setMessage('No opportunities found for your search.');
       }
-    } catch (err) {
-      setMessage('An error occurred while searching. Please try again.');
+    } catch (err: any) {
+      setMessage(err.message || 'An error occurred while searching. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -97,7 +87,7 @@ export default function Opportunities() {
     }
     setMessage('');
     try {
-      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const supabase = createClient();
       // Insert a simplified record into the opportunities table.  You
       // can adjust the columns to match your table schema.  Unknown
       // fields are omitted.  The user_id links this record to the

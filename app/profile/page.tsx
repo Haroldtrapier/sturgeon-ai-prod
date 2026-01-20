@@ -2,13 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 import { apiFetch } from "@/lib/api";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type Profile = {
   email: string;
@@ -23,6 +18,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     (async () => {
+      const supabase = createClient();
       // Check authentication
       const { data } = await supabase.auth.getUser();
       if (!data?.user) {
@@ -32,7 +28,9 @@ export default function ProfilePage() {
 
       // Try to load from backend, fallback to Supabase auth data
       try {
-        const backendProfile = await apiFetch<Profile>("/me");
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        const backendProfile = await apiFetch<Profile>("/me", {}, token);
         setProfile(backendProfile);
       } catch (e) {
         // Fallback to Supabase user data
