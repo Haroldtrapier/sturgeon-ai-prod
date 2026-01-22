@@ -27,20 +27,32 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
     setStatus('Saving to Sturgeon AI...');
 
     try {
+      // Extract basic info from text or use URL
+      const title = rawText ? extractTitle(rawText) : `${sourceName} Opportunity`;
+      
       const response = await fetch('/api/opportunities/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           source,
           sourceUrl: url || null,
+          title,
+          description: rawText ? rawText.substring(0, 500) : null,
           rawText: rawText || null,
+          externalId: url ? extractIdFromUrl(url) : null,
+          metadata: {
+            importedFrom: sourceName,
+            importedAt: new Date().toISOString(),
+            hasUrl: !!url,
+            hasText: !!rawText,
+          }
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setStatus(`Error: ${data.error}`);
+        setStatus(`❌ Error: ${data.error}`);
         setLoading(false);
         return;
       }
@@ -52,9 +64,38 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
       // Clear success message after 3 seconds
       setTimeout(() => setStatus(''), 3000);
     } catch (err: any) {
-      setStatus(`Error: ${err.message}`);
+      setStatus(`❌ Error: ${err.message}`);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Helper to extract title from text
+  function extractTitle(text: string): string {
+    const lines = text.trim().split('\n');
+    const firstLine = lines[0]?.trim();
+    if (firstLine && firstLine.length > 10 && firstLine.length < 200) {
+      return firstLine;
+    }
+    return `${sourceName} Opportunity - ${new Date().toLocaleDateString()}`;
+  }
+
+  // Helper to extract ID from URL
+  function extractIdFromUrl(url: string): string | null {
+    try {
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/');
+      const lastPart = pathParts[pathParts.length - 1];
+      if (lastPart && lastPart.length > 5) {
+        return lastPart;
+      }
+      // Try to get ID from query params
+      const id = urlObj.searchParams.get('id') || 
+                 urlObj.searchParams.get('opportunity_id') ||
+                 urlObj.searchParams.get('notice_id');
+      return id;
+    } catch {
+      return null;
     }
   }
 
@@ -99,8 +140,8 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
             <textarea
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
-              placeholder="Copy and paste the full opportunity details here..."
-              rows={8}
+              placeholder="Copy and paste the full opportunity details here...\n\nInclude title, description, requirements, deadline, and any other relevant information."
+              rows={10}
               className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition resize-none"
             />
           </div>
@@ -117,7 +158,7 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
             <div className={`p-3 rounded-lg text-sm ${
               status.startsWith('✅') 
                 ? 'bg-emerald-900/50 text-emerald-300 border border-emerald-800' 
-                : status.startsWith('Error') 
+                : status.startsWith('❌') 
                 ? 'bg-red-900/50 text-red-300 border border-red-800'
                 : 'bg-blue-900/50 text-blue-300 border border-blue-800'
             }`}>
