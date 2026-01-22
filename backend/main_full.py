@@ -35,7 +35,7 @@ SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-# ==================== Import Routers ====================
+# ============== Import Routers ==============
 try:
     from routers import agent, billing, chat, marketplaces, proposals
     
@@ -49,7 +49,7 @@ try:
 except ImportError as e:
     print(f"⚠️ Some routers not loaded: {e}")
 
-# ==================== MODELS ====================
+# =============== MODELS ==================
 
 class ContractAnalysis(BaseModel):
     contract_text: str
@@ -73,7 +73,7 @@ class SearchRequest(BaseModel):
     max_value: Optional[float] = None
     use_ai: bool = False
 
-# ==================== CORE ENDPOINTS ====================
+# =============== CORE ENDPOINTS ================
 
 @app.get("/")
 async def root():
@@ -118,7 +118,7 @@ async def health():
         }
     }
 
-# ==================== SAM.GOV SEARCH ====================
+# =============== SAM.GOV SEARCH ================
 
 @app.get("/api/opportunities/search")
 async def search_opportunities(
@@ -179,7 +179,7 @@ async def search_opportunities_post(request: SearchRequest):
         limit=50
     )
 
-# ==================== GRANTS SEARCH ====================
+# =============== GRANTS SEARCH ================
 
 @app.get("/api/grants/search")
 async def search_grants(keywords: Optional[str] = None, limit: int = 50):
@@ -191,7 +191,7 @@ async def search_grants(keywords: Optional[str] = None, limit: int = 50):
         "grants": []
     }
 
-# ==================== AI ENDPOINTS ====================
+# =============== AI ENDPOINTS ================
 
 @app.post("/api/ai/analyze-contract")
 async def analyze_contract(request: ContractAnalysis):
@@ -228,7 +228,7 @@ async def match_opportunities(company_profile: Dict[str, Any]):
         "timestamp": datetime.utcnow().isoformat()
     }
 
-# ==================== AGENT ENDPOINT (Fallback) ====================
+# =============== AGENT ENDPOINT (Fallback) ================
 
 @app.post("/agent/ask")
 async def agent_ask(request: AgentRequest):
@@ -243,7 +243,7 @@ async def agent_ask(request: AgentRequest):
             "response": f"Agent received: '{request.message}'. Full AgentKit integration requires OpenAI API key."
         }
 
-# ==================== DOCUMENTS ====================
+# =============== DOCUMENTS ================
 
 @app.post("/api/documents/upload")
 async def upload_document(file: UploadFile = File(...), document_type: str = "general"):
@@ -257,7 +257,7 @@ async def upload_document(file: UploadFile = File(...), document_type: str = "ge
         "uploaded_at": datetime.utcnow().isoformat()
     }
 
-# ==================== ANALYTICS ====================
+# =============== ANALYTICS ================
 
 @app.get("/api/analytics/dashboard")
 async def dashboard(user_id: str = None):
@@ -274,7 +274,7 @@ async def dashboard(user_id: str = None):
         }
     }
 
-# ==================== USER PROFILE ====================
+# =============== USER PROFILE ================
 
 @app.get("/api/users/me")
 async def get_current_user():
@@ -287,5 +287,8 @@ async def get_current_user():
     }
 
 if __name__ == "__main__":
+    import os
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
