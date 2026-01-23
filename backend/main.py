@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
-from typing import Optional
+from typing import Optional, Dict, Any
 
 app = FastAPI(
     title="Sturgeon AI Backend",
@@ -30,7 +30,7 @@ app.add_middleware(
 # Request/Response Models
 class ChatRequest(BaseModel):
     message: str
-    context: Optional[dict] = None
+    context: Optional[Dict[str, Any]] = None
     userId: Optional[str] = None
 
 class ChatResponse(BaseModel):
@@ -54,20 +54,29 @@ def health_check():
         }
     }
 
-# AI Chat Endpoint
+# AI Chat Endpoint with Specialized Agent Support
 @app.post("/agent/chat", response_model=ChatResponse)
 async def agent_chat(
     payload: ChatRequest,
     authorization: Optional[str] = Header(None)
 ):
     """
-    AI chat endpoint with OpenAI integration.
+    AI chat endpoint with support for specialized agents.
+    Uses custom system prompts passed from frontend for different agent types.
     """
     
     # Extract user ID from authorization header if needed
     user_id = None
     if authorization and authorization.startswith("Bearer "):
         user_id = authorization.replace("Bearer ", "")
+    
+    # Extract agent context
+    agent_type = payload.context.get('agentType', 'general') if payload.context else 'general'
+    system_prompt = payload.context.get('systemPrompt') if payload.context else None
+    
+    # Default system prompt if none provided
+    if not system_prompt:
+        system_prompt = "You are a helpful AI assistant for Sturgeon AI, a government contracting platform. Help users with questions about opportunities, proposals, and contracts."
     
     # Try to use OpenAI if API key is available
     openai_key = os.getenv("OPENAI_API_KEY")
@@ -77,17 +86,14 @@ async def agent_chat(
             from openai import OpenAI
             client = OpenAI(api_key=openai_key)
             
-            # Create system message for government contracting expert
-            system_message = "You are an expert AI assistant for Sturgeon AI, a government contracting and grants platform. You help users find opportunities, analyze contracts, and generate proposals. Be helpful, concise, and professional."
-            
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": system_message},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": payload.message}
                 ],
                 temperature=0.7,
-                max_tokens=500
+                max_tokens=1000
             )
             
             reply = response.choices[0].message.content
@@ -96,6 +102,7 @@ async def agent_chat(
                 reply=reply,
                 metadata={
                     "userId": user_id,
+                    "agentType": agent_type,
                     "contextProvided": bool(payload.context),
                     "model": "gpt-4o-mini",
                     "aiPowered": True
@@ -105,9 +112,10 @@ async def agent_chat(
         except Exception as e:
             # If OpenAI fails, return error message
             return ChatResponse(
-                reply=f"I'm having trouble connecting to my AI engine right now. Error: {str(e)[:100]}. Please try again in a moment.",
+                reply=f"I'm having trouble connecting to my AI engine right now. Error: {str(e)[:100]}. Please check your OpenAI API key in Railway environment variables.",
                 metadata={
                     "userId": user_id,
+                    "agentType": agent_type,
                     "contextProvided": bool(payload.context),
                     "error": str(e),
                     "aiPowered": False
@@ -115,12 +123,13 @@ async def agent_chat(
             )
     else:
         # Fallback if no API key
-        reply = f"Received your message: '{payload.message}'. AI integration is ready - connect your OpenAI key or custom AI engine."
+        reply = f"AI Agent ({agent_type}) received: '{payload.message}'. Please add OPENAI_API_KEY to Railway environment variables to enable AI responses."
         
         return ChatResponse(
             reply=reply,
             metadata={
                 "userId": user_id,
+                "agentType": agent_type,
                 "contextProvided": bool(payload.context),
                 "aiPowered": False
             }
