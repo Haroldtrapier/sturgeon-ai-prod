@@ -154,7 +154,7 @@ export default function Dashboard() {
               </p>
               <div className="mt-4">
                 <Link
-                  href="/chat"
+                  href="/agents"
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Open Chat
@@ -169,7 +169,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link
-              href="/chat"
+              href="/agents"
               className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
@@ -219,7 +219,7 @@ export default function Dashboard() {
             </Link>
 
             <Link
-              href="/agent"
+              href="/agents"
               className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
