@@ -50,7 +50,7 @@ async def search_sam_opportunities(request: SAMSearchRequest):
     if not SAM_API_KEY:
         raise HTTPException(
             status_code=500,
-            detail="SAM_GOV_API_KEY not configured. Please add it to environment variables."
+            detail="SAM_GOV_API_KEY not configured. Please add it to Railway environment variables."
         )
     
     # Build query parameters
