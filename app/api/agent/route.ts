@@ -1,74 +1,46 @@
-import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
+// Get the backend URL from environment variables
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+export async function POST(request: NextRequest) {
   try {
-    const { message, context, agentType, systemPrompt } = await req.json();
-
-    if (!message) {
-      return NextResponse.json({ error: 'Missing message' }, { status: 400 });
-    }
-
-    // Verify authenticated user
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Call backend agent service
-    const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
+    const body = await request.json();
     
-    if (!backendUrl) {
-      // Fallback: simple echo response if backend not configured
-      console.warn('BACKEND_URL not set, using fallback response');
-      return NextResponse.json({ 
-        reply: `I received your message: "${message}". The AI backend is not yet configured. Please set BACKEND_URL environment variable.`,
-        fallback: true
-      });
-    }
-
-    // Forward to backend agent with specialized agent info
-    const backendResponse = await fetch(`${backendUrl}/agent/chat`, {
+    // Forward the request to the Railway backend
+    const response = await fetch(`${BACKEND_URL}/agent/chat`, {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.id}` // Pass user ID for context
+        // Forward authorization header if present
+        ...(request.headers.get('authorization') && {
+          'Authorization': request.headers.get('authorization')!,
+        }),
       },
-      body: JSON.stringify({ 
-        message, 
-        context: {
-          ...context,
-          agentType: agentType || 'general',
-          systemPrompt: systemPrompt || 'You are a helpful AI assistant for Sturgeon AI.'
-        },
-        userId: user.id 
-      }),
+      body: JSON.stringify(body),
     });
 
-    if (!backendResponse.ok) {
-      const errorData = await backendResponse.json().catch(() => ({}));
-      return NextResponse.json({ 
-        error: errorData?.error ?? 'Agent service failed',
-        status: backendResponse.status 
-      }, { status: backendResponse.status });
+    // Check if the response is ok
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      return NextResponse.json(
+        { error: errorData.error || `Backend error: ${response.statusText}` },
+        { status: response.status }
+      );
     }
 
-    const data = await backendResponse.json();
-    return NextResponse.json({ 
-      reply: data.reply || data.response || 'No response from agent',
-      agentType: agentType || 'general',
-      ...data
-    });
-
-  } catch (err: any) {
-    console.error('Agent error:', err);
-    return NextResponse.json({ 
-      error: err?.message ?? 'Agent request failed',
-      details: err?.cause?.message
-    }, { status: 500 });
+    // Parse and return the backend response
+    const data = await response.json();
+    return NextResponse.json(data);
+    
+  } catch (error: any) {
+    console.error('API route error:', error);
+    return NextResponse.json(
+      { 
+        error: error.message || 'Failed to connect to AI backend',
+        details: `Backend URL: ${BACKEND_URL}/agent/chat`
+      },
+      { status: 500 }
+    );
   }
 }
