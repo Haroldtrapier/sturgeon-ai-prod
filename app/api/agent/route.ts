@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
   try {
-    const { message, context } = await req.json();
+    const { message, context, agentType, systemPrompt } = await req.json();
 
     if (!message) {
       return NextResponse.json({ error: 'Missing message' }, { status: 400 });
@@ -31,14 +31,22 @@ export async function POST(req: Request) {
       });
     }
 
-    // Forward to backend agent
+    // Forward to backend agent with specialized agent info
     const backendResponse = await fetch(`${backendUrl}/agent/chat`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${user.id}` // Pass user ID for context
       },
-      body: JSON.stringify({ message, context, userId: user.id }),
+      body: JSON.stringify({ 
+        message, 
+        context: {
+          ...context,
+          agentType: agentType || 'general',
+          systemPrompt: systemPrompt || 'You are a helpful AI assistant for Sturgeon AI.'
+        },
+        userId: user.id 
+      }),
     });
 
     if (!backendResponse.ok) {
@@ -52,6 +60,7 @@ export async function POST(req: Request) {
     const data = await backendResponse.json();
     return NextResponse.json({ 
       reply: data.reply || data.response || 'No response from agent',
+      agentType: agentType || 'general',
       ...data
     });
 
