@@ -61,14 +61,7 @@ async def agent_chat(
     authorization: Optional[str] = Header(None)
 ):
     """
-    AI chat endpoint. Integrate with OpenAI, AgentKit, or your custom AI.
-    
-    TODO: Implement your AI logic here:
-    - Connect to OpenAI API
-    - Use AgentKit
-    - Custom prompt engineering
-    - RAG (Retrieval Augmented Generation)
-    - Tool calling
+    AI chat endpoint with OpenAI integration.
     """
     
     # Extract user ID from authorization header if needed
@@ -76,28 +69,62 @@ async def agent_chat(
     if authorization and authorization.startswith("Bearer "):
         user_id = authorization.replace("Bearer ", "")
     
-    # TODO: Replace with real AI integration
-    # Example OpenAI integration:
-    # client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    # response = client.chat.completions.create(
-    #     model="gpt-4",
-    #     messages=[
-    #         {"role": "system", "content": "You are a government contracting expert."},
-    #         {"role": "user", "content": payload.message}
-    #     ]
-    # )
-    # reply = response.choices[0].message.content
+    # Try to use OpenAI if API key is available
+    openai_key = os.getenv("OPENAI_API_KEY")
     
-    # Fallback response
-    reply = f"Received your message: '{payload.message}'. AI integration is ready - connect your OpenAI key or custom AI engine."
-    
-    return ChatResponse(
-        reply=reply,
-        metadata={
-            "userId": user_id,
-            "contextProvided": bool(payload.context)
-        }
-    )
+    if openai_key:
+        try:
+            from openai import OpenAI
+            client = OpenAI(api_key=openai_key)
+            
+            # Create system message for government contracting expert
+            system_message = "You are an expert AI assistant for Sturgeon AI, a government contracting and grants platform. You help users find opportunities, analyze contracts, and generate proposals. Be helpful, concise, and professional."
+            
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": payload.message}
+                ],
+                temperature=0.7,
+                max_tokens=500
+            )
+            
+            reply = response.choices[0].message.content
+            
+            return ChatResponse(
+                reply=reply,
+                metadata={
+                    "userId": user_id,
+                    "contextProvided": bool(payload.context),
+                    "model": "gpt-4o-mini",
+                    "aiPowered": True
+                }
+            )
+            
+        except Exception as e:
+            # If OpenAI fails, return error message
+            return ChatResponse(
+                reply=f"I'm having trouble connecting to my AI engine right now. Error: {str(e)[:100]}. Please try again in a moment.",
+                metadata={
+                    "userId": user_id,
+                    "contextProvided": bool(payload.context),
+                    "error": str(e),
+                    "aiPowered": False
+                }
+            )
+    else:
+        # Fallback if no API key
+        reply = f"Received your message: '{payload.message}'. AI integration is ready - connect your OpenAI key or custom AI engine."
+        
+        return ChatResponse(
+            reply=reply,
+            metadata={
+                "userId": user_id,
+                "contextProvided": bool(payload.context),
+                "aiPowered": False
+            }
+        )
 
 # Opportunity Parser Endpoint
 @app.post("/opportunities/parse")
