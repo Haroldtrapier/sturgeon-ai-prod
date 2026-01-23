@@ -1,15 +1,12 @@
-"""
-Sturgeon AI Backend - FastAPI Application
-
-This is a minimal backend template for the Sturgeon AI platform.
-Expand this with your custom business logic, AI integrations, and data processing.
-"""
-
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from typing import Optional, Dict, Any
+
+# Import routers
+from routers.agent import router as agent_router
+from routers.sam import router as sam_router
 
 app = FastAPI(
     title="Sturgeon AI Backend",
@@ -26,6 +23,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(agent_router)
+app.include_router(sam_router)
 
 # Request/Response Models
 class ChatRequest(BaseModel):
@@ -50,6 +51,7 @@ def health_check():
         "version": "1.0.0",
         "env": {
             "hasOpenAI": bool(os.getenv("OPENAI_API_KEY")),
+            "hasSAMKey": bool(os.getenv("SAM_GOV_API_KEY")),
             "corsOrigins": allowed_origins,
         }
     }
