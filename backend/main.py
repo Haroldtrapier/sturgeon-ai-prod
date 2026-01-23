@@ -4,9 +4,15 @@ from pydantic import BaseModel
 import os
 from typing import Optional, Dict, Any
 
-# Import routers
-from routers.agent import router as agent_router
-from routers.sam import router as sam_router
+# Import routers - use absolute imports
+try:
+    # Try relative import first (when running from backend directory)
+    from routers.agent import router as agent_router
+    from routers.sam import router as sam_router
+except ImportError:
+    # Fall back to absolute import (when running from root)
+    from backend.routers.agent import router as agent_router
+    from backend.routers.sam import router as sam_router
 
 app = FastAPI(
     title="Sturgeon AI Backend",
