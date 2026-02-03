@@ -9,15 +9,41 @@ try:
     # Try relative import first (when running from backend directory)
     from routers.agent import router as agent_router
     from routers.sam import router as sam_router
+    from routers.billing import router as billing_router
+    from routers.chat import router as chat_router
+    from routers.marketplaces import router as marketplaces_router
+    from routers.proposals import router as proposals_router
+    from routers.opportunities import router as opportunities_router
+    from routers.compliance import router as compliance_router
+    from routers.certifications import router as certifications_router
+    from routers.research import router as research_router
+    from routers.profile import router as profile_router
+    from routers.notifications import router as notifications_router
+    from routers.admin import router as admin_router
+    from routers.support import router as support_router
+    from routers.settings import router as settings_router
 except ImportError:
     # Fall back to absolute import (when running from root)
     from backend.routers.agent import router as agent_router
     from backend.routers.sam import router as sam_router
+    from backend.routers.billing import router as billing_router
+    from backend.routers.chat import router as chat_router
+    from backend.routers.marketplaces import router as marketplaces_router
+    from backend.routers.proposals import router as proposals_router
+    from backend.routers.opportunities import router as opportunities_router
+    from backend.routers.compliance import router as compliance_router
+    from backend.routers.certifications import router as certifications_router
+    from backend.routers.research import router as research_router
+    from backend.routers.profile import router as profile_router
+    from backend.routers.notifications import router as notifications_router
+    from backend.routers.admin import router as admin_router
+    from backend.routers.support import router as support_router
+    from backend.routers.settings import router as settings_router
 
 app = FastAPI(
     title="Sturgeon AI Backend",
     description="AI-powered government contracting intelligence",
-    version="1.0.0"
+    version="2.0.0"
 )
 
 # CORS Configuration
@@ -30,9 +56,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# Include ALL routers
 app.include_router(agent_router)
 app.include_router(sam_router)
+app.include_router(billing_router)
+app.include_router(chat_router)
+app.include_router(marketplaces_router)
+app.include_router(proposals_router)
+app.include_router(opportunities_router)
+app.include_router(compliance_router)
+app.include_router(certifications_router)
+app.include_router(research_router)
+app.include_router(profile_router)
+app.include_router(notifications_router)
+app.include_router(admin_router)
+app.include_router(support_router)
+app.include_router(settings_router)
 
 # Request/Response Models
 class ChatRequest(BaseModel):
@@ -54,7 +93,8 @@ def health_check():
     return {
         "ok": True,
         "service": "sturgeon-ai-backend",
-        "version": "1.0.0",
+        "version": "2.0.0",
+        "routers_loaded": 15,
         "env": {
             "hasOpenAI": bool(os.getenv("OPENAI_API_KEY")),
             "hasSAMKey": bool(os.getenv("SAM_GOV_API_KEY")),
@@ -72,28 +112,28 @@ async def agent_chat(
     AI chat endpoint with support for specialized agents.
     Uses custom system prompts passed from frontend for different agent types.
     """
-    
+
     # Extract user ID from authorization header if needed
     user_id = None
     if authorization and authorization.startswith("Bearer "):
         user_id = authorization.replace("Bearer ", "")
-    
+
     # Extract agent context
     agent_type = payload.context.get('agentType', 'general') if payload.context else 'general'
     system_prompt = payload.context.get('systemPrompt') if payload.context else None
-    
+
     # Default system prompt if none provided
     if not system_prompt:
         system_prompt = "You are a helpful AI assistant for Sturgeon AI, a government contracting platform. Help users with questions about opportunities, proposals, and contracts."
-    
+
     # Try to use OpenAI if API key is available
     openai_key = os.getenv("OPENAI_API_KEY")
-    
+
     if openai_key:
         try:
             from openai import OpenAI
             client = OpenAI(api_key=openai_key)
-            
+
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -103,9 +143,9 @@ async def agent_chat(
                 temperature=0.7,
                 max_tokens=1000
             )
-            
+
             reply = response.choices[0].message.content
-            
+
             return ChatResponse(
                 reply=reply,
                 metadata={
@@ -116,7 +156,7 @@ async def agent_chat(
                     "aiPowered": True
                 }
             )
-            
+
         except Exception as e:
             # If OpenAI fails, return error message
             return ChatResponse(
@@ -132,7 +172,7 @@ async def agent_chat(
     else:
         # Fallback if no API key
         reply = f"AI Agent ({agent_type}) received: '{payload.message}'. Please add OPENAI_API_KEY to Railway environment variables to enable AI responses."
-        
+
         return ChatResponse(
             reply=reply,
             metadata={
@@ -151,20 +191,20 @@ async def parse_opportunity(
 ):
     """
     Parse opportunity text and extract structured data.
-    
+
     TODO: Implement parsing logic:
     - Extract title, agency, due date
     - Identify requirements
     - Parse NAICS codes, PSC codes
     - Extract contact information
     """
-    
+
     # TODO: Replace with real parsing logic
     # Could use:
     # - Regex patterns
     # - NLP libraries (spaCy, NLTK)
     # - LLM-based extraction (GPT-4)
-    
+
     return {
         "parsed": {
             "title": "Extracted Title",
