@@ -2,30 +2,7 @@ from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
-import sys
 from typing import Optional, Dict, Any
-
-# Ensure the current directory is in Python path for imports
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
-
-# Import routers
-from routers.agent import router as agent_router
-from routers.sam import router as sam_router
-from routers.billing import router as billing_router
-from routers.chat import router as chat_router
-from routers.marketplaces import router as marketplaces_router
-from routers.proposals import router as proposals_router
-from routers.opportunities import router as opportunities_router
-from routers.compliance import router as compliance_router
-from routers.certifications import router as certifications_router
-from routers.research import router as research_router
-from routers.profile import router as profile_router
-from routers.notifications import router as notifications_router
-from routers.admin import router as admin_router
-from routers.support import router as support_router
-from routers.settings import router as settings_router
 
 app = FastAPI(
     title="Sturgeon AI Backend",
@@ -43,22 +20,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include ALL routers
-app.include_router(agent_router)
-app.include_router(sam_router)
-app.include_router(billing_router)
-app.include_router(chat_router)
-app.include_router(marketplaces_router)
-app.include_router(proposals_router)
-app.include_router(opportunities_router)
-app.include_router(compliance_router)
-app.include_router(certifications_router)
-app.include_router(research_router)
-app.include_router(profile_router)
-app.include_router(notifications_router)
-app.include_router(admin_router)
-app.include_router(support_router)
-app.include_router(settings_router)
+# Import routers with error handling
+routers_loaded = []
+try:
+    from routers.sam import router as sam_router
+    app.include_router(sam_router)
+    routers_loaded.append("sam")
+except Exception as e:
+    print(f"Failed to load sam router: {e}")
+
+try:
+    from routers.chat import router as chat_router
+    app.include_router(chat_router)
+    routers_loaded.append("chat")
+except Exception as e:
+    print(f"Failed to load chat router: {e}")
+
+try:
+    from routers.opportunities import router as opportunities_router
+    app.include_router(opportunities_router)
+    routers_loaded.append("opportunities")
+except Exception as e:
+    print(f"Failed to load opportunities router: {e}")
+
+try:
+    from routers.profile import router as profile_router
+    app.include_router(profile_router)
+    routers_loaded.append("profile")
+except Exception as e:
+    print(f"Failed to load profile router: {e}")
 
 # Request/Response Models
 class ChatRequest(BaseModel):
@@ -81,7 +71,7 @@ def health_check():
         "ok": True,
         "service": "sturgeon-ai-backend",
         "version": "2.0.0",
-        "routers_loaded": 15,
+        "routers_loaded": routers_loaded,
         "env": {
             "hasOpenAI": bool(os.getenv("OPENAI_API_KEY")),
             "hasSAMKey": bool(os.getenv("SAM_GOV_API_KEY")),
