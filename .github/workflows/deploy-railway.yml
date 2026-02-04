@@ -20,9 +20,6 @@ on:
           - production
           - staging
 
-env:
-  RAILWAY_DOMAIN: ${{ secrets.RAILWAY_DOMAIN || 'acceptable-beauty.up.railway.app' }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -61,12 +58,27 @@ jobs:
           fi
 
       - name: Deploy to Railway
+        id: deploy
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           echo "Deploying to Railway..."
           railway up --detach
           echo "Deployment initiated successfully"
+          
+          # Get the Railway domain from the service
+          echo "Fetching service domain..."
+          DOMAIN=$(railway domain 2>/dev/null || echo "")
+          if [ -n "$DOMAIN" ]; then
+            echo "RAILWAY_DOMAIN=$DOMAIN" >> $GITHUB_OUTPUT
+            echo "Detected domain: $DOMAIN"
+          elif [ -n "${{ secrets.RAILWAY_DOMAIN }}" ]; then
+            echo "RAILWAY_DOMAIN=${{ secrets.RAILWAY_DOMAIN }}" >> $GITHUB_OUTPUT
+            echo "Using configured domain: ${{ secrets.RAILWAY_DOMAIN }}"
+          else
+            echo "Warning: Could not detect Railway domain"
+            echo "RAILWAY_DOMAIN=" >> $GITHUB_OUTPUT
+          fi
 
       - name: Wait for Deployment
         run: |
@@ -74,9 +86,11 @@ jobs:
           sleep 45
 
       - name: Verify Deployment Health
+        if: steps.deploy.outputs.RAILWAY_DOMAIN != ''
         run: |
+          DOMAIN="${{ steps.deploy.outputs.RAILWAY_DOMAIN }}"
           echo "Checking health endpoint..."
-          HEALTH_URL="https://${{ env.RAILWAY_DOMAIN }}/health"
+          HEALTH_URL="https://${DOMAIN}/health"
           echo "Health URL: $HEALTH_URL"
           
           # Retry logic for health check
@@ -93,6 +107,12 @@ jobs:
           echo "Health check failed after 5 attempts"
           exit 1
 
+      - name: Skip Health Check
+        if: steps.deploy.outputs.RAILWAY_DOMAIN == ''
+        run: |
+          echo "Skipping health check - no domain configured"
+          echo "Set RAILWAY_DOMAIN secret or run 'railway domain' to generate one"
+
       - name: Deployment Summary
         if: always()
         run: |
@@ -100,7 +120,13 @@ jobs:
           echo "Deployment Summary"
           echo "=================================="
           echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
-          echo "Domain: https://${{ env.RAILWAY_DOMAIN }}"
-          echo "Health: https://${{ env.RAILWAY_DOMAIN }}/health"
-          echo "Docs: https://${{ env.RAILWAY_DOMAIN }}/docs"
+          DOMAIN="${{ steps.deploy.outputs.RAILWAY_DOMAIN }}"
+          if [ -n "$DOMAIN" ]; then
+            echo "Domain: https://${DOMAIN}"
+            echo "Health: https://${DOMAIN}/health"
+            echo "Docs: https://${DOMAIN}/docs"
+          else
+            echo "Domain: Not configured"
+            echo "Run 'railway domain' to generate a public URL"
+          fi
           echo "=================================="
