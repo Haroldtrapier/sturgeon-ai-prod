@@ -1,5 +1,7 @@
 # Railway Deployment Setup
 
+This guide explains how to connect and deploy the Sturgeon AI backend to Railway.
+
 ## Quick Setup (5 minutes)
 
 ### 1. Install Railway CLI
@@ -9,42 +11,55 @@ brew install railway
 
 # Or use npm
 npm i -g @railway/cli
+
+# Verify installation
+railway version
 ```
 
 ### 2. Login to Railway
 ```bash
 railway login
+# This will open a browser for authentication
 ```
 
 ### 3. Create New Project
 ```bash
 # In your project directory
-cd /Users/haroldtrapier/sturgeon-ai-prod-1
+cd /path/to/sturgeon-ai-prod
 
-# Initialize Railway
+# Initialize Railway project
 railway init
+
+# Or link to an existing project
+railway link
 ```
 
-### 4. Add PostgreSQL Database
+### 4. Configure Environment Variables
 ```bash
-# In Railway dashboard or CLI
-railway add --database postgres
-```
-
-### 5. Set Environment Variables
-```bash
-# Set required environment variables
+# Required variables
 railway variables set OPENAI_API_KEY=your_key_here
 railway variables set SAM_GOV_API_KEY=your_key_here
-railway variables set STRIPE_SECRET_KEY=your_key_here
+
+# Supabase configuration
 railway variables set SUPABASE_URL=your_url_here
 railway variables set SUPABASE_SERVICE_ROLE_KEY=your_key_here
+
+# Optional: Stripe for billing
+railway variables set STRIPE_SECRET_KEY=your_key_here
+
+# Optional: CORS configuration
+railway variables set CORS_ORIGINS=https://sturgeon-ai-prod.vercel.app
 ```
 
-### 6. Deploy
+See `.env.railway.example` for all available environment variables.
+
+### 5. Deploy
 ```bash
 # Deploy to Railway
 railway up
+
+# Or deploy in detached mode
+railway up --detach
 ```
 
 ## GitHub Actions Deployment

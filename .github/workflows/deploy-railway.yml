@@ -6,27 +6,101 @@ on:
       - main
     paths:
       - 'backend/**'
+      - 'Dockerfile.backend'
+      - 'railway.json'
+      - 'railway.toml'
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  RAILWAY_DOMAIN: ${{ secrets.RAILWAY_DOMAIN || 'acceptable-beauty.up.railway.app' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
+
+      - name: Check Railway Token
+        run: |
+          if [ -z "${{ secrets.RAILWAY_TOKEN }}" ]; then
+            echo "Error: RAILWAY_TOKEN secret is not set"
+            echo "Please add your Railway token in GitHub Secrets"
+            echo "Get your token from: https://railway.app/account/tokens"
+            exit 1
+          fi
+          echo "Railway token is configured"
+
+      - name: Link Railway Project
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
+            railway link ${{ secrets.RAILWAY_PROJECT_ID }} --environment ${{ github.event.inputs.environment || 'production' }}
+          else
+            echo "Warning: RAILWAY_PROJECT_ID not set, using default project"
+          fi
 
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          cd backend
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }} --environment production
+          echo "Deploying to Railway..."
           railway up --detach
+          echo "Deployment initiated successfully"
 
-      - name: Verify Deployment
+      - name: Wait for Deployment
         run: |
-          sleep 30
-          curl -f https://acceptable-beauty.up.railway.app/health || exit 1
+          echo "Waiting for deployment to complete..."
+          sleep 45
+
+      - name: Verify Deployment Health
+        run: |
+          echo "Checking health endpoint..."
+          HEALTH_URL="https://${{ env.RAILWAY_DOMAIN }}/health"
+          echo "Health URL: $HEALTH_URL"
+          
+          # Retry logic for health check
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i/5..."
+            if curl -sf "$HEALTH_URL" | jq .; then
+              echo "Health check passed!"
+              exit 0
+            fi
+            echo "Health check failed, retrying in 15 seconds..."
+            sleep 15
+          done
+          
+          echo "Health check failed after 5 attempts"
+          exit 1
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "=================================="
+          echo "Deployment Summary"
+          echo "=================================="
+          echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
+          echo "Domain: https://${{ env.RAILWAY_DOMAIN }}"
+          echo "Health: https://${{ env.RAILWAY_DOMAIN }}/health"
+          echo "Docs: https://${{ env.RAILWAY_DOMAIN }}/docs"
+          echo "=================================="
