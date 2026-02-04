@@ -12,5 +12,5 @@ COPY backend/ .
 # Expose port
 EXPOSE 8000
 
-# Run the app with gunicorn (Railway's default) or uvicorn
-CMD gunicorn main:app --bind 0.0.0.0:${PORT:-8000} --worker-class uvicorn.workers.UvicornWorker --workers 2 --timeout 120
+# Run the app with gunicorn using app:app (Railway expects this)
+CMD gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --worker-class uvicorn.workers.UvicornWorker --workers 2 --timeout 120
