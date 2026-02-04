@@ -10,8 +10,9 @@ from sqlalchemy import (
     ForeignKey,
     UniqueConstraint,
     Index,
+    create_engine,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncSession,
@@ -19,28 +20,53 @@ from sqlalchemy.ext.asyncio import (
 )
 
 # ----------------------------------------------------------------------
-# Async PostgreSQL engine & session configuration
+# Database URL configuration
 # ----------------------------------------------------------------------
 DATABASE_URL = os.getenv(
     "STURGEON_DATABASE_URL",
-    "postgresql+asyncpg://postgres:postgres@localhost:5432/sturgeon_ai",
-)
-# Convert postgresql:// to postgresql+asyncpg:// if needed for Railway
-if DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith("postgresql+asyncpg://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
-engine = create_async_engine(
-    DATABASE_URL,
-    echo=False,  # set True for SQL debugging
-    future=True,
+    os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/sturgeon_ai")
 )
 
-AsyncSessionLocal = async_sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autoflush=False,
-    autocommit=False,
-)
+# ----------------------------------------------------------------------
+# Synchronous PostgreSQL engine & session (for compatibility)
+# ----------------------------------------------------------------------
+SYNC_DATABASE_URL = DATABASE_URL
+# Ensure sync URL doesn't have asyncpg
+if "+asyncpg" in SYNC_DATABASE_URL:
+    SYNC_DATABASE_URL = SYNC_DATABASE_URL.replace("+asyncpg", "")
+
+try:
+    sync_engine = create_engine(SYNC_DATABASE_URL, echo=False)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_engine)
+except Exception:
+    # If sync engine fails (e.g., missing psycopg2), create a dummy
+    sync_engine = None
+    SessionLocal = None
+
+# ----------------------------------------------------------------------
+# Async PostgreSQL engine & session configuration
+# ----------------------------------------------------------------------
+ASYNC_DATABASE_URL = DATABASE_URL
+# Convert postgresql:// to postgresql+asyncpg:// if needed for Railway
+if ASYNC_DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in ASYNC_DATABASE_URL:
+    ASYNC_DATABASE_URL = ASYNC_DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+try:
+    engine = create_async_engine(
+        ASYNC_DATABASE_URL,
+        echo=False,  # set True for SQL debugging
+        future=True,
+    )
+    AsyncSessionLocal = async_sessionmaker(
+        bind=engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+        autoflush=False,
+        autocommit=False,
+    )
+except Exception:
+    engine = None
+    AsyncSessionLocal = None
 
 async def get_async_session() -> AsyncSession:
     """
@@ -49,6 +75,8 @@ async def get_async_session() -> AsyncSession:
         async with get_async_session() as session:
             ...
     """
+    if AsyncSessionLocal is None:
+        raise RuntimeError("Database not configured. Set STURGEON_DATABASE_URL or DATABASE_URL environment variable.")
     async with AsyncSessionLocal() as session:
         yield session
 

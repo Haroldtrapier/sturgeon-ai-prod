@@ -2,43 +2,30 @@ from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
+import sys
 from typing import Optional, Dict, Any
 
-# Import routers - use absolute imports
-try:
-    # Try relative import first (when running from backend directory)
-    from routers.agent import router as agent_router
-    from routers.sam import router as sam_router
-    from routers.billing import router as billing_router
-    from routers.chat import router as chat_router
-    from routers.marketplaces import router as marketplaces_router
-    from routers.proposals import router as proposals_router
-    from routers.opportunities import router as opportunities_router
-    from routers.compliance import router as compliance_router
-    from routers.certifications import router as certifications_router
-    from routers.research import router as research_router
-    from routers.profile import router as profile_router
-    from routers.notifications import router as notifications_router
-    from routers.admin import router as admin_router
-    from routers.support import router as support_router
-    from routers.settings import router as settings_router
-except ImportError:
-    # Fall back to absolute import (when running from root)
-    from backend.routers.agent import router as agent_router
-    from backend.routers.sam import router as sam_router
-    from backend.routers.billing import router as billing_router
-    from backend.routers.chat import router as chat_router
-    from backend.routers.marketplaces import router as marketplaces_router
-    from backend.routers.proposals import router as proposals_router
-    from backend.routers.opportunities import router as opportunities_router
-    from backend.routers.compliance import router as compliance_router
-    from backend.routers.certifications import router as certifications_router
-    from backend.routers.research import router as research_router
-    from backend.routers.profile import router as profile_router
-    from backend.routers.notifications import router as notifications_router
-    from backend.routers.admin import router as admin_router
-    from backend.routers.support import router as support_router
-    from backend.routers.settings import router as settings_router
+# Ensure the current directory is in Python path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+# Import routers
+from routers.agent import router as agent_router
+from routers.sam import router as sam_router
+from routers.billing import router as billing_router
+from routers.chat import router as chat_router
+from routers.marketplaces import router as marketplaces_router
+from routers.proposals import router as proposals_router
+from routers.opportunities import router as opportunities_router
+from routers.compliance import router as compliance_router
+from routers.certifications import router as certifications_router
+from routers.research import router as research_router
+from routers.profile import router as profile_router
+from routers.notifications import router as notifications_router
+from routers.admin import router as admin_router
+from routers.support import router as support_router
+from routers.settings import router as settings_router
 
 app = FastAPI(
     title="Sturgeon AI Backend",
