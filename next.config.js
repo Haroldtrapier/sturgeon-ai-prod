@@ -9,35 +9,13 @@ const nextConfig = {
     // Temporarily ignore ESLint errors during build
     ignoreDuringBuilds: true,
   },
-  // Rewrites for backend API
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
-      },
-      {
-        source: '/agent/:path*',
-        destination: 'http://localhost:8000/agent/:path*',
-      },
-      {
-        source: '/billing/:path*',
-        destination: 'http://localhost:8000/billing/:path*',
-      },
-      {
-        source: '/chat/:path*',
-        destination: 'http://localhost:8000/chat/:path*',
-      },
-      {
-        source: '/marketplaces/:path*',
-        destination: 'http://localhost:8000/marketplaces/:path*',
-      },
-      {
-        source: '/proposals/:path*',
-        destination: 'http://localhost:8000/proposals/:path*',
-      },
-    ];
+  // Environment variables available at build time
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
+  // Note: Rewrites to external URLs don't work on Vercel for serverless functions
+  // Instead, we use Next.js API routes in /app/api and /pages/api to proxy requests
+  // The backend URL is configured via BACKEND_URL environment variable
 }
 
 module.exports = nextConfig

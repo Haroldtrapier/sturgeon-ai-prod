@@ -7,6 +7,17 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
+    // Transform request body to match backend expected format
+    const backendPayload = {
+      message: body.message,
+      context: {
+        agentType: body.agentType || 'general',
+        systemPrompt: body.systemPrompt,
+        ...(body.context || {})
+      },
+      userId: body.userId
+    };
+    
     // Forward the request to the Railway backend
     const response = await fetch(`${BACKEND_URL}/agent/chat`, {
       method: 'POST',
@@ -17,14 +28,14 @@ export async function POST(request: NextRequest) {
           'Authorization': request.headers.get('authorization')!,
         }),
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(backendPayload),
     });
 
     // Check if the response is ok
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
       return NextResponse.json(
-        { error: errorData.error || `Backend error: ${response.statusText}` },
+        { error: errorData.error || errorData.detail || `Backend error: ${response.statusText}` },
         { status: response.status }
       );
     }
@@ -38,6 +49,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         error: error.message || 'Failed to connect to AI backend',
+        reply: 'I apologize, but I\'m having trouble connecting to the AI service. Please try again in a moment.',
         details: `Backend URL: ${BACKEND_URL}/agent/chat`
       },
       { status: 500 }
