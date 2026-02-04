@@ -16,3 +16,9 @@ public/
 .vercel/
 .env.local
 .env.production*
+
+# Ignore root Python files (backend is in /backend folder)
+index.py
+streamlit_app.py
+requirements.txt
+api/
