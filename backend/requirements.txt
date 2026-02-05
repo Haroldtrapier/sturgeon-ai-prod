@@ -3,3 +3,5 @@ uvicorn[standard]==0.34.0
 pydantic==2.10.3
 python-dotenv==1.0.1
 openai==1.57.4
+supabase==2.4.0
+stripe==10.12.0
