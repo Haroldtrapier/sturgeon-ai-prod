@@ -1,239 +1,276 @@
-# 🐟 Sturgeon AI - Government Contracting Intelligence Platform
+# Sturgeon AI – Government Contracting Intelligence & Proposal Platform
 
-AI-powered platform for government contract analysis, proposal generation, and opportunity matching.
+**Production-Ready GovCon SaaS**  
+**FedRAMP Moderate–Aligned | NIST 800-53 Implemented | Agency Pilot Ready**
 
-## 🚀 Quick Start
+---
 
-### Prerequisites
+## 🎯 What is Sturgeon AI?
 
-- Node.js 22.x or later
-- Supabase account (for database)
-- OpenAI API key (for AI features)
-- Vercel account (for deployment)
+Sturgeon AI is an end-to-end government contracting intelligence and proposal production system that delivers:
 
-### 1. Clone and Install
+- **Requirement Traceability** – Automated SHALL/MUST extraction from RFPs
+- **Compliance Confidence** – Real-time compliance matrix with coverage tracking
+- **Faster, Auditable Submissions** – One-click submission packages (DOCX/ZIP)
+- **FedRAMP-Aligned Security** – RBAC, audit logging, RLS, MFA, encryption
 
-```bash
-git clone https://github.com/Haroldtrapier/sturgeon-ai-prod.git
-cd sturgeon-ai-prod
-npm install
-```
+**No hype. Outcomes only.**
 
-### 2. Environment Setup
+---
 
-Create `.env.local` file:
+## 🚀 Current Status
 
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+- **✅ Core Platform:** Complete (Phases 1–7)
+- **✅ Security Pack:** FedRAMP-aligned documentation ready
+- **✅ Pricing:** Locked (Starter/Pro/Enterprise)
+- **🔶 Launch Status:** Pre-Production (checklist in progress)
+- **🎯 Next:** 3 agency pilots, then paid launch
 
-# Backend API (optional, for AI features)
-BACKEND_URL=https://your-backend.railway.app
-# OR
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# Optional: OpenAI (if using direct integration)
-OPENAI_API_KEY=your_openai_key
-```
-
-### 3. Database Setup
-
-Run the Supabase migration:
-
-```bash
-# In Supabase SQL Editor, run:
-supabase/migrations/001_create_opportunities.sql
-```
-
-Or use Supabase CLI:
-
-```bash
-supabase db push
-```
-
-### 4. Run Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
-## 🏗️ Architecture
-
-### Frontend (Next.js 14)
-- **Framework**: Next.js 14 with App Router
-- **Styling**: TailwindCSS
-- **Auth**: Supabase Auth
-- **Database**: Supabase (PostgreSQL)
-
-### Backend (FastAPI - Optional)
-- **Framework**: FastAPI
-- **AI Engine**: OpenAI / Custom Agent
-- **Deployment**: Railway
-
-### Key Features
-
-1. **Opportunity Import** - Import from SAM.gov, GovWin, Unison, FPDS, etc.
-2. **AI Analysis** - Chat with AI about opportunities
-3. **Proposal Generation** - AI-powered proposal drafting
-4. **User Dashboard** - Track saved opportunities
-
-## 📦 API Endpoints
-
-### Frontend (Next.js API Routes)
-
-- `POST /api/opportunities/import` - Save opportunity
-- `GET /api/opportunities/import` - List user's opportunities
-- `POST /api/agent` - Chat with AI assistant
-- `GET /api/health` - Health check
-
-### Backend (FastAPI)
-
-- `GET /health` - Health check
-- `POST /agent/chat` - AI chat endpoint
-- `POST /opportunities/parse` - Parse opportunity text
-
-## 🗎️ Database Schema
-
-### opportunities table
-
-```sql
-id: uuid (primary key)
-user_id: uuid (foreign key to auth.users)
-source: text (sam, govwin, unison, etc.)
-source_url: text
-title: text
-agency: text
-solicitation_id: text
-due_date: timestamptz
-raw_text: text
-parsed_json: jsonb
-created_at: timestamptz
-updated_at: timestamptz
-```
-
-## 🚀 Deployment
-
-### Deploy to Vercel (Frontend)
-
-```bash
-vercel --prod
-```
-
-Or connect your GitHub repo to Vercel for automatic deployments.
-
-**Required Environment Variables in Vercel:**
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `BACKEND_URL` (if using separate backend)
-
-### Deploy Backend to Railway
-
-```bash
-cd backend
-railway up
-```
-
-**Required Environment Variables in Railway:**
-- `OPENAI_API_KEY`
-- `DATABASE_URL` (if using database)
-- `CORS_ORIGINS` (your Vercel domain)
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-sturgeon-ai-prod/
-├── app/                    # Next.js app directory
-│   ├── api/                # API routes
-│   │   ├── agent/          # AI chat endpoint
-│   │   └── opportunities/  # Opportunity endpoints
-│   ├── agent/              # AI assistant page
-│   ├── marketplaces/       # Marketplace integrations
-│   └── opportunities/      # Opportunities list
-├── components/            # React components
-├── lib/                   # Utilities
-│   ├── supabase/          # Supabase client
-│   └── hooks/             # Custom React hooks
-├── backend/               # FastAPI backend (separate)
-└── supabase/              # Database migrations
-```
-
-### Adding New Marketplace
-
-1. Create new page: `app/marketplaces/[name]/page.tsx`
-2. Use `MarketplaceImport` component:
-
-```tsx
-import MarketplaceImport from '@/components/MarketplaceImport';
-
-export default function NewMarketplacePage() {
-  return (
-    <MarketplaceImport
-      source="marketplace-key"
-      sourceName="Marketplace Name"
-      loginUrl="https://marketplace.url"
-      description="Description here"
-    />
-  );
-}
-```
-
-3. Add link in `app/marketplaces/page.tsx`
-
-## 🐛 Troubleshooting
-
-### Build Errors
-
-**Error: "Module not found: @/lib/supabase/client"**
-- Ensure `lib/supabase/client.ts` exists
-- Check `tsconfig.json` has `"@/*": ["./*"]` in paths
-
-**Error: "useRouter can only be used in Client Components"**
-- Add `'use client'` directive at top of file
-- Change import from `next/router` to `next/navigation`
-
-### Database Issues
-
-**Error: "relation 'opportunities' does not exist"**
-- Run the migration: `supabase/migrations/001_create_opportunities.sql`
-- Check Supabase connection in `.env.local`
-
-### API Issues
-
-**Error: "BACKEND_URL is not set"**
-- Backend is optional for basic features
-- AI chat will show fallback message
-- Add `BACKEND_URL` env var to enable full AI features
+---
 
 ## 📚 Documentation
 
-- [Next.js Docs](https://nextjs.org/docs)
-- [Supabase Docs](https://supabase.com/docs)
-- [TailwindCSS Docs](https://tailwindcss.com/docs)
+### Core Docs:
+- [Production Launch Checklist](./PRODUCTION_LAUNCH_CHECKLIST.md)
+- [Agency Pilot Strategy](./PILOT_STRATEGY.md)
+- [Pricing & Packaging](./PRICING.md)
 
-## 🔐 Security
+### Phase READMEs:
+- [Phase 4: Proposal Generator + Compliance Matrix](./README_PHASE4.md)
+- [Security Documentation Pack](./security/) (SSP, policies, control matrix)
 
-- All API routes verify user authentication
-- Row Level Security (RLS) enabled on database
-- Users can only access their own data
-- Environment variables never exposed to client
+---
 
-## 🤝 Contributing
+## 🔧 Tech Stack
 
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open Pull Request
+### Frontend (Vercel):
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase Auth
 
-## 📝 License
+### Backend (Railway):
+- FastAPI (Python)
+- Supabase (PostgreSQL + Auth)
+- OpenAI GPT-4
+- Stripe (billing)
 
-Private - All rights reserved
+### Infrastructure:
+- **Hosting:** Vercel (frontend), Railway (backend)
+- **Database:** Supabase (managed PostgreSQL)
+- **Auth:** Supabase Auth (email + MFA)
+- **Payments:** Stripe
+- **Email:** Resend (alerts, digests)
 
-## 📧 Support
+---
 
-For issues or questions, contact: info@trapiermanagement.com
+## ✨ Features
+
+### 🤖 Multi-Agent System (6 Agents):
+1. **General Assistant** – Routing, general queries
+2. **Opportunity Finder** – SAM.gov search, opportunity ingestion
+3. **Proposal Writer** – AI-powered proposal section generation
+4. **Compliance Analyst** – SHALL/MUST requirement extraction
+5. **Market Researcher** – Agency trends, NAICS analysis
+6. **Submission Specialist** – Packaging, readiness scoring
+
+### 📄 Proposal Production:
+- Automated requirement extraction (SHALL/MUST)
+- AI-generated proposal sections
+- Real-time compliance matrix
+- Readiness scoring (0-100)
+- One-click DOCX/ZIP export
+- Submission checklists
+
+### 🔒 Enterprise Security:
+- Role-based access control (Admin, Writer, Reviewer, Viewer)
+- Row-level security (RLS) for data isolation
+- Immutable audit logging
+- MFA enforcement
+- Legal hold + data retention (7-year default)
+- Encryption in transit and at rest
+
+### 📊 Analytics & Dashboards:
+- Opportunity tracking
+- Proposal pipeline metrics
+- Compliance coverage stats
+- User activity logs
+
+---
+
+## 📂 Repository Structure
+
+```
+sturgeon-ai-prod/
+├── backend/
+│   ├── main.py                    # FastAPI app
+│   ├── routers/
+│   │   ├── chat.py                # Multi-agent chat
+│   │   ├── proposals.py            # Proposal CRUD + generation
+│   │   ├── submission.py           # Submission packaging
+│   │   ├── export.py               # DOCX/ZIP export
+│   │   ├── review.py               # Human review workflow
+│   │   └── billing.py              # Stripe integration
+│   ├── services/
+│   │   ├── compliance_extractor.py # SHALL/MUST extraction
+│   │   ├── proposal_generator.py   # AI proposal writer
+│   │   ├── readiness.py            # Readiness scoring
+│   │   ├── packager.py             # ZIP packaging
+│   │   └── brief_gen.py            # Submission brief generator
+│   ├── migrations/
+│   │   ├── 004_proposals_compliance.sql
+│   │   ├── 005_review_teams_audit.sql
+│   │   └── 006_submission_readiness_security.sql
+│   └── templates/
+│       ├── proposal.docx
+│       └── compliance_matrix.docx
+├── frontend/
+│   ├── app/
+│   │   ├── dashboard/page.tsx
+│   │   ├── proposals/[id]/page.tsx  # Proposal builder UI
+│   │   └── settings/page.tsx
+│   ├── components/
+│   └── lib/
+├── security/
+│   ├── SSP.docx                      # System Security Plan
+│   ├── control-matrix.xlsx           # Control Implementation Matrix
+│   ├── architecture-diagrams/
+│   ├── policies/                      # 6 core policies
+│   ├── incident-response/
+│   └── conmon-metrics.md
+├── PRODUCTION_LAUNCH_CHECKLIST.md
+├── PILOT_STRATEGY.md
+├── PRICING.md
+└── README.md                       # This file
+```
+
+---
+
+## 🛠️ Setup & Deployment
+
+### Prerequisites:
+- Node.js 18+
+- Python 3.11+
+- Supabase account
+- Railway account
+- Vercel account
+- OpenAI API key
+- Stripe account
+
+### Environment Variables:
+
+**Backend (.env):**
+```bash
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENAI_API_KEY=your_openai_key
+STRIPE_SECRET_KEY=your_stripe_secret
+```
+
+**Frontend (.env.local):**
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_API_URL=your_railway_backend_url
+```
+
+### Deploy:
+
+1. **Database:**
+   ```bash
+   # Run migrations in Supabase SQL Editor
+   backend/migrations/004_proposals_compliance.sql
+   backend/migrations/005_review_teams_audit.sql
+   backend/migrations/006_submission_readiness_security.sql
+   ```
+
+2. **Backend (Railway):**
+   - Connect GitHub repo
+   - Set environment variables
+   - Deploy (auto-deploys from `main`)
+
+3. **Frontend (Vercel):**
+   - Connect GitHub repo
+   - Set environment variables
+   - Deploy (auto-deploys from `main`)
+
+---
+
+## 📊 Roadmap
+
+### ✅ Completed (Phases 1–7):
+- Multi-agent chat system
+- Opportunity intelligence (SAM.gov ingestion)
+- Proposal generator + compliance matrix
+- DOCX/ZIP export
+- Human review workflow
+- Teams + roles + audit logging
+- FedRAMP-aligned security pack
+
+### 🔶 Current (Pre-Launch):
+- Production launch checklist
+- Agency pilot outreach (3 targets)
+- Pilot onboarding materials
+
+### 🔮 Future (Post-Pilot):
+- PDF export polish
+- Advanced ML scoring (win probability)
+- Mobile UI optimization
+- Full JAB P-ATO certification
+- White-label offering
+- API for third-party integrations
+
+---
+
+## 💰 Pricing
+
+- **Starter:** $99/month
+- **Pro:** $399/month
+- **Enterprise:** $5k–$25k/year (custom)
+
+See [PRICING.md](./PRICING.md) for details.
+
+---
+
+## 👥 Target Customers
+
+1. **Small GovCon Firms** (1–50 employees)
+2. **Federal Agencies** (OSDBU, contracting offices)
+3. **Prime Contractors** (proposal teams)
+4. **State/Local Government** (procurement offices)
+
+---
+
+## 🔒 Security & Compliance
+
+- **FedRAMP Moderate–aligned** (not certified)
+- **NIST 800-53 Rev. 5** controls implemented
+- **Audit logging** (immutable)
+- **RBAC + RLS** (team isolation)
+- **MFA enforced**
+- **Encryption** (in transit + at rest)
+- **Data retention** (7-year default, legal hold support)
+
+**Sales-Safe Language:**
+- ✅ "FedRAMP Moderate–aligned architecture"
+- ✅ "NIST 800-53 controls implemented"
+- ✅ "Prepared for agency ATO sponsorship"
+- ❌ "FedRAMP certified" (not yet)
+
+---
+
+## 📞 Contact
+
+**Website:** [Coming Soon]  
+**Email:** [Your Email]  
+**GitHub:** [Haroldtrapier/sturgeon-ai-prod](https://github.com/Haroldtrapier/sturgeon-ai-prod)  
+
+---
+
+## 📄 License
+
+Proprietary. All rights reserved.
+
+---
+
+**Built for GovCon. Ready for agencies. Launch-ready.**
