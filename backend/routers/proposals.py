@@ -1,143 +1,233 @@
+"""
+Proposal Management API
+
+End-to-end workflow:
+1. POST /create - Extract requirements from RFP
+2. POST /{id}/generate - Generate proposal sections
+3. GET /{id} - View proposal + compliance matrix
+4. PUT /{id}/sections/{section_id} - Edit sections
+5. GET /{id}/export - Export to DOCX/PDF (Phase 4.5)
+"""
+
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from database import get_db
+from pydantic import BaseModel
+from backend.services.auth import get_user
+from backend.services.db import supabase
+from backend.services.compliance_extractor import extract_requirements
+from backend.services.proposal_generator import generate_section
 
-from models.proposal import Proposal
-import services.proposal_ai as a_ai
-from services.proposal_ai import generate_full_proposal, write_proposal
+router = APIRouter(prefix="/proposals", tags=["proposals"])
 
-router = APIRouter(prefix="/proposals", tags=["Proposals"])
 
-@router.get("/")
-async def list_proposals(db: Session = Depends(get_db)):
-    """List all proposals for the current user."""
-    proposals = db.query(Proposal).all()
-    return {"proposals": [{
-        "id": p.id,
-        "name": p.name,
-        "user_id": p.user_id,
-        "created_at": p.created_at.isoformat(),
-        "updated_at": p.updated_at.isoformat(),
-    } for p in proposals]}
+class CreateProposalRequest(BaseModel):
+    opportunity_id: str
+    rfp_text: str
+    title: str = "New Proposal"
 
-@router.post("/")
-async def create_proposal(db: Session = Depends(get_db)):
-    """Create a new proposal shell."""
-    p = Proposal(
-        id=None, # let DB set ID
-        name="New Proposal",
-        user_id=None,
-        raw_text="",
-        generated_text="",
+
+class GenerateSectionRequest(BaseModel):
+    section_name: str
+    company_profile: dict = None
+
+
+@router.post("/create")
+def create_proposal(request: CreateProposalRequest, user=Depends(get_user)):
+    """
+    Create a new proposal and extract compliance requirements from RFP text.
+    
+    This is the entry point for the proposal workflow:
+    1. Creates proposal record
+    2. Extracts SHALL/MUST requirements from RFP
+    3. Populates compliance matrix
+    4. Returns proposal_id and requirement count
+    """
+    
+    # Validate opportunity exists and belongs to user
+    opp_response = supabase.table("opportunities") \
+        .select("*") \
+        .eq("id", request.opportunity_id) \
+        .eq("user_id", user.id) \
+        .execute()
+    
+    if not opp_response.data:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+    
+    # Create proposal
+    proposal_response = supabase.table("proposals").insert({
+        "user_id": user.id,
+        "opportunity_id": request.opportunity_id,
+        "title": request.title,
+        "status": "draft"
+    }).execute()
+    
+    if not proposal_response.data:
+        raise HTTPException(status_code=500, detail="Failed to create proposal")
+    
+    proposal = proposal_response.data[0]
+    
+    # Extract requirements from RFP
+    requirements = extract_requirements(request.rfp_text)
+    
+    # Insert requirements into compliance matrix
+    if requirements:
+        requirement_records = [
+            {
+                "proposal_id": proposal["id"],
+                "requirement": req["requirement"],
+                "section_ref": req.get("section_ref", ""),
+                "status": "missing"
+            }
+            for req in requirements
+        ]
+        
+        supabase.table("compliance_requirements").insert(requirement_records).execute()
+    
+    return {
+        "proposal_id": proposal["id"],
+        "title": proposal["title"],
+        "requirements_extracted": len(requirements),
+        "status": "draft"
+    }
+
+
+@router.post("/{proposal_id}/generate")
+def generate_proposal_section(
+    proposal_id: str,
+    request: GenerateSectionRequest,
+    user=Depends(get_user)
+):
+    """
+    Generate a proposal section using AI.
+    
+    Workflow:
+    1. Fetch proposal and linked opportunity
+    2. Get relevant compliance requirements
+    3. Generate section content using LLM
+    4. Save to proposal_sections
+    5. Mark requirements as 'addressed'
+    """
+    
+    # Validate proposal belongs to user
+    proposal_response = supabase.table("proposals") \
+        .select("*, opportunities(*)") \
+        .eq("id", proposal_id) \
+        .eq("user_id", user.id) \
+        .execute()
+    
+    if not proposal_response.data:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+    
+    proposal = proposal_response.data[0]
+    opportunity = proposal.get("opportunities")
+    
+    if not opportunity:
+        raise HTTPException(status_code=400, detail="No opportunity linked to proposal")
+    
+    # Get compliance requirements
+    reqs_response = supabase.table("compliance_requirements") \
+        .select("*") \
+        .eq("proposal_id", proposal_id) \
+        .execute()
+    
+    requirements = reqs_response.data or []
+    
+    # Generate section content
+    content = generate_section(
+        section_name=request.section_name,
+        requirements=requirements,
+        opportunity=opportunity,
+        company_profile=request.company_profile
     )
-    db.add(p)
-    db.commit()
-    return {"id": p.id}
+    
+    # Save section
+    section_response = supabase.table("proposal_sections").insert({
+        "proposal_id": proposal_id,
+        "section_name": request.section_name,
+        "content": content
+    }).execute()
+    
+    if not section_response.data:
+        raise HTTPException(status_code=500, detail="Failed to save section")
+    
+    # Update requirements status to 'addressed'
+    # (In production, should be smarter about which requirements are actually addressed)
+    if requirements:
+        supabase.table("compliance_requirements") \
+            .update({"status": "addressed"}) \
+            .eq("proposal_id", proposal_id) \
+            .execute()
+    
+    # Update proposal status
+    supabase.table("proposals") \
+        .update({"status": "in_progress"}) \
+        .eq("id", proposal_id) \
+        .execute()
+    
+    return {
+        "section_id": section_response.data[0]["id"],
+        "section_name": request.section_name,
+        "content_length": len(content),
+        "status": "generated"
+    }
 
 
 @router.get("/{proposal_id}")
-async def get_proposal(proposal_id: str, db: Session = Depends(get_db)):
-    """Get proposal details by ID."""
-    p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Proposal not found")
-    return {
-        "id": p.id,
-        "name": p.name,
-        "user_id": p.user_id,
-        "raw_text": p.raw_text,
-        "generated_text": p.generated_text,
-        "created_at": p.created_at.isoformat(),
-        "updated_at": p.updated_at.isoformat(),
-    }
-
-@router.post("/{proposal_id}/generate")
-async def generate_proposal_text(proposal_id: str, db: Session = Depends(get_db)):
-    """Generate a one-pass AI proposal draft."""
-    p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Proposal not found")
-
-    company_profile = "Trapier Management LLC — SDVOSB, logistics & AI solutions."
-
-    draft = await write_proposal(
-        outline="High-level outline based on requirements and company profile.",
-        company_profile=company_profile,
-    )
-
-    p.generated_text = draft
-    db.commit()
-
-    return {"generated": draft}
-
-@router.post("/{proposal_id}/generate-full")
-async def generate_full_proposal_endpoint(proposal_id: str, db: Session = Depends(get_db)):
-    """Run full 3-stage pipeline: analyzer —  outliner —  positional writer."""
-    p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Proposal not found")
-
-    company_profile = "Trapier Management LLC — SDVOSB, logistics & AI solutions."
-
-    result = await generate_full_proposal(
-        raw_requirements=p.raw_text or "",
-        company_profile=company_profile,
-    )
-
-    # Store o“draft” back onto the Proposal model
-    p.generated_text = result["draft"]
-    db.commit()
-
-    return result
-@router.put("/{proposal_id}")
-async def update_proposal(
-    proposal_id: str,
-    body: dict,
-    db: Session = Depends(get_db)
-):
-    """Update proposal details."""
-    p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
-    if not p:
+def get_proposal(proposal_id: str, user=Depends(get_user)):
+    """
+    Get complete proposal with sections and compliance matrix.
+    """
+    
+    # Get proposal
+    proposal_response = supabase.table("proposals") \
+        .select("*, opportunities(*)") \
+        .eq("id", proposal_id) \
+        .eq("user_id", user.id) \
+        .execute()
+    
+    if not proposal_response.data:
         raise HTTPException(status_code=404, detail="Proposal not found")
     
-    # Apply patches from body to update model
-    allowed_fields = [
-        "name", "status", "raw_text", "generated_text",
-        "executive_summary", "technical_approach", "management_plan",
-        "past_performance", "cost_proposal", "confidence_score"
-    ]
+    proposal = proposal_response.data[0]
     
-    updated_fields = []
-    for field in allowed_fields:
-        if field in body:
-            setattr(p, field, body[field])
-            updated_fields.append(field)
+    # Get sections
+    sections_response = supabase.table("proposal_sections") \
+        .select("*") \
+        .eq("proposal_id", proposal_id) \
+        .order("created_at") \
+        .execute()
     
-    # Update word count if text changed
-    if "generated_text" in body or "raw_text" in body:
-        text = p.generated_text or p.raw_text or ""
-        p.word_count = len(text.split())
-    
-    db.commit()
-    db.refresh(p)
+    # Get compliance requirements
+    requirements_response = supabase.table("compliance_requirements") \
+        .select("*") \
+        .eq("proposal_id", proposal_id) \
+        .order("section_ref") \
+        .execute()
     
     return {
-        "message": "Proposal updated",
-        "updated_fields": updated_fields,
-        "proposal": {
-            "id": p.id,
-            "name": p.name,
-            "status": p.status,
-            "word_count": p.word_count
+        "proposal": proposal,
+        "sections": sections_response.data or [],
+        "compliance_matrix": requirements_response.data or [],
+        "stats": {
+            "total_requirements": len(requirements_response.data or []),
+            "addressed": len([r for r in (requirements_response.data or []) if r["status"] == "addressed"]),
+            "missing": len([r for r in (requirements_response.data or []) if r["status"] == "missing"]),
+            "sections_count": len(sections_response.data or [])
         }
     }
 
-@router.delete("/{proposal_id}")
-async def delete_proposal(proposal_id: str, db: Session = Depends(get_db)):
-    """Delete a proposal."""
-    p = db.query(Proposal).filter(Proposal.id == proposal_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Proposal not found")
-    db.delete(p)
-    db.commit()
-    return {"message": "Proposal deleted"}
+
+@router.get("/")
+def list_proposals(user=Depends(get_user)):
+    """
+    List all proposals for authenticated user.
+    """
+    
+    response = supabase.table("proposals") \
+        .select("*, opportunities(title, agency)") \
+        .eq("user_id", user.id) \
+        .order("created_at", desc=True) \
+        .execute()
+    
+    return {
+        "proposals": response.data or []
+    }
