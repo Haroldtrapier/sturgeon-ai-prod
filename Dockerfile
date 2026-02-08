@@ -2,15 +2,28 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code
 COPY backend/ .
 
-# Expose port
+# Set environment
+ENV PYTHONPATH=/app
+ENV PORT=8000
+ENV PYTHONUNBUFFERED=1
+
 EXPOSE 8000
 
-# Run the app with gunicorn using app:app (Railway expects this)
-CMD gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --worker-class uvicorn.workers.UvicornWorker --workers 2 --timeout 120
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python -c "import httpx; r = httpx.get('http://localhost:8000/health'); assert r.status_code == 200"
+
+# Start server
+CMD uvicorn app:app --host 0.0.0.0 --port $PORT

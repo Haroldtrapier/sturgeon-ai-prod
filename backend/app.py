@@ -1,16 +1,59 @@
+"""
+Sturgeon AI Backend - Unified FastAPI Application
+Government Contracting Intelligence Platform
+
+All routers, middleware, and background jobs configured here.
+"""
+import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel
-import os
 from typing import Optional, Dict, Any
+
+# Rate limiter
+limiter = Limiter(key_func=get_remote_address)
+
+
+# ── Lifespan (startup/shutdown) ──────────────────────────────────────
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    print("[Sturgeon AI] Starting backend services...")
+    try:
+        from jobs.scheduler import start_scheduler
+        start_scheduler()
+        print("[Sturgeon AI] Background scheduler started")
+    except Exception as e:
+        print(f"[Sturgeon AI] Scheduler start failed (non-fatal): {e}")
+    yield
+    # Shutdown
+    try:
+        from jobs.scheduler import stop_scheduler
+        stop_scheduler()
+    except Exception:
+        pass
+    print("[Sturgeon AI] Backend shutting down")
+
+
+# ── FastAPI App ──────────────────────────────────────────────────────
 
 app = FastAPI(
     title="Sturgeon AI Backend",
-    description="AI-powered government contracting intelligence",
-    version="2.0.0"
+    description="AI-powered government contracting intelligence platform",
+    version="9.0.0",
+    lifespan=lifespan,
 )
 
-# CORS Configuration
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ── CORS Configuration ───────────────────────────────────────────────
+
 allowed_origins = os.getenv("CORS_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
@@ -20,183 +63,185 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Import routers with error handling
+# ── Router Registration ──────────────────────────────────────────────
+
 routers_loaded = []
-try:
-    from routers.sam import router as sam_router
-    app.include_router(sam_router)
-    routers_loaded.append("sam")
-except Exception as e:
-    print(f"Failed to load sam router: {e}")
+router_configs = [
+    ("routers.opportunities", "opportunities"),
+    ("routers.profile", "profile"),
+    ("routers.compliance", "compliance"),
+    ("routers.certifications", "certifications"),
+    ("routers.notifications", "notifications"),
+    ("routers.market_intelligence", "market_intelligence"),
+    ("routers.agents_chat", "agents_chat"),
+    ("routers.sam", "sam"),
+    ("routers.settings", "settings"),
+]
 
-try:
-    from routers.chat import router as chat_router
-    app.include_router(chat_router)
-    routers_loaded.append("chat")
-except Exception as e:
-    print(f"Failed to load chat router: {e}")
+for module_path, name in router_configs:
+    try:
+        module = __import__(module_path, fromlist=["router"])
+        app.include_router(module.router)
+        routers_loaded.append(name)
+    except Exception as e:
+        print(f"[Sturgeon AI] Failed to load {name} router: {e}")
 
-try:
-    from routers.opportunities import router as opportunities_router
-    app.include_router(opportunities_router)
-    routers_loaded.append("opportunities")
-except Exception as e:
-    print(f"Failed to load opportunities router: {e}")
+# Load additional routers (Phase 4-8)
+extra_routers = [
+    ("routers.chat", "chat"),
+    ("routers.agent", "agent"),
+    ("routers.export", "export"),
+    ("routers.review", "review"),
+    ("routers.submission", "submission"),
+    ("routers.billing", "billing"),
+    ("routers.admin", "admin"),
+    ("routers.onboarding", "onboarding"),
+    ("routers.support", "support"),
+    ("routers.research", "research"),
+    ("routers.marketplaces", "marketplaces"),
+    ("routers.stripe_webhook", "stripe_webhook"),
+]
 
-try:
-    from routers.profile import router as profile_router
-    app.include_router(profile_router)
-    routers_loaded.append("profile")
-except Exception as e:
-    print(f"Failed to load profile router: {e}")
+for module_path, name in extra_routers:
+    try:
+        module = __import__(module_path, fromlist=["router"])
+        app.include_router(module.router)
+        routers_loaded.append(name)
+    except Exception as e:
+        print(f"[Sturgeon AI] Failed to load {name} router (non-critical): {e}")
 
-# Request/Response Models
-class ChatRequest(BaseModel):
-    message: str
-    context: Optional[Dict[str, Any]] = None
-    userId: Optional[str] = None
 
-class ChatResponse(BaseModel):
-    reply: str
-    metadata: Optional[dict] = None
+# ── Health Check ─────────────────────────────────────────────────────
 
-class OpportunityParseRequest(BaseModel):
-    text: str
-    source: str
-
-# Health Check
 @app.get("/health")
 def health_check():
     return {
         "ok": True,
         "service": "sturgeon-ai-backend",
-        "version": "2.0.0",
+        "version": "9.0.0",
+        "status": "healthy",
         "routers_loaded": routers_loaded,
+        "routers_count": len(routers_loaded),
         "env": {
-            "hasOpenAI": bool(os.getenv("OPENAI_API_KEY")),
+            "hasAnthropicKey": bool(os.getenv("ANTHROPIC_API_KEY")),
+            "hasOpenAIKey": bool(os.getenv("OPENAI_API_KEY")),
             "hasSAMKey": bool(os.getenv("SAM_GOV_API_KEY")),
+            "hasSupabaseUrl": bool(os.getenv("SUPABASE_URL")),
             "corsOrigins": allowed_origins,
-        }
+        },
     }
 
-# AI Chat Endpoint with Specialized Agent Support
+
+@app.get("/")
+def root():
+    return {
+        "service": "Sturgeon AI API",
+        "version": "9.0.0",
+        "status": "operational",
+        "docs": "/docs",
+        "health": "/health",
+        "features": [
+            "6 Specialized AI Agents (Research, Opportunity, Compliance, Proposal, Market, General)",
+            "SAM.gov Opportunity Search & Import",
+            "Opportunity Matching & Scoring",
+            "Proposal Generation & Compliance Matrix",
+            "Market Intelligence (FPDS, USASpending)",
+            "Certification Management",
+            "Multi-agent Chat with Session History",
+            "Background Job Scheduling",
+            "DOCX/PDF Export",
+            "Stripe Billing Integration",
+            "Notification System",
+        ],
+    }
+
+
+# ── Legacy Agent Chat Endpoint (backward compatibility) ───────────────
+
+class ChatRequest(BaseModel):
+    message: str
+    context: Optional[Dict[str, Any]] = None
+    userId: Optional[str] = None
+
+
+class ChatResponse(BaseModel):
+    reply: str
+    metadata: Optional[dict] = None
+
+
 @app.post("/agent/chat", response_model=ChatResponse)
-async def agent_chat(
+async def legacy_agent_chat(
     payload: ChatRequest,
-    authorization: Optional[str] = Header(None)
+    authorization: Optional[str] = Header(None),
 ):
-    """
-    AI chat endpoint with support for specialized agents.
-    Uses custom system prompts passed from frontend for different agent types.
-    """
+    """Legacy agent chat endpoint for backward compatibility with frontend."""
+    agent_type = payload.context.get("agentType", "general") if payload.context else "general"
 
-    # Extract user ID from authorization header if needed
-    user_id = None
-    if authorization and authorization.startswith("Bearer "):
-        user_id = authorization.replace("Bearer ", "")
+    # Map frontend agent types to backend agent types
+    agent_map = {
+        "contract_research": "research",
+        "proposal_writer": "proposal",
+        "compliance_checker": "compliance",
+        "capture_strategy": "research",
+        "certifications": "general",
+        "general_assistant": "general",
+        "general": "general",
+        "research": "research",
+        "opportunity": "opportunity",
+        "compliance": "compliance",
+        "proposal": "proposal",
+        "market": "market",
+    }
+    mapped_type = agent_map.get(agent_type, "general")
 
-    # Extract agent context
-    agent_type = payload.context.get('agentType', 'general') if payload.context else 'general'
-    system_prompt = payload.context.get('systemPrompt') if payload.context else None
-
-    # Default system prompt if none provided
-    if not system_prompt:
-        system_prompt = "You are a helpful AI assistant for Sturgeon AI, a government contracting platform. Help users with questions about opportunities, proposals, and contracts."
-
-    # Try to use OpenAI if API key is available
-    openai_key = os.getenv("OPENAI_API_KEY")
-
-    if openai_key:
-        try:
-            from openai import OpenAI
-            client = OpenAI(api_key=openai_key)
-
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": payload.message}
-                ],
-                temperature=0.7,
-                max_tokens=1000
-            )
-
-            reply = response.choices[0].message.content
-
-            return ChatResponse(
-                reply=reply,
-                metadata={
-                    "userId": user_id,
-                    "agentType": agent_type,
-                    "contextProvided": bool(payload.context),
-                    "model": "gpt-4o-mini",
-                    "aiPowered": True
-                }
-            )
-
-        except Exception as e:
-            # If OpenAI fails, return error message
-            return ChatResponse(
-                reply=f"I'm having trouble connecting to my AI engine right now. Error: {str(e)[:100]}. Please check your OpenAI API key in Railway environment variables.",
-                metadata={
-                    "userId": user_id,
-                    "agentType": agent_type,
-                    "contextProvided": bool(payload.context),
-                    "error": str(e),
-                    "aiPowered": False
-                }
-            )
-    else:
-        # Fallback if no API key
-        reply = f"AI Agent ({agent_type}) received: '{payload.message}'. Please add OPENAI_API_KEY to Railway environment variables to enable AI responses."
+    try:
+        from agents import get_agent
+        agent = get_agent(mapped_type)
+        reply = await agent.chat(message=payload.message)
 
         return ChatResponse(
             reply=reply,
             metadata={
-                "userId": user_id,
-                "agentType": agent_type,
-                "contextProvided": bool(payload.context),
-                "aiPowered": False
-            }
+                "agentType": mapped_type,
+                "agentName": agent.name,
+                "aiPowered": True,
+            },
+        )
+    except Exception as e:
+        return ChatResponse(
+            reply=f"I'm having trouble processing your request: {str(e)[:200]}. Please check that AI API keys are configured.",
+            metadata={
+                "agentType": mapped_type,
+                "aiPowered": False,
+                "error": str(e)[:100],
+            },
         )
 
-# Opportunity Parser Endpoint
+
+# ── Opportunity Parser (backward compat) ─────────────────────────────
+
+class OpportunityParseRequest(BaseModel):
+    text: str
+    source: str
+
+
 @app.post("/opportunities/parse")
-async def parse_opportunity(
-    payload: OpportunityParseRequest,
-    authorization: Optional[str] = Header(None)
-):
-    """
-    Parse opportunity text and extract structured data.
+async def parse_opportunity(payload: OpportunityParseRequest):
+    """Parse opportunity text using AI."""
+    try:
+        from services.llm import llm_chat
+        result = llm_chat(
+            "You are an expert at parsing government contracting opportunities. Extract structured data.",
+            f"Parse this opportunity from {payload.source}:\n\n{payload.text[:5000]}\n\nExtract: title, agency, NAICS code, due date, set-aside type, estimated value, and key requirements. Return as JSON.",
+        )
+        return {"parsed": result, "source": payload.source, "confidence": 0.85}
+    except Exception as e:
+        return {"parsed": None, "error": str(e), "source": payload.source}
 
-    TODO: Implement parsing logic:
-    - Extract title, agency, due date
-    - Identify requirements
-    - Parse NAICS codes, PSC codes
-    - Extract contact information
-    """
 
-    # TODO: Replace with real parsing logic
-    # Could use:
-    # - Regex patterns
-    # - NLP libraries (spaCy, NLTK)
-    # - LLM-based extraction (GPT-4)
+# ── Run Server ────────────────────────────────────────────────────────
 
-    return {
-        "parsed": {
-            "title": "Extracted Title",
-            "agency": "Extracted Agency",
-            "source": payload.source,
-            "rawText": payload.text[:200] + "...",
-            "confidence": 0.85
-        },
-        "message": "Parsing complete - implement custom extraction logic"
-    }
-
-# Run with: uvicorn main:app --reload --port 8000
 if __name__ == "__main__":
-    import os
     import uvicorn
-
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)

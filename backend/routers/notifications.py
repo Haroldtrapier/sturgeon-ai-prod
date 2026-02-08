@@ -1,78 +1,81 @@
-from fastapi import APIRouter, HTTPException
+"""
+Notifications Router - User notification management.
+"""
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime
+from typing import Optional, Dict
+from services.auth import get_user
+from services.db import (
+    get_notifications,
+    create_notification,
+    mark_notification_read,
+    mark_all_notifications_read,
+    get_unread_notification_count,
+    supabase,
+)
 
 router = APIRouter(prefix="/api/notifications", tags=["notifications"])
 
-class Notification(BaseModel):
-    id: str
-    type: str
-    title: str
-    message: str
-    read: bool = False
-    created_at: datetime
-    data: Optional[dict] = None
+
+class NotificationPreferencesRequest(BaseModel):
+    email_notifications: Optional[bool] = None
+    push_notifications: Optional[bool] = None
+    notification_types: Optional[Dict[str, bool]] = None
+
 
 @router.get("")
 async def list_notifications(
-    user_id: Optional[str] = None,
     unread_only: bool = False,
-    limit: int = 20
+    limit: int = 50,
+    user=Depends(get_user),
 ):
-    """List user notifications"""
+    """List user notifications."""
+    notifications = get_notifications(user["id"], unread_only=unread_only, limit=limit)
+    unread_count = get_unread_notification_count(user["id"])
+
     return {
-        "notifications": [
-            {
-                "id": "notif_1",
-                "type": "opportunity",
-                "title": "New Opportunity Match",
-                "message": "3 new opportunities match your profile",
-                "read": False,
-                "created_at": datetime.now().isoformat(),
-                "data": {"opportunity_count": 3}
-            },
-            {
-                "id": "notif_2",
-                "type": "deadline",
-                "title": "Upcoming Deadline",
-                "message": "Proposal due in 3 days",
-                "read": False,
-                "created_at": datetime.now().isoformat(),
-                "data": {"opportunity_id": "opp_123", "days_remaining": 3}
-            }
-        ],
-        "unread_count": 2,
-        "total": 2
+        "notifications": notifications,
+        "unread_count": unread_count,
+        "total": len(notifications),
     }
+
+
+@router.get("/unread-count")
+async def get_unread_count(user=Depends(get_user)):
+    """Get count of unread notifications."""
+    count = get_unread_notification_count(user["id"])
+    return {"unread_count": count}
+
 
 @router.put("/{notification_id}/read")
-async def mark_as_read(notification_id: str):
-    """Mark notification as read"""
-    return {
-        "notification_id": notification_id,
-        "read": True
-    }
+async def mark_as_read(notification_id: str, user=Depends(get_user)):
+    """Mark a notification as read."""
+    mark_notification_read(notification_id)
+    return {"notification_id": notification_id, "read": True}
+
 
 @router.put("/read-all")
-async def mark_all_as_read(user_id: Optional[str] = None):
-    """Mark all notifications as read"""
-    return {
-        "marked_read": True,
-        "count": 0
-    }
+async def mark_all_read(user=Depends(get_user)):
+    """Mark all notifications as read."""
+    mark_all_notifications_read(user["id"])
+    return {"marked_read": True}
+
 
 @router.delete("/{notification_id}")
-async def delete_notification(notification_id: str):
-    """Delete a notification"""
-    return {
-        "deleted": True,
-        "notification_id": notification_id
-    }
+async def delete_notification(notification_id: str, user=Depends(get_user)):
+    """Delete a notification."""
+    supabase.table("notifications") \
+        .delete() \
+        .eq("id", notification_id) \
+        .eq("user_id", user["id"]) \
+        .execute()
+    return {"deleted": True, "notification_id": notification_id}
+
 
 @router.get("/preferences")
-async def get_notification_preferences(user_id: Optional[str] = None):
-    """Get notification preferences"""
+async def get_notification_preferences(user=Depends(get_user)):
+    """Get notification preferences."""
+    # Preferences stored in user_preferences or a settings table
     return {
         "email_notifications": True,
         "push_notifications": True,
@@ -80,14 +83,16 @@ async def get_notification_preferences(user_id: Optional[str] = None):
             "new_opportunities": True,
             "deadlines": True,
             "proposal_updates": True,
-            "system_alerts": True
-        }
+            "system_alerts": True,
+            "ai_insights": True,
+        },
     }
 
+
 @router.put("/preferences")
-async def update_notification_preferences(preferences: dict):
-    """Update notification preferences"""
-    return {
-        "updated": True,
-        "preferences": preferences
-    }
+async def update_notification_preferences(
+    request: NotificationPreferencesRequest,
+    user=Depends(get_user),
+):
+    """Update notification preferences."""
+    return {"updated": True, "preferences": request.model_dump(exclude_none=True)}
