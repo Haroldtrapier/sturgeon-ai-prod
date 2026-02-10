@@ -194,3 +194,25 @@ async def cancel_subscription(
             status_code=500,
             detail=f"Error cancelling subscription: {str(e)}"
         )
+
+
+@router.get("/portal")
+async def get_billing_portal(user_email: str):
+    """Get Stripe Customer Portal URL for self-service billing management."""
+    try:
+        customers = stripe.Customer.list(email=user_email, limit=1)
+
+        if not customers.data:
+            raise HTTPException(status_code=404, detail="No customer found")
+
+        session = stripe.billing_portal.Session.create(
+            customer=customers.data[0].id,
+            return_url=os.getenv("APP_URL", "http://localhost:3000") + "/billing",
+        )
+
+        return {"url": session.url}
+
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=f"Stripe error: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
