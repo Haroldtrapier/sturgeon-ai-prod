@@ -8,10 +8,12 @@ router = APIRouter(prefix="/reviews")
 try:
     from services.db import supabase
     from services.auth import get_user
+    from services.review_merge import merge_and_save
 except ImportError:
     try:
         from backend.services.db import supabase
         from backend.services.auth import get_user
+        from backend.services.review_merge import merge_and_save
     except ImportError:
         supabase = None
         def get_user():
@@ -108,3 +110,21 @@ def update_review(review_id: str, update: ReviewUpdate, user=Depends(get_user)):
         return {"updated": True, "review_id": review_id, "status": update.status}
     except Exception:
         return {"updated": False}
+
+
+class MergeRequest(BaseModel):
+    proposal_id: str
+    section_id: str
+    notes: str
+
+
+@router.post("/merge")
+def merge_review_notes(body: MergeRequest, user=Depends(get_user)):
+    """Merge reviewer notes into a proposal section using AI."""
+    try:
+        result = merge_and_save(body.proposal_id, body.section_id, body.notes)
+        return {"merged": True, "section": result}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Merge failed: {str(e)}")

@@ -439,6 +439,54 @@ GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 -- COMMENTS (Documentation)
 -- ============================================================================
 
+-- ============================================================================
+-- SUBMISSION CHECKLISTS (pre-submission verification)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS submission_checklists (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    item TEXT NOT NULL,
+    category TEXT DEFAULT 'general',
+    completed BOOLEAN DEFAULT FALSE,
+    completed_by UUID REFERENCES auth.users(id),
+    completed_at TIMESTAMPTZ,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_submission_checklists_proposal ON submission_checklists(proposal_id);
+
+ALTER TABLE submission_checklists ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage checklists for their proposals" ON submission_checklists
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+-- ============================================================================
+-- PROPOSAL REVIEWS (human review tracking)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS proposal_reviews (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    reviewer_email TEXT,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'in_progress', 'completed', 'rejected')),
+    notes TEXT,
+    reviewer_notes TEXT,
+    score INT CHECK (score >= 0 AND score <= 100),
+    requested_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_proposal_reviews_proposal ON proposal_reviews(proposal_id);
+CREATE INDEX idx_proposal_reviews_user ON proposal_reviews(user_id);
+
+ALTER TABLE proposal_reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage their review requests" ON proposal_reviews
+    FOR ALL USING (user_id = auth.uid());
+
+-- ============================================================================
+
 COMMENT ON TABLE user_profiles IS 'Extended user profile information beyond Supabase auth';
 COMMENT ON TABLE companies IS 'Company information for SDVOSB certification and SAM.gov integration';
 COMMENT ON TABLE opportunities IS 'Government contracting opportunities from SAM.gov and Grants.gov';
