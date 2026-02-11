@@ -53,7 +53,7 @@ export default function SystemIntegrationsPage() {
     { key: "railway", name: "Railway", desc: "Backend API hosting and job scheduling", category: "Infrastructure" },
   ];
 
-  const categories = [...new Set(INTEGRATIONS.map(i => i.category))];
+  const categories = [...Array.from(new Set(INTEGRATIONS.map(i => i.category)))];
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

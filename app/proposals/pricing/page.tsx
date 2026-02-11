@@ -17,7 +17,7 @@ interface LineItem {
 export default function ProposalPricingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const proposalId = searchParams.get("proposal_id");
+  const proposalId = searchParams?.get("proposal_id");
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
   const [items, setItems] = useState<LineItem[]>([

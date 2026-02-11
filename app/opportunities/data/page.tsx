@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 export default function OpportunityDataPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const oppId = searchParams.get("id");
+  const oppId = searchParams?.get("id");
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
   const [opportunity, setOpportunity] = useState<Record<string, unknown> | null>(null);

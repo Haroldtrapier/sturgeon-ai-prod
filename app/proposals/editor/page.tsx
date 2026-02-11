@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 export default function ProposalEditorPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const proposalId = searchParams.get("id");
+  const proposalId = searchParams?.get("id");
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true);
   const [proposal, setProposal] = useState<any>(null);

@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function OpportunityDetailPage() {
   const router = useRouter();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const [opp, setOpp] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [analysis, setAnalysis] = useState<any>(null);

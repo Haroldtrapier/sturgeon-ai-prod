@@ -71,7 +71,7 @@ export default function EmailSettingsPage() {
     { key: "marketing_emails", label: "Product Updates", desc: "New features and platform announcements", category: "General" },
   ];
 
-  const categories = [...new Set(TOGGLES.map(t => t.category))];
+  const categories = [...Array.from(new Set(TOGGLES.map(t => t.category)))];
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

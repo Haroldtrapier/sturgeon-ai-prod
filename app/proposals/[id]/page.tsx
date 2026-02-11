@@ -9,7 +9,7 @@ interface Requirement { id: string; requirement: string; section_ref: string; st
 
 export default function ProposalDetailPage() {
   const router = useRouter();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const [proposal, setProposal] = useState<any>(null);
   const [sections, setSections] = useState<Section[]>([]);
   const [requirements, setRequirements] = useState<Requirement[]>([]);

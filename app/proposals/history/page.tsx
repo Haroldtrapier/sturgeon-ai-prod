@@ -17,7 +17,7 @@ interface HistoryEntry {
 export default function ProposalHistoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const proposalId = searchParams.get("proposal_id");
+  const proposalId = searchParams?.get("proposal_id");
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
 

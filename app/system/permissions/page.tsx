@@ -68,7 +68,7 @@ export default function PermissionsPage() {
   ];
 
   const active = ROLES.find(r => r.name === activeRole) || ROLES[0];
-  const categories = [...new Set(ALL_PERMISSIONS.map(p => p.category))];
+  const categories = [...Array.from(new Set(ALL_PERMISSIONS.map(p => p.category)))];
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -15,7 +15,7 @@ interface ChecklistItem {
 export default function ComplianceChecklistPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const proposalId = searchParams.get("proposal_id");
+  const proposalId = searchParams?.get("proposal_id");
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
   const [items, setItems] = useState<ChecklistItem[]>([]);
@@ -101,7 +101,7 @@ export default function ComplianceChecklistPage() {
   ];
 
   const displayItems = items.length > 0 ? items : TEMPLATE_ITEMS;
-  const sections = [...new Set(displayItems.map(i => i.section))];
+  const sections = Array.from(new Set(displayItems.map(i => i.section)));
   const complete = displayItems.filter(i => i.status === "complete").length;
 
   const statusIcon = (s: string) => s === "complete" ? "text-emerald-400" : s === "na" ? "text-slate-500 line-through" : "text-slate-400";
