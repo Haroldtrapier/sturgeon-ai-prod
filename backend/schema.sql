@@ -486,6 +486,290 @@ CREATE POLICY "Users can manage their review requests" ON proposal_reviews
     FOR ALL USING (user_id = auth.uid());
 
 -- ============================================================================
+-- PROPOSAL SECTIONS (generated content blocks)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS proposal_sections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    section_name TEXT NOT NULL,
+    content TEXT,
+    sort_order INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_proposal_sections_proposal ON proposal_sections(proposal_id);
+
+ALTER TABLE proposal_sections ENABLE ROW LEVEL SECURITY;
+CREATE POLICY proposal_sections_access ON proposal_sections
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+CREATE TRIGGER update_proposal_sections_updated_at BEFORE UPDATE ON proposal_sections
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- COMPLIANCE REQUIREMENTS (SHALL/MUST statements)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS compliance_requirements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    requirement TEXT NOT NULL,
+    section_ref TEXT,
+    status TEXT DEFAULT 'missing' CHECK (status IN ('missing', 'partial', 'addressed')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_compliance_requirements_proposal ON compliance_requirements(proposal_id);
+CREATE INDEX idx_compliance_requirements_status ON compliance_requirements(status);
+
+ALTER TABLE compliance_requirements ENABLE ROW LEVEL SECURITY;
+CREATE POLICY compliance_requirements_access ON compliance_requirements
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+CREATE TRIGGER update_compliance_requirements_updated_at BEFORE UPDATE ON compliance_requirements
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- TEAMS & TEAM MEMBERS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS teams (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL,
+    owner_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS team_members (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    role TEXT DEFAULT 'viewer' CHECK (role IN ('admin', 'writer', 'reviewer', 'viewer')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(team_id, user_id)
+);
+
+CREATE INDEX idx_team_members_team ON team_members(team_id);
+CREATE INDEX idx_team_members_user ON team_members(user_id);
+
+ALTER TABLE teams ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY teams_access ON teams
+    FOR ALL USING (
+        owner_id = auth.uid() OR id IN (SELECT team_id FROM team_members WHERE user_id = auth.uid())
+    );
+CREATE POLICY team_members_access ON team_members
+    FOR ALL USING (
+        user_id = auth.uid() OR team_id IN (SELECT id FROM teams WHERE owner_id = auth.uid())
+    );
+
+-- ============================================================================
+-- TEAM INVITES
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS team_invites (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+    invited_email TEXT NOT NULL,
+    invited_by UUID NOT NULL REFERENCES auth.users(id),
+    role TEXT DEFAULT 'viewer' CHECK (role IN ('admin', 'writer', 'reviewer', 'viewer')),
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'declined', 'expired')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '7 days'
+);
+
+CREATE INDEX idx_team_invites_team ON team_invites(team_id);
+CREATE INDEX idx_team_invites_email ON team_invites(invited_email);
+
+ALTER TABLE team_invites ENABLE ROW LEVEL SECURITY;
+CREATE POLICY team_invites_access ON team_invites
+    FOR ALL USING (
+        invited_by = auth.uid()
+        OR invited_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+        OR team_id IN (SELECT id FROM teams WHERE owner_id = auth.uid())
+    );
+
+-- ============================================================================
+-- AUDIT LOGS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    action TEXT NOT NULL,
+    entity TEXT,
+    entity_id UUID,
+    metadata JSONB DEFAULT '{}',
+    ip_address INET,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_audit_logs_user ON audit_logs(user_id);
+CREATE INDEX idx_audit_logs_action ON audit_logs(action);
+CREATE INDEX idx_audit_logs_entity ON audit_logs(entity, entity_id);
+CREATE INDEX idx_audit_logs_created ON audit_logs(created_at DESC);
+
+ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY audit_logs_select ON audit_logs FOR SELECT USING (auth.uid() = user_id);
+
+-- ============================================================================
+-- CHAT SESSIONS & MESSAGES
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    title TEXT DEFAULT 'New Chat',
+    agent_type TEXT DEFAULT 'general',
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    session_id UUID NOT NULL REFERENCES chat_sessions(id) ON DELETE CASCADE,
+    role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    tokens_used INT DEFAULT 0,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_chat_sessions_user ON chat_sessions(user_id);
+CREATE INDEX idx_chat_messages_session ON chat_messages(session_id);
+CREATE INDEX idx_chat_messages_created ON chat_messages(created_at);
+
+ALTER TABLE chat_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY chat_sessions_access ON chat_sessions
+    FOR ALL USING (user_id = auth.uid());
+CREATE POLICY chat_messages_access ON chat_messages
+    FOR ALL USING (
+        session_id IN (SELECT id FROM chat_sessions WHERE user_id = auth.uid())
+    );
+
+CREATE TRIGGER update_chat_sessions_updated_at BEFORE UPDATE ON chat_sessions
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- NOTIFICATIONS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS notifications (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    message TEXT,
+    type TEXT DEFAULT 'info' CHECK (type IN ('info', 'success', 'warning', 'error', 'deadline', 'opportunity')),
+    read BOOLEAN DEFAULT FALSE,
+    action_url TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_notifications_user ON notifications(user_id);
+CREATE INDEX idx_notifications_unread ON notifications(user_id) WHERE read = false;
+CREATE INDEX idx_notifications_created ON notifications(created_at DESC);
+
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+CREATE POLICY notifications_access ON notifications
+    FOR ALL USING (user_id = auth.uid());
+
+-- ============================================================================
+-- JOB RUNS & JOB EVENTS (background job observability)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS job_runs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    job_name TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('queued', 'running', 'success', 'failed')),
+    attempts INT DEFAULT 0,
+    last_error TEXT,
+    started_at TIMESTAMPTZ,
+    finished_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS job_events (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    job_run_id UUID NOT NULL REFERENCES job_runs(id) ON DELETE CASCADE,
+    level TEXT NOT NULL CHECK (level IN ('info', 'warn', 'error')),
+    message TEXT NOT NULL,
+    meta JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_job_runs_status ON job_runs(status);
+CREATE INDEX idx_job_runs_created ON job_runs(created_at DESC);
+CREATE INDEX idx_job_events_run ON job_events(job_run_id);
+
+ALTER TABLE job_runs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE job_events ENABLE ROW LEVEL SECURITY;
+
+-- Job tables: service role only (admin dashboard)
+CREATE POLICY job_runs_admin ON job_runs FOR SELECT TO authenticated USING (true);
+CREATE POLICY job_events_admin ON job_events FOR SELECT TO authenticated USING (true);
+
+-- ============================================================================
+-- CONTRACTS HISTORY (past performance tracking)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS contracts_history (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    company_id UUID REFERENCES companies(id) ON DELETE SET NULL,
+    contract_number TEXT,
+    title TEXT NOT NULL,
+    agency TEXT,
+    contract_type TEXT,
+    value NUMERIC,
+    start_date DATE,
+    end_date DATE,
+    status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'terminated')),
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_contracts_history_user ON contracts_history(user_id);
+CREATE INDEX idx_contracts_history_company ON contracts_history(company_id);
+
+ALTER TABLE contracts_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY contracts_history_access ON contracts_history
+    FOR ALL USING (user_id = auth.uid());
+
+CREATE TRIGGER update_contracts_history_updated_at BEFORE UPDATE ON contracts_history
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- CERTIFICATION DOCUMENTS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS certification_documents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    document_type TEXT NOT NULL,
+    file_url TEXT,
+    file_name TEXT,
+    status TEXT DEFAULT 'active' CHECK (status IN ('active', 'expired', 'pending')),
+    issued_date DATE,
+    expiry_date DATE,
+    notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_certification_docs_company ON certification_documents(company_id);
+CREATE INDEX idx_certification_docs_expiry ON certification_documents(expiry_date);
+
+ALTER TABLE certification_documents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY certification_documents_access ON certification_documents
+    FOR ALL USING (
+        company_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
+    );
+
+-- ============================================================================
 
 COMMENT ON TABLE user_profiles IS 'Extended user profile information beyond Supabase auth';
 COMMENT ON TABLE companies IS 'Company information for SDVOSB certification and SAM.gov integration';
