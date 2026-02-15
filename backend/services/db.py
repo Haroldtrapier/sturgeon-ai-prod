@@ -7,7 +7,12 @@ from supabase import create_client, Client
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", os.getenv("SUPABASE_KEY", ""))
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("[Sturgeon AI] WARNING: SUPABASE_URL or SUPABASE_KEY not set. DB calls will fail.")
+    # Create with placeholder to avoid import-time crash; calls will error at runtime
+    supabase: Client = create_client("https://placeholder.supabase.co", "placeholder-key")
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 # ── User Profile Operations ──────────────────────────────────────────
