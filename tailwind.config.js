@@ -7,7 +7,12 @@ module.exports = {
     './lib/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'float': 'float 6s ease-in-out infinite',
+        'float-delayed': 'float-delayed 5s ease-in-out 1s infinite',
+      },
+    },
   },
   plugins: [],
 }
