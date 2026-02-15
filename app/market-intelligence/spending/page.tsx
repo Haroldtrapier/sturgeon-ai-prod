@@ -32,7 +32,7 @@ export default function SpendingTrendsPage() {
       const params = new URLSearchParams();
       if (naics) params.set("naics", naics);
       if (agency) params.set("agency", agency);
-      const res = await fetch(`${API}/api/market/spending-trends?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/market/trends?${params}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { const d = await res.json(); setData(d); }
     } catch {}
     setSearching(false);

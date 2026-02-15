@@ -11,10 +11,17 @@ End-to-end workflow:
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from backend.services.auth import get_user
-from backend.services.db import supabase
-from backend.services.compliance_extractor import extract_requirements
-from backend.services.proposal_generator import generate_section
+
+try:
+    from services.auth import get_user
+    from services.db import supabase
+    from services.compliance_extractor import extract_requirements
+    from services.proposal_generator import generate_section
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import supabase
+    from backend.services.compliance_extractor import extract_requirements
+    from backend.services.proposal_generator import generate_section
 
 router = APIRouter(prefix="/proposals", tags=["proposals"])
 
@@ -46,7 +53,7 @@ def create_proposal(request: CreateProposalRequest, user=Depends(get_user)):
     opp_response = supabase.table("opportunities") \
         .select("*") \
         .eq("id", request.opportunity_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not opp_response.data:
@@ -54,7 +61,7 @@ def create_proposal(request: CreateProposalRequest, user=Depends(get_user)):
     
     # Create proposal
     proposal_response = supabase.table("proposals").insert({
-        "user_id": user.id,
+        "user_id": user["id"],
         "opportunity_id": request.opportunity_id,
         "title": request.title,
         "status": "draft"
@@ -111,7 +118,7 @@ def generate_proposal_section(
     proposal_response = supabase.table("proposals") \
         .select("*, opportunities(*)") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not proposal_response.data:
@@ -181,7 +188,7 @@ def get_proposal(proposal_id: str, user=Depends(get_user)):
     proposal_response = supabase.table("proposals") \
         .select("*, opportunities(*)") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not proposal_response.data:
@@ -225,7 +232,7 @@ def list_proposals(status: str = None, user=Depends(get_user)):
 
     query = supabase.table("proposals") \
         .select("*, opportunities(title, agency)") \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .order("created_at", desc=True)
 
     if status:
@@ -251,7 +258,7 @@ def update_proposal(proposal_id: str, request: UpdateProposalRequest, user=Depen
     proposal_response = supabase.table("proposals") \
         .select("*") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
 
     if not proposal_response.data:
@@ -294,7 +301,7 @@ def delete_proposal(proposal_id: str, user=Depends(get_user)):
     proposal_response = supabase.table("proposals") \
         .select("id") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
 
     if not proposal_response.data:
@@ -325,7 +332,7 @@ def submit_proposal(proposal_id: str, user=Depends(get_user)):
     proposal_response = supabase.table("proposals") \
         .select("*") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
 
     if not proposal_response.data:

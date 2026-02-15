@@ -28,7 +28,7 @@ export default function UpgradePage() {
   async function upgrade(plan: string) {
     setUpgrading(true);
     try {
-      const res = await fetch(`${API}/api/billing/create-checkout`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ plan }) });
+      const res = await fetch(`${API}/billing/create-checkout`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ plan }) });
       if (res.ok) { const d = await res.json(); if (d.url) window.location.href = d.url; }
     } catch {}
     setUpgrading(false);

@@ -19,7 +19,7 @@ export default function AdminUsersPage() {
       if (!session) { router.push("/login"); return; }
       setToken(session.access_token);
       try {
-        const res = await fetch(`${API}/api/admin/users`, { headers: { Authorization: `Bearer ${session.access_token}` } });
+        const res = await fetch(`${API}/admin/users`, { headers: { Authorization: `Bearer ${session.access_token}` } });
         if (res.ok) { const d = await res.json(); setUsers(d.users || []); }
       } catch {}
       setLoading(false);

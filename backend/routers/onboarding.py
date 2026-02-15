@@ -9,8 +9,13 @@ Handles user onboarding workflow:
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from backend.services.auth import get_user
-from backend.services.db import supabase
+
+try:
+    from services.auth import get_user
+    from services.db import supabase
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import supabase
 
 router = APIRouter(prefix="/onboarding", tags=["onboarding"])
 
@@ -28,7 +33,7 @@ def create_profile(request: ProfileRequest, user=Depends(get_user)):
     
     # Upsert profile
     supabase.table("user_profiles").upsert({
-        "user_id": user.id,
+        "user_id": user["id"],
         "naics": request.naics,
         "keywords": request.keywords,
         "onboarding_completed": False
@@ -49,7 +54,7 @@ def complete_onboarding(user=Depends(get_user)):
     
     supabase.table("user_profiles").update({
         "onboarding_completed": True
-    }).eq("user_id", user.id).execute()
+    }).eq("user_id", user["id"]).execute()
     
     return {"status": "onboarding_complete"}
 
@@ -62,7 +67,7 @@ def get_onboarding_status(user=Depends(get_user)):
     
     response = supabase.table("user_profiles") \
         .select("*") \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not response.data:

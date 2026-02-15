@@ -32,7 +32,7 @@ export default function AgencySpendingPage() {
     setSearching(true);
     setAgencyName(search);
     try {
-      const res = await fetch(`${API}/api/market/agency-analysis?agency=${encodeURIComponent(search)}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/market/agencies/${encodeURIComponent(search)}/spending`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { const d = await res.json(); setAgencyData(d); }
     } catch {}
     setSearching(false);

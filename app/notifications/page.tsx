@@ -55,7 +55,7 @@ export default function NotificationsPage() {
 
   async function markAllRead() {
     try {
-      await fetch(`${API}/api/notifications/mark-all-read`, { method: "PUT", headers: { Authorization: `Bearer ${token}` } });
+      await fetch(`${API}/api/notifications/read-all`, { method: "PUT", headers: { Authorization: `Bearer ${token}` } });
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setMessage("All notifications marked as read.");
     } catch { /* empty */ }

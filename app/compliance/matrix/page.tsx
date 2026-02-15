@@ -29,7 +29,7 @@ export default function ComplianceMatrixPage() {
     if (!rfpText.trim()) return;
     setGenerating(true);
     try {
-      const res = await fetch(`${API}/api/compliance/extract`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ rfp_text: rfpText }) });
+      const res = await fetch(`${API}/api/compliance/extract-requirements`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ solicitation_text: rfpText }) });
       if (res.ok) {
         const d = await res.json();
         const reqs = d.requirements || [];

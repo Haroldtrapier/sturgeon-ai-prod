@@ -35,7 +35,7 @@ def create_backup(request: BackupRequest, user=Depends(get_user)):
 
     # Create backup record
     backup_response = supabase.table("backups").insert({
-        "user_id": user.id,
+        "user_id": user["id"],
         "type": request.type,
         "status": "processing",
         "size": None,
@@ -87,7 +87,7 @@ def invite_team_member(request: InviteRequest, user=Depends(get_user)):
 
     # Create invitation record
     invite_response = supabase.table("team_invites").insert({
-        "invited_by": user.id,
+        "invited_by": user["id"],
         "email": request.email,
         "role": request.role,
         "status": "pending",
@@ -157,7 +157,7 @@ def get_billing_portal(user=Depends(get_user)):
         # Look up customer by email
         profile = supabase.table("user_profiles") \
             .select("email, stripe_customer_id") \
-            .eq("id", user.id) \
+            .eq("id", user["id"]) \
             .single() \
             .execute()
 

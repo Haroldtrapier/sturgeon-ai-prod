@@ -29,7 +29,7 @@ export default function VendorProfilesPage() {
     if (!query.trim()) return;
     setSearching(true);
     try {
-      const res = await fetch(`${API}/api/market/vendors?name=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/market/vendors/search?keyword=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { const d = await res.json(); setVendors(d.vendors || d.results || []); }
     } catch {}
     setSearching(false);

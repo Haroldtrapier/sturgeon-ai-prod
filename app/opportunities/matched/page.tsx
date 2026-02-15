@@ -28,7 +28,7 @@ export default function MatchedOpportunitiesPage() {
   async function runMatch() {
     setRunning(true);
     try {
-      const res = await fetch(`${API}/api/contract-match/run`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API}/api/opportunities/match`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const d = await res.json();
         if (d.matches) setMatches(d.matches);

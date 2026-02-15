@@ -30,7 +30,7 @@ export default function CreateProposalPage() {
     if (!title.trim()) return;
     setCreating(true);
     try {
-      const res = await fetch(`${API}/api/proposals`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ title, rfp_text: rfpText, opportunity_id: opportunityId || undefined }) });
+      const res = await fetch(`${API}/proposals/create`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ title, rfp_text: rfpText, opportunity_id: opportunityId || undefined }) });
       if (res.ok) { const d = await res.json(); router.push(`/proposals/${d.id || d.proposal_id || ""}`); }
     } catch {}
     setCreating(false);
