@@ -14,11 +14,11 @@ from typing import Optional
 import os
 
 try:
-    from backend.services.auth import get_user
-    from backend.services.db import supabase
-except ImportError:
     from services.auth import get_user
     from services.db import supabase
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import supabase
 
 router = APIRouter(prefix="/api/system", tags=["system"])
 

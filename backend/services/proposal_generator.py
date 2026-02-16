@@ -8,7 +8,10 @@ Phase 4: Basic section generation
 Phase 4.5+: Template integration, style customization, past performance
 """
 
-from backend.services.llm import llm_chat
+try:
+    from services.llm import llm_chat
+except ImportError:
+    from backend.services.llm import llm_chat
 
 
 def generate_section(

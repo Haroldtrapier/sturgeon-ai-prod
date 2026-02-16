@@ -770,6 +770,129 @@ CREATE POLICY certification_documents_access ON certification_documents
     );
 
 -- ============================================================================
+-- SUPPORT TICKETS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS support_tickets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    ticket_id TEXT UNIQUE NOT NULL,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    subject TEXT NOT NULL,
+    description TEXT,
+    category TEXT,
+    priority TEXT DEFAULT 'normal' CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
+    status TEXT DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+    closed_at TIMESTAMPTZ,
+    last_updated TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_support_tickets_user ON support_tickets(user_id);
+CREATE INDEX idx_support_tickets_status ON support_tickets(status);
+
+ALTER TABLE support_tickets ENABLE ROW LEVEL SECURITY;
+CREATE POLICY support_tickets_access ON support_tickets
+    FOR ALL USING (user_id = auth.uid());
+
+-- ============================================================================
+-- BACKUPS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS backups (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    type TEXT DEFAULT 'full' CHECK (type IN ('full', 'proposals', 'settings')),
+    status TEXT DEFAULT 'processing' CHECK (status IN ('processing', 'completed', 'failed')),
+    size TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_backups_user ON backups(user_id);
+
+ALTER TABLE backups ENABLE ROW LEVEL SECURITY;
+CREATE POLICY backups_access ON backups
+    FOR ALL USING (user_id = auth.uid());
+
+-- ============================================================================
+-- COMPLIANCE CHECKS
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS compliance_checks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID REFERENCES proposals(id) ON DELETE CASCADE,
+    check_type TEXT DEFAULT 'full',
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'passed', 'failed')),
+    details JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_compliance_checks_proposal ON compliance_checks(proposal_id);
+
+ALTER TABLE compliance_checks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY compliance_checks_access ON compliance_checks
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+-- ============================================================================
+-- TEAM INVITES
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS team_invites (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    invited_by UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT NOT NULL,
+    role TEXT DEFAULT 'analyst' CHECK (role IN ('admin', 'manager', 'analyst', 'viewer')),
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'declined', 'expired')),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_team_invites_email ON team_invites(email);
+
+ALTER TABLE team_invites ENABLE ROW LEVEL SECURITY;
+CREATE POLICY team_invites_access ON team_invites
+    FOR ALL USING (invited_by = auth.uid());
+
+-- ============================================================================
+-- COMPLIANCE REQUIREMENTS (per-proposal extracted requirements)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS compliance_requirements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    requirement_text TEXT NOT NULL,
+    requirement_type TEXT,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'addressed', 'missing', 'partial')),
+    section_reference TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_compliance_reqs_proposal ON compliance_requirements(proposal_id);
+
+ALTER TABLE compliance_requirements ENABLE ROW LEVEL SECURITY;
+CREATE POLICY compliance_requirements_access ON compliance_requirements
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+-- ============================================================================
+-- PROPOSAL SECTIONS (individual sections of a proposal)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS proposal_sections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    proposal_id UUID NOT NULL REFERENCES proposals(id) ON DELETE CASCADE,
+    section_name TEXT NOT NULL,
+    section_order INT DEFAULT 0,
+    content TEXT,
+    word_count INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_proposal_sections_proposal ON proposal_sections(proposal_id);
+
+ALTER TABLE proposal_sections ENABLE ROW LEVEL SECURITY;
+CREATE POLICY proposal_sections_access ON proposal_sections
+    FOR ALL USING (
+        proposal_id IN (SELECT id FROM proposals WHERE user_id = auth.uid())
+    );
+
+-- ============================================================================
 
 COMMENT ON TABLE user_profiles IS 'Extended user profile information beyond Supabase auth';
 COMMENT ON TABLE companies IS 'Company information for SDVOSB certification and SAM.gov integration';

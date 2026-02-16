@@ -121,7 +121,7 @@ def get_stats(user=Depends(require_admin)):
         job_stats[status] = count.count or 0
     
     # User stats
-    user_count = supabase.table("users").select("id", count="exact").execute()
+    user_count = supabase.table("user_profiles").select("id", count="exact").execute()
     
     # Proposal stats
     proposal_count = supabase.table("proposals").select("id", count="exact").execute()

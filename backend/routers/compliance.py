@@ -4,14 +4,12 @@ Compliance Checking Router - FAR/DFARS compliance, requirement extraction, and p
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List, Optional, Dict
-from services.auth import get_user
-from services.db import (
-    get_opportunity,
-    get_proposal,
-    get_company,
-    get_certifications,
-    supabase,
-)
+try:
+    from services.auth import get_user
+    from services.db import get_opportunity, get_proposal, get_company, get_certifications, supabase
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import get_opportunity, get_proposal, get_company, get_certifications, supabase
 
 router = APIRouter(prefix="/api/compliance", tags=["compliance"])
 

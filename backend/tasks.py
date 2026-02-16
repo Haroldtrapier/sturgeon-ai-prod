@@ -8,7 +8,10 @@ Called by RQ worker to execute queued jobs.
 import importlib
 import traceback
 from datetime import datetime
-from backend.services.jobs import update_job_run, log_event
+try:
+    from services.jobs import update_job_run, log_event
+except ImportError:
+    from backend.services.jobs import update_job_run, log_event
 
 
 def dispatch(job_name: str, job_run_id: str, func_path: str, payload: dict, max_retries: int):
