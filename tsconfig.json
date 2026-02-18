@@ -35,6 +35,7 @@
   ],
   "exclude": [
     "node_modules",
+    "frontend",
     "**/*.test.ts",
     "**/*.test.tsx",
     "__tests__"

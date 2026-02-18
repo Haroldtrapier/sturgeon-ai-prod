@@ -16,7 +16,7 @@ class APIClient {
   }
 
   async searchOpportunities(keywords) {
-    const response = await fetch(`${this.baseURL}/api/v1/search`, {
+    const response = await fetch(`${this.baseURL}/sam/search`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ keywords, page: 1, page_size: 50 }),
@@ -26,7 +26,7 @@ class APIClient {
   }
 
   async matchOpportunities(opportunityIds, naicsCodes, certifications) {
-    const response = await fetch(`${this.baseURL}/api/v1/match`, {
+    const response = await fetch(`${this.baseURL}/api/opportunities/match`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

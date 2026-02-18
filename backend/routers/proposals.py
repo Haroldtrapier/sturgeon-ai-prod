@@ -11,10 +11,17 @@ End-to-end workflow:
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from backend.services.auth import get_user
-from backend.services.db import supabase
-from backend.services.compliance_extractor import extract_requirements
-from backend.services.proposal_generator import generate_section
+
+try:
+    from services.auth import get_user
+    from services.db import supabase
+    from services.compliance_extractor import extract_requirements
+    from services.proposal_generator import generate_section
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import supabase
+    from backend.services.compliance_extractor import extract_requirements
+    from backend.services.proposal_generator import generate_section
 
 router = APIRouter(prefix="/proposals", tags=["proposals"])
 
@@ -46,7 +53,7 @@ def create_proposal(request: CreateProposalRequest, user=Depends(get_user)):
     opp_response = supabase.table("opportunities") \
         .select("*") \
         .eq("id", request.opportunity_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not opp_response.data:
@@ -54,7 +61,7 @@ def create_proposal(request: CreateProposalRequest, user=Depends(get_user)):
     
     # Create proposal
     proposal_response = supabase.table("proposals").insert({
-        "user_id": user.id,
+        "user_id": user["id"],
         "opportunity_id": request.opportunity_id,
         "title": request.title,
         "status": "draft"
@@ -111,7 +118,7 @@ def generate_proposal_section(
     proposal_response = supabase.table("proposals") \
         .select("*, opportunities(*)") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not proposal_response.data:
@@ -181,7 +188,7 @@ def get_proposal(proposal_id: str, user=Depends(get_user)):
     proposal_response = supabase.table("proposals") \
         .select("*, opportunities(*)") \
         .eq("id", proposal_id) \
-        .eq("user_id", user.id) \
+        .eq("user_id", user["id"]) \
         .execute()
     
     if not proposal_response.data:
@@ -217,17 +224,140 @@ def get_proposal(proposal_id: str, user=Depends(get_user)):
 
 
 @router.get("/")
-def list_proposals(user=Depends(get_user)):
+def list_proposals(status: str = None, user=Depends(get_user)):
     """
     List all proposals for authenticated user.
+    Optionally filter by status (draft, in_progress, review, submitted, won, lost).
     """
-    
-    response = supabase.table("proposals") \
+
+    query = supabase.table("proposals") \
         .select("*, opportunities(title, agency)") \
-        .eq("user_id", user.id) \
-        .order("created_at", desc=True) \
-        .execute()
-    
+        .eq("user_id", user["id"]) \
+        .order("created_at", desc=True)
+
+    if status:
+        query = query.eq("status", status)
+
+    response = query.execute()
+
     return {
         "proposals": response.data or []
+    }
+
+
+class UpdateProposalRequest(BaseModel):
+    title: str = None
+    status: str = None
+    sections: list = None
+
+
+@router.put("/{proposal_id}")
+def update_proposal(proposal_id: str, request: UpdateProposalRequest, user=Depends(get_user)):
+    """Update a proposal's title, status, or sections."""
+
+    proposal_response = supabase.table("proposals") \
+        .select("*") \
+        .eq("id", proposal_id) \
+        .eq("user_id", user["id"]) \
+        .execute()
+
+    if not proposal_response.data:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+
+    update_data = {}
+    if request.title is not None:
+        update_data["title"] = request.title
+    if request.status is not None:
+        update_data["status"] = request.status
+
+    if update_data:
+        supabase.table("proposals") \
+            .update(update_data) \
+            .eq("id", proposal_id) \
+            .execute()
+
+    if request.sections:
+        for section in request.sections:
+            if section.get("id"):
+                supabase.table("proposal_sections") \
+                    .update({"content": section.get("content", "")}) \
+                    .eq("id", section["id"]) \
+                    .eq("proposal_id", proposal_id) \
+                    .execute()
+            else:
+                supabase.table("proposal_sections").insert({
+                    "proposal_id": proposal_id,
+                    "section_name": section.get("section_name", "Untitled"),
+                    "content": section.get("content", ""),
+                }).execute()
+
+    return {"message": "Proposal updated", "proposal_id": proposal_id}
+
+
+@router.delete("/{proposal_id}")
+def delete_proposal(proposal_id: str, user=Depends(get_user)):
+    """Delete a proposal and all associated sections and requirements."""
+
+    proposal_response = supabase.table("proposals") \
+        .select("id") \
+        .eq("id", proposal_id) \
+        .eq("user_id", user["id"]) \
+        .execute()
+
+    if not proposal_response.data:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+
+    supabase.table("compliance_requirements") \
+        .delete() \
+        .eq("proposal_id", proposal_id) \
+        .execute()
+
+    supabase.table("proposal_sections") \
+        .delete() \
+        .eq("proposal_id", proposal_id) \
+        .execute()
+
+    supabase.table("proposals") \
+        .delete() \
+        .eq("id", proposal_id) \
+        .execute()
+
+    return {"message": "Proposal deleted", "proposal_id": proposal_id}
+
+
+@router.put("/{proposal_id}/submit")
+def submit_proposal(proposal_id: str, user=Depends(get_user)):
+    """Mark a proposal as submitted after validating it has sections."""
+
+    proposal_response = supabase.table("proposals") \
+        .select("*") \
+        .eq("id", proposal_id) \
+        .eq("user_id", user["id"]) \
+        .execute()
+
+    if not proposal_response.data:
+        raise HTTPException(status_code=404, detail="Proposal not found")
+
+    proposal = proposal_response.data[0]
+    if proposal.get("status") == "submitted":
+        return {"message": "Proposal already submitted", "proposal_id": proposal_id}
+
+    sections_response = supabase.table("proposal_sections") \
+        .select("id", count="exact") \
+        .eq("proposal_id", proposal_id) \
+        .execute()
+
+    if not sections_response.data:
+        raise HTTPException(status_code=400, detail="Proposal has no sections. Generate content before submitting.")
+
+    supabase.table("proposals") \
+        .update({"status": "submitted"}) \
+        .eq("id", proposal_id) \
+        .execute()
+
+    return {
+        "message": "Proposal submitted successfully",
+        "proposal_id": proposal_id,
+        "status": "submitted",
+        "sections_count": sections_response.count or len(sections_response.data),
     }

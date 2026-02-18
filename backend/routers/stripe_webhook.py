@@ -12,7 +12,10 @@ Events handled:
 import os
 import stripe
 from fastapi import APIRouter, Request, HTTPException
-from backend.services.db import supabase
+try:
+    from services.db import supabase
+except ImportError:
+    from backend.services.db import supabase
 
 router = APIRouter(prefix="/stripe", tags=["stripe"])
 
@@ -58,8 +61,8 @@ async def webhook(request: Request):
         plan = metadata.get("plan", "free")
         
         if user_id:
-            supabase.table("users").update({
-                "plan": plan,
+            supabase.table("user_profiles").update({
+                "subscription_plan": plan,
                 "stripe_customer_id": data_object.get("customer")
             }).eq("id", user_id).execute()
             
@@ -80,8 +83,8 @@ async def webhook(request: Request):
         plan = plan_map.get(plan_id, "free")
         
         if status == "active":
-            supabase.table("users").update({
-                "plan": plan
+            supabase.table("user_profiles").update({
+                "subscription_plan": plan
             }).eq("stripe_customer_id", customer_id).execute()
             
             print(f"✅ Subscription updated: {customer_id} → {plan}")
@@ -90,8 +93,8 @@ async def webhook(request: Request):
         # Subscription cancelled
         customer_id = data_object.get("customer")
         
-        supabase.table("users").update({
-            "plan": "free"
+        supabase.table("user_profiles").update({
+            "subscription_plan": "free"
         }).eq("stripe_customer_id", customer_id).execute()
         
         print(f"✅ Subscription cancelled: {customer_id}")

@@ -8,18 +8,29 @@ Provides endpoints for monitoring system health:
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from backend.services.auth import get_user
-from backend.services.db import supabase
-from backend.services.jobs import enqueue
+
+try:
+    from services.auth import get_user
+    from services.db import supabase
+except ImportError:
+    from backend.services.auth import get_user
+    from backend.services.db import supabase
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 def require_admin(user=Depends(get_user)):
     """Require user to have admin role."""
-    if user.role != "admin":
+    if user.get("plan") != "enterprise" and user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     return user
+
+
+@router.get("/users")
+def list_users(limit: int = 100, user=Depends(require_admin)):
+    """List all platform users (admin only)."""
+    response = supabase.table("user_profiles").select("*").order("created_at", desc=True).limit(limit).execute()
+    return {"users": response.data or [], "count": len(response.data or [])}
 
 
 @router.get("/job-runs")
@@ -110,7 +121,7 @@ def get_stats(user=Depends(require_admin)):
         job_stats[status] = count.count or 0
     
     # User stats
-    user_count = supabase.table("users").select("id", count="exact").execute()
+    user_count = supabase.table("user_profiles").select("id", count="exact").execute()
     
     # Proposal stats
     proposal_count = supabase.table("proposals").select("id", count="exact").execute()

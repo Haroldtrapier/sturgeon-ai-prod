@@ -11,7 +11,10 @@ This is the highest-value agent in government contracting:
 - Prevents missed requirements (killer in GovCon)
 """
 
-from backend.services.llm import llm_chat
+try:
+    from services.llm import llm_chat
+except ImportError:
+    from backend.services.llm import llm_chat
 import re
 
 

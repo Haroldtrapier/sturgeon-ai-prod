@@ -5,8 +5,12 @@ Runs opportunity alerts and sends email digests.
 Called by job queue system.
 """
 
-from backend.services.alert_runner import run_alerts
-from backend.services.jobs import log_event
+try:
+    from services.alert_runner import run_alerts
+    from services.jobs import log_event
+except ImportError:
+    from backend.services.alert_runner import run_alerts
+    from backend.services.jobs import log_event
 
 
 def run(payload: dict, job_run_id: str):
