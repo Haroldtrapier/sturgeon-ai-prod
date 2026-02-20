@@ -1,6 +1,7 @@
 // lib/usage-tracker.ts
 // Adapted from GovCon Command Center for Sturgeon AI
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 
 interface UsageEvent {
   user_id: string
@@ -36,7 +37,8 @@ const USAGE_LIMITS: UsageLimits = {
 }
 
 export async function trackUsage(event: UsageEvent) {
-  const supabase = createClient()
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
 
   try {
     const { data, error } = await supabase
@@ -61,7 +63,8 @@ export async function checkUsageLimit(
   eventType: UsageEvent['event_type'],
   subscriptionTier: keyof UsageLimits = 'free'
 ): Promise<{ allowed: boolean; remaining: number }> {
-  const supabase = createClient()
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
 
   // Check if unlimited
   const limit = USAGE_LIMITS[subscriptionTier][`${eventType}s` as keyof typeof USAGE_LIMITS.free]
@@ -91,7 +94,8 @@ export async function checkUsageLimit(
 }
 
 export async function getUserUsageSummary(userId: string) {
-  const supabase = createClient()
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
 
   const startOfMonth = new Date()
   startOfMonth.setDate(1)

@@ -225,7 +225,9 @@ Downloads/
 .env.vercel
 .env*
 
-# env files
+# env files (keep .env.example and .env.local.example)
 .env
 .env.*
+!.env.example
+!.env.local.example
 .env.vercel

@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: 'Jennifer Martinez',
     role: 'Principal, Government Advisory Group',
-    content: 'The compliance checking alone has saved us from costly mistakes. Best investment we've made.',
+    content: 'The compliance checking alone has saved us from costly mistakes. Best investment we\'ve made.',
     rating: 5,
   },
 ]
