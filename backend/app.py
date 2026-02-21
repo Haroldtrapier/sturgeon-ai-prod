@@ -106,6 +106,7 @@ extra_routers = [
     ("routers.stripe_webhook", "stripe_webhook"),
     ("routers.proposals", "proposals"),
     ("routers.system", "system"),
+    ("routers.contacts", "contacts"),
 ]
 
 for module_path, name in extra_routers:
