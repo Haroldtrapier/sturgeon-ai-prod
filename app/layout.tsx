@@ -28,6 +28,7 @@ export default function RootLayout({
                 <Link href="/opportunities" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Opportunities</Link>
                 <Link href="/proposals" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Proposals</Link>
                 <Link href="/contacts" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Contacts</Link>
+                <Link href="/calls" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Calls</Link>
                 <Link href="/agents" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">AI Agents</Link>
                 <Link href="/chat" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Chat</Link>
                 <span className="w-px h-5 bg-slate-700 mx-1" />

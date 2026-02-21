@@ -107,6 +107,7 @@ extra_routers = [
     ("routers.proposals", "proposals"),
     ("routers.system", "system"),
     ("routers.contacts", "contacts"),
+    ("routers.calls", "calls"),
 ]
 
 for module_path, name in extra_routers:
