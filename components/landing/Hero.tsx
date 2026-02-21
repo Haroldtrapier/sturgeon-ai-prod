@@ -27,7 +27,7 @@ export default function Hero() {
 
           {/* Subheadline */}
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
-            Sturgeon AI analyzes thousands of federal opportunities daily, matches them to your capabilities, 
+            Harpoon AI analyzes thousands of federal opportunities daily, matches them to your capabilities, 
             and helps you craft winning proposals with AI-powered insights.
           </p>
 

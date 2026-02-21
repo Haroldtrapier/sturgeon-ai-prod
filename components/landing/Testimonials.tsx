@@ -5,13 +5,13 @@ const testimonials = [
   {
     name: 'Sarah Johnson',
     role: 'CEO, TechDefense Solutions',
-    content: 'Sturgeon AI helped us increase our win rate by 40%. The AI proposal assistant is a game-changer.',
+    content: 'Harpoon AI helped us increase our win rate by 40%. The AI proposal assistant is a game-changer.',
     rating: 5,
   },
   {
     name: 'Michael Chen',
     role: 'Capture Manager, Federal Logistics Inc',
-    content: 'We went from manually tracking 50 opportunities to monitoring 500+ with Sturgeon AI. Incredible ROI.',
+    content: 'We went from manually tracking 50 opportunities to monitoring 500+ with Harpoon AI. Incredible ROI.',
     rating: 5,
   },
   {

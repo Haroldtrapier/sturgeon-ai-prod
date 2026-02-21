@@ -51,7 +51,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 border-t border-gray-800 pt-8">
           <p className="text-center text-sm">
-            © {new Date().getFullYear()} Sturgeon AI. All rights reserved.
+            © {new Date().getFullYear()} Harpoon AI. All rights reserved.
           </p>
         </div>
       </div>

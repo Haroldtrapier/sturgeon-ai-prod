@@ -157,15 +157,15 @@ export default function LandingPage() {
   ];
 
   const TESTIMONIALS = [
-    { name: "Sarah Mitchell", role: "CEO, VetForce Solutions", text: "Sturgeon AI cut our proposal turnaround from 2 weeks to 2 days. We've won 3 contracts in our first quarter using it.", avatar: "SM" },
+    { name: "Sarah Mitchell", role: "CEO, VetForce Solutions", text: "Harpoon AI cut our proposal turnaround from 2 weeks to 2 days. We've won 3 contracts in our first quarter using it.", avatar: "SM" },
     { name: "James Rodriguez", role: "BD Director, ClearPath Federal", text: "The ContractMatch engine surfaces opportunities we were missing entirely. Our pipeline grew 40% in the first month.", avatar: "JR" },
-    { name: "Dr. Angela Chen", role: "Founder, TechBridge Gov", text: "As a small 8(a) firm, we couldn't afford a full capture team. Sturgeon AI gives us enterprise-level capabilities at a fraction of the cost.", avatar: "AC" },
+    { name: "Dr. Angela Chen", role: "Founder, TechBridge Gov", text: "As a small 8(a) firm, we couldn't afford a full capture team. Harpoon AI gives us enterprise-level capabilities at a fraction of the cost.", avatar: "AC" },
   ];
 
   const FAQS = [
-    { q: "How does the AI generate proposals?", a: "Sturgeon AI uses 6 specialized agents trained on government contracting. When you paste an RFP, the system extracts SHALL/MUST requirements, builds a compliance matrix, and generates section-by-section proposal content aligned with evaluation criteria. You review, edit, and export." },
+    { q: "How does the AI generate proposals?", a: "Harpoon AI uses 6 specialized agents trained on government contracting. When you paste an RFP, the system extracts SHALL/MUST requirements, builds a compliance matrix, and generates section-by-section proposal content aligned with evaluation criteria. You review, edit, and export." },
     { q: "Is my data secure?", a: "Absolutely. All data is encrypted at rest and in transit. We use Supabase (PostgreSQL) with row-level security policies, meaning users can only access their own data. We never share your proposals or company information." },
-    { q: "What certifications does Sturgeon AI support?", a: "We support all major small business certifications: SDVOSB, VOSB, 8(a), HUBZone, WOSB, EDWOSB, and SDB. The platform tracks certification status, expiry dates, and factors them into opportunity matching." },
+    { q: "What certifications does Harpoon AI support?", a: "We support all major small business certifications: SDVOSB, VOSB, 8(a), HUBZone, WOSB, EDWOSB, and SDB. The platform tracks certification status, expiry dates, and factors them into opportunity matching." },
     { q: "Can I try it before committing?", a: "Yes. Sign up for a free account with no credit card required. You get 5 AI queries per day, basic opportunity search, and 1 proposal per month. Upgrade anytime." },
     { q: "How does ContractMatch work?", a: "ContractMatch connects to SAM.gov's API and scores every new opportunity against your company profile including NAICS codes, certifications, set-aside preferences, past performance, and keywords. You get daily alerts for high-scoring matches." },
     { q: "Do you integrate with SAM.gov?", a: "Yes, we integrate directly with SAM.gov's official API for real-time opportunity data, entity validation, and set-aside information. We also pull data from USASpending.gov and FPDS for contract history and market intelligence." },
@@ -492,7 +492,7 @@ export default function LandingPage() {
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">Ready to Win More<br /><span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Government Contracts?</span></h2>
-          <p className="text-lg text-slate-400 mt-4 max-w-xl mx-auto">Join hundreds of small businesses using Sturgeon AI to compete and win in federal contracting.</p>
+          <p className="text-lg text-slate-400 mt-4 max-w-xl mx-auto">Join hundreds of small businesses using Harpoon AI to compete and win in federal contracting.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
             <button onClick={goSignup} className="group px-10 py-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-semibold text-lg shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
               Get Started Free
@@ -512,7 +512,7 @@ export default function LandingPage() {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
                   <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
-                <span className="text-lg font-bold">Sturgeon AI</span>
+                <span className="text-lg font-bold">Harpoon AI</span>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">AI-powered government contracting intelligence for small businesses.</p>
             </div>
@@ -547,7 +547,7 @@ export default function LandingPage() {
           </div>
 
           <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-slate-600">&copy; {new Date().getFullYear()} Sturgeon AI. All rights reserved.</p>
+            <p className="text-xs text-slate-600">&copy; {new Date().getFullYear()} Harpoon AI. All rights reserved.</p>
             <div className="flex gap-6 text-xs text-slate-600">
               <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
               <span className="hover:text-slate-400 cursor-pointer">Terms of Service</span>

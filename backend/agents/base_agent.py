@@ -1,5 +1,5 @@
 """
-Base agent class for all Sturgeon AI specialized agents.
+Base agent class for all Harpoon AI specialized agents.
 """
 import os
 from typing import Optional, List, Dict, Any

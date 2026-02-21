@@ -5,7 +5,7 @@ export default function GovWinPage() {
     <MarketplaceWorkspace
       name="GovWin"
       loginUrl="https://www.deltek.com/en/products/government-contracting/govwin"
-      description="GovWin is a premium market intelligence platform. Use it to discover opportunities and forecasts, then plug your findings into Sturgeon AI for rapid analysis and proposal support."
+      description="GovWin is a premium market intelligence platform. Use it to discover opportunities and forecasts, then plug your findings into Harpoon AI for rapid analysis and proposal support."
     />
   );
 }

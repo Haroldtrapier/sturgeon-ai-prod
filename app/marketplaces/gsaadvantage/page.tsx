@@ -6,7 +6,7 @@ export default function GsaAdvantagePage() {
       source="gsa-advantage"
       sourceName="GSA Advantage"
       loginUrl="https://www.gsaadvantage.gov/"
-      description="Import catalog items and pricing from GSA Advantage. Optimize your GSA Schedule listings and competitive positioning using Sturgeon AI analysis."
+      description="Import catalog items and pricing from GSA Advantage. Optimize your GSA Schedule listings and competitive positioning using Harpoon AI analysis."
     />
   );
 }

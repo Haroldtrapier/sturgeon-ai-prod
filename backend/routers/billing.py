@@ -83,7 +83,7 @@ async def stripe_webhook(request: Request):
     try:
         event = stripe.Webhook.construct_event(payload, sig, WEBHOOK_SECRET)
     except Exception as e:
-        print(f"[Sturgeon AI] Webhook error: {e}")
+        print(f"[Harpoon AI] Webhook error: {e}")
         return {"error": "Invalid webhook"}
 
     if event["type"] == "checkout.session.completed":
@@ -94,16 +94,16 @@ async def stripe_webhook(request: Request):
                 .update({"subscription_plan": "pro"}) \
                 .eq("id", user_id) \
                 .execute()
-            print(f"[Sturgeon AI] Subscription activated for user {user_id}")
+            print(f"[Harpoon AI] Subscription activated for user {user_id}")
 
     elif event["type"] == "customer.subscription.deleted":
         subscription = event["data"]["object"]
         # Find user by stripe customer and downgrade
-        print(f"[Sturgeon AI] Subscription cancelled: {subscription.get('id')}")
+        print(f"[Harpoon AI] Subscription cancelled: {subscription.get('id')}")
 
     elif event["type"] == "invoice.payment_failed":
         invoice = event["data"]["object"]
-        print(f"[Sturgeon AI] Payment failed for: {invoice.get('customer_email')}")
+        print(f"[Harpoon AI] Payment failed for: {invoice.get('customer_email')}")
 
     return {"received": True}
 

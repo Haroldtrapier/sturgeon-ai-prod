@@ -121,7 +121,7 @@ export default function UpdatePassword() {
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="max-w-sm w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-emerald-400">Sturgeon AI</h1>
+          <h1 className="text-3xl font-bold text-emerald-400">Harpoon AI</h1>
           <p className="text-slate-400 mt-2 text-sm">Set your new password</p>
         </div>
 

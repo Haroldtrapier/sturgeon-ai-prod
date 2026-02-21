@@ -13,7 +13,7 @@ except ImportError:
     from backend.services.db import supabase
 
 
-SYSTEM_PROMPT = """You are the Sturgeon AI Government Contracting Assistant.
+SYSTEM_PROMPT = """You are the Harpoon AI Government Contracting Assistant.
 You help users:
 - Analyze solicitations, RFPs, and RFQs
 - Summarize requirements and evaluation criteria
@@ -32,7 +32,7 @@ Always provide actionable next steps."""
 
 async def run_agent(message: str, user_id: Optional[str] = None) -> str:
     """
-    Run the Sturgeon AI agent on a user message.
+    Run the Harpoon AI agent on a user message.
 
     Args:
         message: The user's question or request

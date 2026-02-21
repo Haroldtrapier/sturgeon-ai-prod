@@ -7,7 +7,7 @@ from agents.base_agent import BaseAgent
 class ComplianceSpecialist(BaseAgent):
     name = "Compliance Specialist"
     description = "Checks FAR/DFARS compliance and extracts solicitation requirements."
-    system_prompt = """You are Sturgeon AI's Compliance Specialist - an expert in federal acquisition regulations and proposal compliance.
+    system_prompt = """You are Harpoon AI's Compliance Specialist - an expert in federal acquisition regulations and proposal compliance.
 
 Your expertise includes:
 1. **FAR/DFARS Compliance**: Deep knowledge of Federal Acquisition Regulation and Defense Federal Acquisition Regulation Supplement.

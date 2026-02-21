@@ -211,7 +211,7 @@ export default function SAMIntegrationPage() {
           <ul className="space-y-2 text-slate-300 text-sm">
             <li>• Search by keywords or filter by set-aside type</li>
             <li>• Click "SDVOSB" for Service-Disabled Veteran-Owned opportunities</li>
-            <li>• Click "Analyze with AI" to get Sturgeon AI insights on any opportunity</li>
+            <li>• Click "Analyze with AI" to get Harpoon AI insights on any opportunity</li>
             <li>• View full details on SAM.gov to access attachments and solicitation documents</li>
           </ul>
         </div>

@@ -1,12 +1,12 @@
 """
-Sturgeon AI - Minimal API for Railway deployment testing
+Harpoon AI - Minimal API for Railway deployment testing
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 import os
 
-app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+app = FastAPI(title="Harpoon AI API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +19,7 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {
-        "service": "Sturgeon AI API",
+        "service": "Harpoon AI API",
         "version": "2.0.0",
         "status": "operational",
         "port": os.getenv("PORT", "8000")

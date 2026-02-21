@@ -77,7 +77,7 @@ export default function AgentPage() {
         <div className="flex-1 bg-slate-900/50 border border-slate-800 rounded-xl p-4 overflow-y-auto mb-4 space-y-4">
           {messages.length === 0 ? (
             <div className="text-center text-slate-500 mt-8">
-              <p className="mb-4">👋 Hi! I'm your Sturgeon AI Assistant.</p>
+              <p className="mb-4">👋 Hi! I'm your Harpoon AI Assistant.</p>
               <p className="text-sm">Ask me about:</p>
               <ul className="text-sm mt-2 space-y-1">
                 <li>• Analyzing contract opportunities</li>

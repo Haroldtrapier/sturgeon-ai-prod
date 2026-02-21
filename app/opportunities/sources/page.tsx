@@ -39,7 +39,7 @@ export default function OpportunitySourcesPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Opportunity Sources</h1><p className="text-slate-400 mt-1">Federal procurement data sources integrated with Sturgeon AI</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Opportunity Sources</h1><p className="text-slate-400 mt-1">Federal procurement data sources integrated with Harpoon AI</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">{SOURCES.filter(s => s.status === "active").length}</p><p className="text-xs text-slate-400 mt-1">Active Sources</p></div>
         <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-blue-400">{SOURCES.length}</p><p className="text-xs text-slate-400 mt-1">Total Sources</p></div>

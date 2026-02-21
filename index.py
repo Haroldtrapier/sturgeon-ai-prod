@@ -1,5 +1,5 @@
 """
-Sturgeon AI - Government Contracting & Grants Ecosystem API
+Harpoon AI - Government Contracting & Grants Ecosystem API
 """
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +10,7 @@ from datetime import datetime
 import httpx
 import json
 
-app = FastAPI(title="Sturgeon AI API", version="2.0.0")
+app = FastAPI(title="Harpoon AI API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -40,7 +40,7 @@ class ProposalRequest(BaseModel):
 @app.get("/")
 async def root():
     return {
-        "service": "Sturgeon AI API",
+        "service": "Harpoon AI API",
         "version": "2.0.0",
         "status": "operational",
         "endpoints": {

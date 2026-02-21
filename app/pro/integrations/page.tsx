@@ -31,7 +31,7 @@ export default function IntegrationsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Integrations</h1><p className="text-slate-400 mt-1">Connect Sturgeon AI with your existing tools</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Integrations</h1><p className="text-slate-400 mt-1">Connect Harpoon AI with your existing tools</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">{INTEGRATIONS.filter(i => i.status === "active").length}</p><p className="text-xs text-slate-400 mt-1">Active</p></div>
         <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-amber-400">{INTEGRATIONS.filter(i => i.status === "coming_soon").length}</p><p className="text-xs text-slate-400 mt-1">Coming Soon</p></div>

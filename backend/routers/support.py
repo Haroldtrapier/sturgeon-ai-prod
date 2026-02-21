@@ -122,7 +122,7 @@ async def get_faq():
                 "name": "Getting Started",
                 "questions": [
                     {"question": "How do I create an account?", "answer": "Click the Sign Up button and follow the registration process with your email."},
-                    {"question": "What is Sturgeon AI?", "answer": "Sturgeon AI is an AI-powered platform for government contract analysis, proposal generation, compliance checking, and opportunity matching."},
+                    {"question": "What is Harpoon AI?", "answer": "Harpoon AI is an AI-powered platform for government contract analysis, proposal generation, compliance checking, and opportunity matching."},
                     {"question": "How do I set up my profile?", "answer": "Visit the Onboarding page after signing up to configure your NAICS codes and keywords."},
                 ],
             },

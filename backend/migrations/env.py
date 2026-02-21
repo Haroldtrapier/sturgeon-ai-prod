@@ -20,7 +20,7 @@ if config.config_file_name is not None:
 # Set the sqlalchemy.url from environment variable
 config.set_main_option(
     "sqlalchemy.url",
-    os.getenv("STURGEON_DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/sturgeon_ai")
+    os.getenv("HARPOON_DATABASE_URL", os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/harpoon_ai"))
 )
 
 # add your model's MetaData object here for 'autogenerate' support

@@ -19,7 +19,7 @@ export default function EmailSettingsPage() {
     team_activity: false,
     marketing_emails: false,
     digest_time: "08:00",
-    from_name: "Sturgeon AI",
+    from_name: "Harpoon AI",
   });
 
   useEffect(() => {

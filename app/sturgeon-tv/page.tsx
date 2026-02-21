@@ -6,7 +6,7 @@ const CATEGORIES = ["All", "Getting Started", "Proposals", "Compliance", "Market
 
 const VIDEOS = [
   {
-    title: "Getting Started with Sturgeon AI",
+    title: "Getting Started with Harpoon AI",
     description: "Complete platform walkthrough — from profile setup to your first AI-powered proposal.",
     category: "Getting Started",
     duration: "12 min",
@@ -21,7 +21,7 @@ const VIDEOS = [
   },
   {
     title: "Writing Winning Proposals with AI",
-    description: "Step-by-step guide to generating compliant, persuasive proposals using Sturgeon AI.",
+    description: "Step-by-step guide to generating compliant, persuasive proposals using Harpoon AI.",
     category: "Proposals",
     duration: "15 min",
     thumbnail: "edit",
@@ -100,7 +100,7 @@ export default function SturgeonTV() {
           <span className="px-2 py-0.5 bg-emerald-600 text-white text-xs font-medium rounded">NEW</span>
           <span className="text-xs text-slate-400">Latest Episode</span>
         </div>
-        <h2 className="text-xl font-bold mb-1">Getting Started with Sturgeon AI</h2>
+        <h2 className="text-xl font-bold mb-1">Getting Started with Harpoon AI</h2>
         <p className="text-sm text-slate-400 mb-4">Complete platform walkthrough — from profile setup to your first AI-powered proposal.</p>
         <div className="flex items-center gap-4">
           <span className="text-xs text-slate-500">12 min</span>

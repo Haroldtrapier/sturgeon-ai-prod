@@ -1,5 +1,5 @@
 """
-Sturgeon AI - Streamlit Frontend
+Harpoon AI - Streamlit Frontend
 ================================
 This is an optional Streamlit UI that connects to the FastAPI backend.
 
@@ -19,7 +19,7 @@ API_BASE_URL = "http://localhost:8000"
 
 # Page configuration
 st.set_page_config(
-    page_title="Sturgeon AI",
+    page_title="Harpoon AI",
     page_icon="🐟",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -52,7 +52,7 @@ def check_backend_health() -> bool:
 
 def main():
     # Header
-    st.markdown('<h1 class="main-header">🐟 Sturgeon AI</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🐟 Harpoon AI</h1>', unsafe_allow_html=True)
     st.markdown("### Government Contract Intelligence Assistant")
 
     # Sidebar
@@ -89,7 +89,7 @@ def main():
         # About section
         st.subheader("ℹ️ About")
         st.info("""
-        **Sturgeon AI** helps government contractors:
+        **Harpoon AI** helps government contractors:
         - Search opportunities
         - Analyze requirements
         - Generate proposals

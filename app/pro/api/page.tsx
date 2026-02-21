@@ -50,7 +50,7 @@ export default function APIDocumentationPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">API Documentation</h1><p className="text-slate-400 mt-1">Integrate Sturgeon AI into your workflows</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">API Documentation</h1><p className="text-slate-400 mt-1">Integrate Harpoon AI into your workflows</p></div>
       <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
         <h2 className="font-semibold mb-3">API Key</h2>
         {apiKey ? (

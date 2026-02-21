@@ -15,7 +15,7 @@ except ImportError:
     from backend.services.db import supabase
 
 
-SYSTEM_PROMPT = """You are Sturgeon AI, a government contracting intelligence assistant.
+SYSTEM_PROMPT = """You are Harpoon AI, a government contracting intelligence assistant.
 You help small businesses win federal contracts by providing expert guidance on:
 - SAM.gov opportunities and registration
 - Proposal writing and compliance
@@ -44,7 +44,7 @@ class ChatSessionManager:
         # Send welcome message
         await self.send_personal_message(json.dumps({
             "type": "system",
-            "content": "Connected to Sturgeon AI. How can I help with your government contracting needs?",
+            "content": "Connected to Harpoon AI. How can I help with your government contracting needs?",
             "timestamp": datetime.utcnow().isoformat(),
         }), websocket)
 

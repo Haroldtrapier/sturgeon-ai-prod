@@ -25,7 +25,7 @@ const AGENTS: Agent[] = [
     name: 'General Assistant',
     description: 'Ask me anything about opportunities, contracts, and proposals',
     icon: '🤖',
-    systemPrompt: 'You are a helpful AI assistant for Sturgeon AI, a government contracting platform. Help users with general questions about opportunities, proposals, and the platform.'
+    systemPrompt: 'You are a helpful AI assistant for Harpoon AI, a government contracting platform. Help users with general questions about opportunities, proposals, and the platform.'
   },
   {
     id: 'contract-analysis',

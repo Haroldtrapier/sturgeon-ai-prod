@@ -23,6 +23,6 @@ describe('Home Page', () => {
 
   it('displays company branding', () => {
     render(<Index />)
-    expect(screen.getByText(/Sturgeon AI/i)).toBeInTheDocument()
+    expect(screen.getByText(/Harpoon AI/i)).toBeInTheDocument()
   })
 })

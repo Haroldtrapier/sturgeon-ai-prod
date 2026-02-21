@@ -71,7 +71,7 @@ export default function DashboardOverviewPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-slate-400 mt-1">Welcome back to Sturgeon AI</p>
+        <p className="text-slate-400 mt-1">Welcome back to Harpoon AI</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">

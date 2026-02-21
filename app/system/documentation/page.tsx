@@ -23,7 +23,7 @@ export default function DocumentationPage() {
 
   const SECTIONS = [
     { id: "getting-started", title: "Getting Started", items: [
-      { title: "Platform Overview", desc: "Introduction to Sturgeon AI and its core features for government contractors." },
+      { title: "Platform Overview", desc: "Introduction to Harpoon AI and its core features for government contractors." },
       { title: "Account Setup", desc: "Create your account, set up your company profile, and configure initial settings." },
       { title: "SAM.gov Integration", desc: "Connect your SAM.gov profile for automated opportunity matching." },
       { title: "First Proposal", desc: "Step-by-step guide to creating your first AI-assisted proposal." },
@@ -59,7 +59,7 @@ export default function DocumentationPage() {
       { title: "Plan Comparison", desc: "Compare Starter ($97), Professional ($197), and Enterprise ($397) plans." },
       { title: "Upgrade Process", desc: "How to upgrade your plan and manage billing through Stripe." },
       { title: "API Access", desc: "API key management and endpoint documentation for Enterprise users." },
-      { title: "White Label", desc: "Resell Sturgeon AI under your own brand with Enterprise plans." },
+      { title: "White Label", desc: "Resell Harpoon AI under your own brand with Enterprise plans." },
     ]},
   ];
 
@@ -69,7 +69,7 @@ export default function DocumentationPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Documentation</h1>
-        <p className="text-slate-400 mt-1">Learn how to get the most from Sturgeon AI</p>
+        <p className="text-slate-400 mt-1">Learn how to get the most from Harpoon AI</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">

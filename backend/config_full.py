@@ -3,12 +3,12 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    """Sturgeon AI Application Settings"""
+    """Harpoon AI Application Settings"""
 
     # Application
-    APP_NAME: str = "Sturgeon AI"
+    APP_NAME: str = "Harpoon AI"
     DEBUG: bool = False
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "https://sturgeon.ai"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "https://harpoon.ai"]
 
     # Database
     DATABASE_URL: str = "postgresql://user:password@localhost/dbname"

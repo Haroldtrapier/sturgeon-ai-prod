@@ -23,7 +23,7 @@ export default function WhiteLabelPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="text-center mb-12"><h1 className="text-3xl font-bold">White Label Solution</h1><p className="text-slate-400 mt-2">Offer Sturgeon AI under your own brand</p></div>
+      <div className="text-center mb-12"><h1 className="text-3xl font-bold">White Label Solution</h1><p className="text-slate-400 mt-2">Offer Harpoon AI under your own brand</p></div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {FEATURES.map(f => (
           <div key={f.title} className="p-5 bg-slate-900 border border-slate-800 rounded-xl">

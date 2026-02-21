@@ -1,5 +1,5 @@
 // lib/usage-tracker.ts
-// Adapted from GovCon Command Center for Sturgeon AI
+// Adapted from GovCon Command Center for Harpoon AI
 import { createClient } from '@/lib/supabase/server'
 
 interface UsageEvent {

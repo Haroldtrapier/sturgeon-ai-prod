@@ -20,7 +20,7 @@ class AgentRequest(BaseModel):
 @router.post("/ask")
 async def ask_agent(payload: AgentRequest, user=Depends(get_optional_user)):
     """
-    Run the Sturgeon AI Agent on a question.
+    Run the Harpoon AI Agent on a question.
     Supports both authenticated and unauthenticated users.
     """
     user_id = payload.user_id or (user.get("id") if user else None)

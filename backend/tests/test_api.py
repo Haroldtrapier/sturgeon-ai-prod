@@ -1,5 +1,5 @@
 """
-API tests for Sturgeon AI backend.
+API tests for Harpoon AI backend.
 Tests critical endpoints and agent functionality.
 """
 import pytest
@@ -21,7 +21,7 @@ def test_health_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert data["ok"] is True
-    assert data["service"] == "sturgeon-ai-backend"
+    assert data["service"] == "harpoon-ai-backend"
     assert data["version"] == "9.0.0"
     assert "routers_loaded" in data
     assert "env" in data
@@ -37,7 +37,7 @@ def test_root_endpoint():
 
     assert response.status_code == 200
     data = response.json()
-    assert data["service"] == "Sturgeon AI API"
+    assert data["service"] == "Harpoon AI API"
     assert "features" in data
     assert len(data["features"]) > 0
 

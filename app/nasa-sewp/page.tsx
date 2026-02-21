@@ -5,7 +5,7 @@ export default function NasaSewpPage() {
     <MarketplaceWorkspace
       name="NASA SEWP"
       loginUrl="https://www.sewp.nasa.gov/"
-      description="NASA SEWP is a major GWAC for IT products and services. Sturgeon AI will support SEWP holders with faster analysis of RFQs and ordering guides."
+      description="NASA SEWP is a major GWAC for IT products and services. Harpoon AI will support SEWP holders with faster analysis of RFQs and ordering guides."
     />
   );
 }

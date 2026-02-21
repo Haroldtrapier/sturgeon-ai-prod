@@ -1,5 +1,5 @@
 """
-Background job scheduler for Sturgeon AI.
+Background job scheduler for Harpoon AI.
 Handles automated opportunity syncing, deadline reminders, and data updates.
 """
 import os

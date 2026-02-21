@@ -75,15 +75,15 @@ export default function SSOPage() {
         <div className="space-y-3 text-sm">
           <div>
             <label className="block text-slate-400 mb-1">Entity ID / Issuer</label>
-            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.sturgeon-ai.com/auth/saml/metadata</div>
+            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.harpoon-ai.com/auth/saml/metadata</div>
           </div>
           <div>
             <label className="block text-slate-400 mb-1">ACS URL (Reply URL)</label>
-            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.sturgeon-ai.com/auth/saml/acs</div>
+            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.harpoon-ai.com/auth/saml/acs</div>
           </div>
           <div>
             <label className="block text-slate-400 mb-1">SLO URL</label>
-            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.sturgeon-ai.com/auth/saml/slo</div>
+            <div className="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg font-mono text-xs text-slate-300">https://app.harpoon-ai.com/auth/saml/slo</div>
           </div>
         </div>
         <p className="text-xs text-slate-500 mt-3">Provide these URLs to your identity provider when configuring SAML SSO.</p>

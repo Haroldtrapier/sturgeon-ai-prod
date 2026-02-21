@@ -6,7 +6,7 @@ export default function UnisonMarketplacePage() {
       source="unison"
       sourceName="Unison Marketplace"
       loginUrl="https://marketplace.unisonglobal.com/"
-      description="Import micro-purchase and simplified acquisition opportunities from Unison Marketplace. Paste URLs or opportunity text to save them in Sturgeon AI for instant analysis, pricing support, and proposal generation."
+      description="Import micro-purchase and simplified acquisition opportunities from Unison Marketplace. Paste URLs or opportunity text to save them in Harpoon AI for instant analysis, pricing support, and proposal generation."
     />
   );
 }

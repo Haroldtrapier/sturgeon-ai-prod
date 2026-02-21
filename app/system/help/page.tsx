@@ -32,7 +32,7 @@ export default function HelpPage() {
       const res = await fetch(`${API}/api/agents/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ agent_type: "general", message: `Help the user with this question about the Sturgeon AI platform: "${question}". Provide clear, actionable guidance.` }),
+        body: JSON.stringify({ agent_type: "general", message: `Help the user with this question about the Harpoon AI platform: "${question}". Provide clear, actionable guidance.` }),
       });
       if (res.ok) { const d = await res.json(); setAnswer(typeof d.response === "string" ? d.response : JSON.stringify(d.response || d, null, 2)); }
     } catch {}
@@ -67,7 +67,7 @@ export default function HelpPage() {
       <form onSubmit={askQuestion} className="mb-8 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
         <h2 className="text-lg font-semibold mb-3">Ask AI Help Assistant</h2>
         <div className="flex gap-3">
-          <input type="text" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Ask anything about Sturgeon AI..." className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          <input type="text" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Ask anything about Harpoon AI..." className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
           <button type="submit" disabled={asking} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{asking ? "Thinking..." : "Ask"}</button>
         </div>
         {answer && <pre className="mt-4 text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 p-4 rounded-lg">{answer}</pre>}

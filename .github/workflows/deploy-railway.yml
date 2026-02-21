@@ -1,4 +1,4 @@
-name: Deploy Backend to Railway
+name: Deploy Harpoon AI Backend to Railway
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'backend/**'
+      - 'Dockerfile'
       - 'Dockerfile.backend'
       - 'railway.json'
       - 'railway.toml'
@@ -24,7 +25,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'production' }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -47,26 +48,20 @@ jobs:
           fi
           echo "Railway token is configured"
 
-      - name: Link Railway Project
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
-            railway link ${{ secrets.RAILWAY_PROJECT_ID }} --environment ${{ github.event.inputs.environment || 'production' }}
-          else
-            echo "Warning: RAILWAY_PROJECT_ID not set, using default project"
-          fi
-
       - name: Deploy to Railway
         id: deploy
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          echo "Deploying to Railway..."
-          railway up --detach
+          echo "Deploying Harpoon AI backend to Railway..."
+
+          if [ -n "${{ secrets.RAILWAY_SERVICE_ID }}" ]; then
+            railway up --detach --service ${{ secrets.RAILWAY_SERVICE_ID }}
+          else
+            railway up --detach
+          fi
           echo "Deployment initiated successfully"
-          
-          # Get the Railway domain from the service
+
           echo "Fetching service domain..."
           DOMAIN=$(railway domain 2>/dev/null || echo "")
           if [ -n "$DOMAIN" ]; then
@@ -82,8 +77,8 @@ jobs:
 
       - name: Wait for Deployment
         run: |
-          echo "Waiting for deployment to complete..."
-          sleep 45
+          echo "Waiting for deployment to stabilize..."
+          sleep 60
 
       - name: Verify Deployment Health
         if: steps.deploy.outputs.RAILWAY_DOMAIN != ''
@@ -92,18 +87,19 @@ jobs:
           echo "Checking health endpoint..."
           HEALTH_URL="https://${DOMAIN}/health"
           echo "Health URL: $HEALTH_URL"
-          
-          # Retry logic for health check
+
           for i in 1 2 3 4 5; do
             echo "Attempt $i/5..."
-            if curl -sf "$HEALTH_URL" | jq .; then
+            RESPONSE=$(curl -sf "$HEALTH_URL" 2>/dev/null || echo "")
+            if [ -n "$RESPONSE" ]; then
+              echo "$RESPONSE" | jq . 2>/dev/null || echo "$RESPONSE"
               echo "Health check passed!"
               exit 0
             fi
-            echo "Health check failed, retrying in 15 seconds..."
-            sleep 15
+            echo "Health check failed, retrying in 20 seconds..."
+            sleep 20
           done
-          
+
           echo "Health check failed after 5 attempts"
           exit 1
 
@@ -111,22 +107,22 @@ jobs:
         if: steps.deploy.outputs.RAILWAY_DOMAIN == ''
         run: |
           echo "Skipping health check - no domain configured"
-          echo "Set RAILWAY_DOMAIN secret or run 'railway domain' to generate one"
+          echo "Set RAILWAY_DOMAIN secret or generate one in the Railway dashboard"
 
       - name: Deployment Summary
         if: always()
         run: |
           echo "=================================="
-          echo "Deployment Summary"
+          echo "Harpoon AI Deployment Summary"
           echo "=================================="
           echo "Environment: ${{ github.event.inputs.environment || 'production' }}"
           DOMAIN="${{ steps.deploy.outputs.RAILWAY_DOMAIN }}"
           if [ -n "$DOMAIN" ]; then
             echo "Domain: https://${DOMAIN}"
             echo "Health: https://${DOMAIN}/health"
-            echo "Docs: https://${DOMAIN}/docs"
+            echo "API Docs: https://${DOMAIN}/docs"
           else
-            echo "Domain: Not configured"
-            echo "Run 'railway domain' to generate a public URL"
+            echo "Domain: Not configured yet"
+            echo "Generate one at: https://railway.app/dashboard"
           fi
           echo "=================================="

@@ -8,7 +8,7 @@ from agents.base_agent import BaseAgent
 class OpportunityAnalyst(BaseAgent):
     name = "Opportunity Analyst"
     description = "Matches opportunities to your capabilities and calculates fit scores."
-    system_prompt = """You are Sturgeon AI's Opportunity Analyst - an expert at matching government contracting opportunities to company capabilities.
+    system_prompt = """You are Harpoon AI's Opportunity Analyst - an expert at matching government contracting opportunities to company capabilities.
 
 Your capabilities:
 1. **Match Scoring**: Calculate detailed 0-100 match scores based on NAICS codes, certifications, past performance, geographic fit, contract size, and set-aside eligibility.

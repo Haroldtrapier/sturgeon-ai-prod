@@ -24,7 +24,7 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
     }
 
     setLoading(true);
-    setStatus('Saving to Sturgeon AI...');
+    setStatus('Saving to Harpoon AI...');
 
     try {
       // Extract basic info from text or use URL
@@ -151,7 +151,7 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
             disabled={loading || (!url.trim() && !rawText.trim())}
             className="w-full px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
           >
-            {loading ? 'Saving...' : 'Save to Sturgeon AI'}
+            {loading ? 'Saving...' : 'Save to Harpoon AI'}
           </button>
 
           {status && (
@@ -184,7 +184,7 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
             </li>
             <li className="flex gap-2">
               <span className="text-emerald-400 font-bold">4.</span>
-              <span>Click "Save to Sturgeon AI" to import it</span>
+              <span>Click "Save to Harpoon AI" to import it</span>
             </li>
             <li className="flex gap-2">
               <span className="text-emerald-400 font-bold">5.</span>

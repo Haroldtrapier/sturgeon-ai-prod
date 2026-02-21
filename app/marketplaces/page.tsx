@@ -19,7 +19,7 @@ export default function MarketplacesIndexPage() {
       <section className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Marketplaces & Portals</h1>
         <p className="text-slate-300 mb-6">
-          These pages are placeholders that explain how Sturgeon AI will work
+          These pages are placeholders that explain how Harpoon AI will work
           alongside each marketplace. You&apos;ll always log in directly on the
           official portal, then use Sturgeon for analysis, strategy, and
           proposal support.
@@ -34,7 +34,7 @@ export default function MarketplacesIndexPage() {
               <h2 className="text-lg font-semibold mb-1">{m.name}</h2>
               <p className="text-xs text-slate-400">
                 Click to view the placeholder workspace for {m.name} and how
-                it will connect to your Sturgeon AI workflow.
+                it will connect to your Harpoon AI workflow.
               </p>
             </a>
           ))}

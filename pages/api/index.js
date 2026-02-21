@@ -1,6 +1,6 @@
 export default function handler(req, res) {
   res.status(200).json({
-    service: "Sturgeon AI API",
+    service: "Harpoon AI API",
     version: "2.0.0",
     status: "operational",
     endpoints: {

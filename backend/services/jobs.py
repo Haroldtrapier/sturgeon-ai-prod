@@ -34,11 +34,11 @@ if redis_url:
         from redis import Redis
         from rq import Queue
         q = Queue(connection=Redis.from_url(redis_url))
-        print("[Sturgeon AI] Redis job queue connected")
+        print("[Harpoon AI] Redis job queue connected")
     except Exception as e:
-        print(f"[Sturgeon AI] WARNING: Redis connection failed: {e}. Job queue disabled.")
+        print(f"[Harpoon AI] WARNING: Redis connection failed: {e}. Job queue disabled.")
 else:
-    print("[Sturgeon AI] WARNING: REDIS_URL not set. Background job queue disabled. Jobs will run inline.")
+    print("[Harpoon AI] WARNING: REDIS_URL not set. Background job queue disabled. Jobs will run inline.")
 
 
 def log_event(job_run_id: str, level: str, message: str, meta: dict = None):

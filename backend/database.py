@@ -23,8 +23,8 @@ from sqlalchemy.ext.asyncio import (
 # Database URL configuration
 # ----------------------------------------------------------------------
 DATABASE_URL = os.getenv(
-    "STURGEON_DATABASE_URL",
-    os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/sturgeon_ai")
+    "HARPOON_DATABASE_URL",
+    os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/harpoon_ai")
 )
 
 # ----------------------------------------------------------------------

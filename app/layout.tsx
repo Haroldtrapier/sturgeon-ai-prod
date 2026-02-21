@@ -4,7 +4,7 @@ import Link from 'next/link';
 import AppShell from '@/components/AppShell';
 
 export const metadata: Metadata = {
-  title: 'Sturgeon AI - Government Contracting Intelligence',
+  title: 'Harpoon AI - Government Contracting Intelligence',
   description: 'AI-powered platform for government contract analysis, proposal generation, and opportunity matching',
 };
 
@@ -21,7 +21,7 @@ export default function RootLayout({
             <div className="flex items-center justify-between h-16">
               <Link href="/dashboard" className="flex items-center gap-2">
                 <span className="text-2xl">&#x1F41F;</span>
-                <span className="text-xl font-bold text-emerald-400">Sturgeon AI</span>
+                <span className="text-xl font-bold text-emerald-400">Harpoon AI</span>
               </Link>
               <div className="hidden md:flex items-center gap-1">
                 <Link href="/dashboard" className="px-3 py-1.5 text-sm text-slate-300 hover:text-emerald-400 transition-colors rounded-lg hover:bg-slate-800/50">Dashboard</Link>

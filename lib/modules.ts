@@ -1,5 +1,5 @@
 // lib/modules.ts
-// Module access control for Sturgeon AI
+// Module access control for Harpoon AI
 export const MODULES = {
   DASHBOARD: 'dashboard',
   ANALYTICS: 'analytics',

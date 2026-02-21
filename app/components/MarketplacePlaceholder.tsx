@@ -58,7 +58,7 @@ export default function MarketplacePlaceholder({
         
         <div className="flex items-center gap-4 mb-3">
           {logo && <img src={logo} alt={`${name} logo`} className="h-12 w-12 rounded-lg" />}
-          <h1 className="text-3xl md:text-4xl font-bold">{name} + Sturgeon AI</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">{name} + Harpoon AI</h1>
         </div>
         
         <p className="text-slate-300 max-w-2xl mb-6">{description}</p>
@@ -84,7 +84,7 @@ export default function MarketplacePlaceholder({
             How you&apos;ll use {name} with Sturgeon
           </h2>
           <p className="text-sm text-slate-300 mb-3">
-            This page is a Sturgeon AI workspace dedicated to <span className="font-semibold">{name}</span>. 
+            This page is a Harpoon AI workspace dedicated to <span className="font-semibold">{name}</span>. 
             For now, it is a placeholder while we prepare deeper integrations. You will:
           </p>
           <ul className="mt-2 space-y-1.5 text-sm text-slate-200 list-disc list-inside">
@@ -98,7 +98,7 @@ export default function MarketplacePlaceholder({
             Why this is a placeholder
           </h3>
           <p className="text-xs text-amber-100">
-            {name} requires you to log in directly on their website. Sturgeon AI does not store your credentials 
+            {name} requires you to log in directly on their website. Harpoon AI does not store your credentials 
             and cannot automatically access your account. You&apos;ll log in on the official portal and then copy 
             listings or export data into Sturgeon for analysis, bidding, pricing, and tracking.
           </p>
@@ -107,13 +107,13 @@ export default function MarketplacePlaceholder({
 
       <section className="max-w-5xl mx-auto mt-8 grid gap-6 md:grid-cols-2">
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
-          <h2 className="text-lg font-semibold mb-3">Workflow with Sturgeon AI</h2>
+          <h2 className="text-lg font-semibold mb-3">Workflow with Harpoon AI</h2>
           <ol className="space-y-3 text-sm text-slate-200">
             { [
               { title: `Log into ${name}`, desc: `Open the official ${name} portal in a new tab and sign in with your own account.` },
               { title: "Locate opportunities", desc: `Search for relevant buys, RFQs, or opportunities inside ${name}.` },
               { title: "Bring data into Sturgeon", desc: "Copy opportunity text, download attachments, or export data, then paste/upload into Sturgeon's analysis, proposal, or ContractMatch tools." },
-              { title: "Use AI to win", desc: "Let Sturgeon AI summarize, score, price, and build proposals for your selected opportunities." },
+              { title: "Use AI to win", desc: "Let Harpoon AI summarize, score, price, and build proposals for your selected opportunities." },
             ].map((step, i) => (
               <li key={i} className="flex gap-3">
                 <span className={`mt-0.5 h-6 w-6 flex items-center justify-center rounded-full text-xs font-semibold ${colors.step}`}>

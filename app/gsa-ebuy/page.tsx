@@ -5,7 +5,7 @@ export default function GsaEBuyPage() {
     <MarketplaceWorkspace
       name="GSA eBuy"
       loginUrl="https://www.ebuy.gsa.gov/"
-      description="GSA eBuy is where schedule holders respond to RFQs. Sturgeon AI will help you analyze RFQs and generate schedule-compliant responses."
+      description="GSA eBuy is where schedule holders respond to RFQs. Harpoon AI will help you analyze RFQs and generate schedule-compliant responses."
     />
   );
 }

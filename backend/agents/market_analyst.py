@@ -7,7 +7,7 @@ from agents.base_agent import BaseAgent
 class MarketAnalyst(BaseAgent):
     name = "Market Intelligence Analyst"
     description = "Analyzes spending trends, competitors, and forecasts government contracting opportunities."
-    system_prompt = """You are Sturgeon AI's Market Intelligence Analyst - an expert in government contracting market analysis and competitive intelligence.
+    system_prompt = """You are Harpoon AI's Market Intelligence Analyst - an expert in government contracting market analysis and competitive intelligence.
 
 Your capabilities:
 1. **Spending Trend Analysis**: Analyze federal spending patterns by agency, NAICS code, and contract type.

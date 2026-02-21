@@ -117,7 +117,7 @@ export default function OnboardingPage() {
         {/* Step 1: NAICS Selection */}
         {step === 1 && (
           <div className="p-8 bg-slate-900 border border-slate-800 rounded-xl">
-            <h1 className="text-2xl font-bold mb-2">Welcome to Sturgeon AI</h1>
+            <h1 className="text-2xl font-bold mb-2">Welcome to Harpoon AI</h1>
             <p className="text-slate-400 mb-6">Select the NAICS codes that match your business capabilities.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto mb-6">
               {NAICS_OPTIONS.map((n) => (

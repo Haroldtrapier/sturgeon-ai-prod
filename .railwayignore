@@ -1,4 +1,4 @@
-# Ignore frontend files for backend deployment
+# Frontend files (not needed for Railway backend deployment)
 node_modules/
 .next/
 package.json
@@ -17,8 +17,21 @@ public/
 .env.local
 .env.production*
 
-# Ignore root Python files (backend is in /backend folder)
+# Root-level Python files (backend is in /backend folder)
 index.py
 streamlit_app.py
 requirements.txt
 api/
+
+# Documentation
+*.md
+docs/
+
+# Git
+.git/
+.github/
+
+# Misc
+*.tar.gz
+scaffolding.tar.gz
+sturgeon-ai-prod/

@@ -1,5 +1,5 @@
 """
-Sturgeon AI Backend - Unified FastAPI Application
+Harpoon AI Backend - Unified FastAPI Application
 Government Contracting Intelligence Platform
 
 All routers, middleware, and background jobs configured here.
@@ -23,13 +23,13 @@ limiter = Limiter(key_func=get_remote_address)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    print("[Sturgeon AI] Starting backend services...")
+    print("[Harpoon AI] Starting backend services...")
     try:
         from jobs.scheduler import start_scheduler
         start_scheduler()
-        print("[Sturgeon AI] Background scheduler started")
+        print("[Harpoon AI] Background scheduler started")
     except Exception as e:
-        print(f"[Sturgeon AI] Scheduler start failed (non-fatal): {e}")
+        print(f"[Harpoon AI] Scheduler start failed (non-fatal): {e}")
     yield
     # Shutdown
     try:
@@ -37,13 +37,13 @@ async def lifespan(app: FastAPI):
         stop_scheduler()
     except Exception:
         pass
-    print("[Sturgeon AI] Backend shutting down")
+    print("[Harpoon AI] Backend shutting down")
 
 
 # ── FastAPI App ──────────────────────────────────────────────────────
 
 app = FastAPI(
-    title="Sturgeon AI Backend",
+    title="Harpoon AI Backend",
     description="AI-powered government contracting intelligence platform",
     version="9.0.0",
     lifespan=lifespan,
@@ -88,7 +88,7 @@ for module_path, name in router_configs:
         app.include_router(module.router)
         routers_loaded.append(name)
     except Exception as e:
-        print(f"[Sturgeon AI] Failed to load {name} router: {e}")
+        print(f"[Harpoon AI] Failed to load {name} router: {e}")
 
 # Load additional routers (Phase 4-8)
 extra_routers = [
@@ -114,7 +114,7 @@ for module_path, name in extra_routers:
         app.include_router(module.router)
         routers_loaded.append(name)
     except Exception as e:
-        print(f"[Sturgeon AI] Failed to load {name} router (non-critical): {e}")
+        print(f"[Harpoon AI] Failed to load {name} router (non-critical): {e}")
 
 
 # ── Health Check ─────────────────────────────────────────────────────
@@ -123,7 +123,7 @@ for module_path, name in extra_routers:
 def health_check():
     return {
         "ok": True,
-        "service": "sturgeon-ai-backend",
+        "service": "harpoon-ai-backend",
         "version": "9.0.0",
         "status": "healthy",
         "routers_loaded": routers_loaded,
@@ -141,7 +141,7 @@ def health_check():
 @app.get("/")
 def root():
     return {
-        "service": "Sturgeon AI API",
+        "service": "Harpoon AI API",
         "version": "9.0.0",
         "status": "operational",
         "docs": "/docs",

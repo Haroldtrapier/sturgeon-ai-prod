@@ -169,7 +169,7 @@ export default function MarketplaceWorkspace({
       <section className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">{name} + Sturgeon AI</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">{name} + Harpoon AI</h1>
             <p className="text-slate-300">{description}</p>
           </div>
           <a
