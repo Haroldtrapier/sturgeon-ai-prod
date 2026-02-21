@@ -1,6 +1,7 @@
 // lib/usage-tracker.ts
 // Adapted from GovCon Command Center for Harpoon AI
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 
 interface UsageEvent {
   user_id: string
@@ -36,7 +37,7 @@ const USAGE_LIMITS: UsageLimits = {
 }
 
 export async function trackUsage(event: UsageEvent) {
-  const supabase = createClient()
+  const supabase = createClient(cookies())
 
   try {
     const { data, error } = await supabase
@@ -61,15 +62,13 @@ export async function checkUsageLimit(
   eventType: UsageEvent['event_type'],
   subscriptionTier: keyof UsageLimits = 'free'
 ): Promise<{ allowed: boolean; remaining: number }> {
-  const supabase = createClient()
+  const supabase = createClient(cookies())
 
-  // Check if unlimited
   const limit = USAGE_LIMITS[subscriptionTier][`${eventType}s` as keyof typeof USAGE_LIMITS.free]
   if (limit === -1) {
     return { allowed: true, remaining: -1 }
   }
 
-  // Count usage this month
   const startOfMonth = new Date()
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
@@ -91,7 +90,7 @@ export async function checkUsageLimit(
 }
 
 export async function getUserUsageSummary(userId: string) {
-  const supabase = createClient()
+  const supabase = createClient(cookies())
 
   const startOfMonth = new Date()
   startOfMonth.setDate(1)
