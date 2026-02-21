@@ -1,6 +1,6 @@
-# Railway Deployment Setup
+# Harpoon AI - Railway Deployment Setup
 
-This guide explains how to connect and deploy the Sturgeon AI backend to Railway.
+This guide explains how to connect and deploy the Harpoon AI backend to Railway.
 
 ## Quick Setup (5 minutes)
 
@@ -25,7 +25,7 @@ railway login
 ### 3. Create New Project
 ```bash
 # In your project directory
-cd /path/to/sturgeon-ai-prod
+cd /path/to/harpoon-ai
 
 # Initialize Railway project
 railway init
@@ -44,14 +44,17 @@ railway variables set SAM_GOV_API_KEY=your_key_here
 railway variables set SUPABASE_URL=your_url_here
 railway variables set SUPABASE_SERVICE_ROLE_KEY=your_key_here
 
+# Optional: Anthropic API
+railway variables set ANTHROPIC_API_KEY=your_key_here
+
 # Optional: Stripe for billing
 railway variables set STRIPE_SECRET_KEY=your_key_here
 
 # Optional: CORS configuration
-railway variables set CORS_ORIGINS=https://sturgeon-ai-prod.vercel.app
+railway variables set CORS_ORIGINS=https://your-frontend.vercel.app
 ```
 
-See `.env.railway.example` for all available environment variables.
+See `env.railway.example` for all available environment variables.
 
 ### 5. Deploy
 ```bash
@@ -70,20 +73,33 @@ The CI/CD workflow automatically deploys to Railway on push to main.
 - `RAILWAY_TOKEN` - Get from: https://railway.app/account/tokens
 
 **To add the secret:**
-1. Go to https://github.com/Haroldtrapier/sturgeon-ai-prod/settings/secrets/actions
+1. Go to your repository Settings > Secrets and variables > Actions
 2. Click "New repository secret"
 3. Name: `RAILWAY_TOKEN`
 4. Value: Your Railway API token
 5. Click "Add secret"
 
+**Optional GitHub Secrets:**
+- `RAILWAY_SERVICE_ID` - For multi-service Railway projects
+- `RAILWAY_DOMAIN` - For health check verification in CI
+
 ## Service Configuration
 
 Railway will automatically:
-- ✅ Detect Python 3.11
-- ✅ Install dependencies from `backend/requirements.txt`
-- ✅ Start FastAPI with `uvicorn`
-- ✅ Set up health checks at `/health`
-- ✅ Configure auto-restart on failures
+- Build using the Dockerfile (Python 3.11 + FastAPI)
+- Install dependencies from `backend/requirements.txt`
+- Start FastAPI with `uvicorn`
+- Set up health checks at `/health`
+- Auto-restart on failures (up to 5 retries)
+
+## Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `railway.json` | Railway service config (builder, health checks) |
+| `railway.toml` | Alternative TOML-based config |
+| `Dockerfile` | Docker build definition |
+| `.railwayignore` | Files excluded from builds |
 
 ## Database Migrations
 
@@ -97,12 +113,6 @@ railway link
 railway run alembic upgrade head
 ```
 
-Or use Railway dashboard:
-1. Open your service
-2. Go to "Variables" tab
-3. Click "Raw Editor"
-4. Add migration command to startup
-
 ## Monitoring
 
 **Railway Dashboard:** https://railway.app/dashboard
@@ -114,8 +124,10 @@ Or use Railway dashboard:
 ## Production URLs
 
 After deployment, you'll get:
-- **Backend API:** `https://your-service.railway.app`
-- **Frontend:** `https://sturgeon-ai-prod.vercel.app`
+- **Backend API:** `https://your-service.up.railway.app`
+- **API Docs:** `https://your-service.up.railway.app/docs`
+- **Health Check:** `https://your-service.up.railway.app/health`
+- **Frontend:** `https://your-frontend.vercel.app`
 
 ## Troubleshooting
 
@@ -128,14 +140,11 @@ railway logs
 railway up --detach
 ```
 
-### Database Connection Issues
-```bash
-# Get DATABASE_URL
-railway variables
-
-# Test connection
-railway run python -c "import psycopg2; print('Connected!')"
-```
+### Health Check Fails
+The Dockerfile includes a health check that hits `/health`. Make sure:
+1. The `PORT` environment variable is set by Railway
+2. The FastAPI app is starting correctly
+3. Check logs with `railway logs`
 
 ### Environment Variables
 ```bash
@@ -145,22 +154,3 @@ railway variables
 # Update a variable
 railway variables set KEY=value
 ```
-
-## Cost Optimization
-
-Railway free tier includes:
-- $5/month free credits
-- 500 hours of execution time
-- 1GB RAM per service
-
-For production, consider:
-- Starter plan: $5/month + usage
-- Pro plan: Custom pricing
-
-## Next Steps
-
-1. ✅ Deploy backend to Railway
-2. ✅ Run database migrations
-3. ✅ Test API endpoints
-4. ✅ Monitor logs for errors
-5. ✅ Set up custom domain (optional)
