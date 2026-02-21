@@ -21,7 +21,7 @@ export default function MarketplacesIndexPage() {
         <p className="text-slate-300 mb-6">
           These pages are placeholders that explain how Harpoon AI will work
           alongside each marketplace. You&apos;ll always log in directly on the
-          official portal, then use Sturgeon for analysis, strategy, and
+          official portal, then use Harpoon for analysis, strategy, and
           proposal support.
         </p>
         <div className="grid gap-4 md:grid-cols-2">

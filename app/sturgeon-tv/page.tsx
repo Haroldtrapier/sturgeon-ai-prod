@@ -83,14 +83,14 @@ const ICONS: Record<string, string> = {
   search: "🔍", zap: "⚡",
 };
 
-export default function SturgeonTV() {
+export default function HarpoonTV() {
   const [category, setCategory] = useState("All");
   const filtered = category === "All" ? VIDEOS : VIDEOS.filter(v => v.category === category);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Sturgeon TV</h1>
+        <h1 className="text-3xl font-bold">Harpoon TV</h1>
         <p className="text-slate-400 mt-1">Training, tutorials, and government contracting breakdowns</p>
       </div>
 

@@ -211,7 +211,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
             </div>
-            <span className="text-xl font-bold tracking-tight">Sturgeon<span className="text-emerald-400"> AI</span></span>
+            <span className="text-xl font-bold tracking-tight">Harpoon<span className="text-emerald-400"> AI</span></span>
           </div>
 
           <div className="hidden md:flex items-center gap-8 text-sm text-slate-400">
@@ -275,7 +275,7 @@ export default function LandingPage() {
           <div className="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-black/50">
             <div className="bg-slate-900 px-4 py-3 flex items-center gap-2 border-b border-slate-800">
               <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500/80" /><div className="w-3 h-3 rounded-full bg-yellow-500/80" /><div className="w-3 h-3 rounded-full bg-green-500/80" /></div>
-              <div className="flex-1 flex justify-center"><div className="px-6 py-1 bg-slate-800 rounded-md text-xs text-slate-400">app.sturgeon.ai/dashboard</div></div>
+              <div className="flex-1 flex justify-center"><div className="px-6 py-1 bg-slate-800 rounded-md text-xs text-slate-400">app.harpoon.ai/dashboard</div></div>
             </div>
             <div className="bg-slate-950 p-6 sm:p-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

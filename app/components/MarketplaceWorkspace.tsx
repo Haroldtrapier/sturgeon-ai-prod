@@ -246,7 +246,7 @@ export default function MarketplaceWorkspace({
             disabled={saving}
             className="px-6 py-3 bg-emerald-500 text-slate-950 font-semibold rounded-lg hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
-            {saving ? "Saving..." : "Save to Sturgeon"}
+            {saving ? "Saving..." : "Save to Harpoon"}
           </button>
         </div>
 

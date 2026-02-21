@@ -41,7 +41,7 @@ export default function APIDocumentationPage() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const key = `sk_sturgeon_${Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b => b.toString(16).padStart(2, "0")).join("")}`;
+    const key = `sk_harpoon_${Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b => b.toString(16).padStart(2, "0")).join("")}`;
     await supabase.from("user_profiles").upsert({ user_id: user.id, api_key: key });
     setApiKey(key);
   }
@@ -55,7 +55,7 @@ export default function APIDocumentationPage() {
         <h2 className="font-semibold mb-3">API Key</h2>
         {apiKey ? (
           <div className="flex items-center gap-3">
-            <code className="flex-1 px-4 py-2 bg-slate-800 rounded-lg text-sm font-mono">{showKey ? apiKey : "sk_sturgeon_" + "•".repeat(32)}</code>
+            <code className="flex-1 px-4 py-2 bg-slate-800 rounded-lg text-sm font-mono">{showKey ? apiKey : "sk_harpoon_" + "•".repeat(32)}</code>
             <button onClick={() => setShowKey(!showKey)} className="px-3 py-2 bg-slate-800 text-slate-300 rounded text-xs hover:bg-slate-700">{showKey ? "Hide" : "Show"}</button>
           </div>
         ) : (

@@ -81,7 +81,7 @@ export default function MarketplacePlaceholder({
         <div className="md:col-span-2 rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
           <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
             <Workflow className="w-5 h-5" />
-            How you&apos;ll use {name} with Sturgeon
+            How you&apos;ll use {name} with Harpoon
           </h2>
           <p className="text-sm text-slate-300 mb-3">
             This page is a Harpoon AI workspace dedicated to <span className="font-semibold">{name}</span>. 
@@ -100,7 +100,7 @@ export default function MarketplacePlaceholder({
           <p className="text-xs text-amber-100">
             {name} requires you to log in directly on their website. Harpoon AI does not store your credentials 
             and cannot automatically access your account. You&apos;ll log in on the official portal and then copy 
-            listings or export data into Sturgeon for analysis, bidding, pricing, and tracking.
+            listings or export data into Harpoon for analysis, bidding, pricing, and tracking.
           </p>
         </div>
       </section>
@@ -112,7 +112,7 @@ export default function MarketplacePlaceholder({
             { [
               { title: `Log into ${name}`, desc: `Open the official ${name} portal in a new tab and sign in with your own account.` },
               { title: "Locate opportunities", desc: `Search for relevant buys, RFQs, or opportunities inside ${name}.` },
-              { title: "Bring data into Sturgeon", desc: "Copy opportunity text, download attachments, or export data, then paste/upload into Sturgeon's analysis, proposal, or ContractMatch tools." },
+              { title: "Bring data into Harpoon", desc: "Copy opportunity text, download attachments, or export data, then paste/upload into Harpoon's analysis, proposal, or ContractMatch tools." },
               { title: "Use AI to win", desc: "Let Harpoon AI summarize, score, price, and build proposals for your selected opportunities." },
             ].map((step, i) => (
               <li key={i} className="flex gap-3">

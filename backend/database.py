@@ -76,7 +76,7 @@ async def get_async_session() -> AsyncSession:
             ...
     """
     if AsyncSessionLocal is None:
-        raise RuntimeError("Database not configured. Set STURGEON_DATABASE_URL or DATABASE_URL environment variable.")
+        raise RuntimeError("Database not configured. Set HARPOON_DATABASE_URL or DATABASE_URL environment variable.")
     async with AsyncSessionLocal() as session:
         yield session
 

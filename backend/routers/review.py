@@ -49,7 +49,7 @@ def request_review(request: ReviewRequest, user=Depends(get_user)):
     review_record = {
         "proposal_id": request.proposal_id,
         "user_id": user["id"],
-        "reviewer_email": "reviewer@sturgeonai.com",
+        "reviewer_email": "reviewer@harpoonai.com",
         "status": "pending",
         "notes": request.notes,
         "requested_at": datetime.utcnow().isoformat(),
