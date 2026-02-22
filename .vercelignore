@@ -1,13 +1,33 @@
-# Next.js build output
-/.next/
-/out/
+# Backend (deployed to Railway, not Vercel)
+backend/
+Dockerfile
+Dockerfile.backend
+railway.json
+railway.toml
+.railwayignore
+env.railway.example
 
-# Environment variables
+# Python
+*.py
+!next.config.js
+requirements.txt
+index.py
+streamlit_app.py
+
+# Build artifacts
+.next/
+out/
+build/
+dist/
+
+# Environment
 .env*.local
+.env.production.decrypted
 
-# Vercel
-.vercel
-
-# Build outputs
-/build
-/dist
+# Misc
+*.tar.gz
+scaffolding.tar.gz
+sturgeon-ai-prod/
+docs/
+security/
+supabase/

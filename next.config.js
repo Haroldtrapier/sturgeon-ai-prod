@@ -1,13 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Environment variables available at build time
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  // Note: Rewrites to external URLs don't work on Vercel for serverless functions
-  // Instead, we use Next.js API routes in /app/api and /pages/api to proxy requests
-  // The backend URL is configured via BACKEND_URL environment variable
+  async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    return [
+      {
+        source: '/backend/:path*',
+        destination: `${backendUrl}/:path*`,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, max-age=0' },
+        ],
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig
