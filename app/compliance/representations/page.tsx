@@ -40,24 +40,24 @@ export default function RepresentationsPage() {
     setAsking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Representations &amp; Certifications</h1><p className="text-slate-400 mt-1">Guide to required reps &amp; certs for federal proposals</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Representations &amp; Certifications</h1><p className="text-stone-500 mt-1">Guide to required reps &amp; certs for federal proposals</p></div>
       {guidance && (
-        <div className="mb-6 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-emerald-400">AI Explanation</h2><button onClick={() => setGuidance(null)} className="text-slate-500 hover:text-white">&times;</button></div>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{guidance}</pre>
+        <div className="mb-6 p-6 bg-white border border-lime-200 rounded-xl">
+          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-lime-700">AI Explanation</h2><button onClick={() => setGuidance(null)} className="text-stone-8000 hover:text-stone-900">&times;</button></div>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{guidance}</pre>
         </div>
       )}
       {categories.map(cat => (
         <div key={cat} className="mb-6">
-          <h2 className="text-lg font-semibold mb-3 text-emerald-400">{cat}</h2>
+          <h2 className="text-lg font-semibold mb-3 text-lime-700">{cat}</h2>
           <div className="space-y-2">{REPS_CERTS.filter(r => r.category === cat).map(r => (
-            <div key={r.clause} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between">
-              <div><span className="text-xs font-mono text-emerald-400">{r.clause}</span><h3 className="text-sm font-medium mt-0.5">{r.title}</h3><p className="text-xs text-slate-400 mt-0.5">{r.desc}</p></div>
-              <button onClick={() => explainClause(r.clause, r.title)} disabled={asking} className="ml-3 px-3 py-1 bg-emerald-600/10 text-emerald-400 rounded text-xs hover:bg-emerald-600/20 disabled:opacity-50 flex-shrink-0">Explain</button>
+            <div key={r.clause} className="p-4 bg-white border border-stone-200 rounded-xl flex items-center justify-between">
+              <div><span className="text-xs font-mono text-lime-700">{r.clause}</span><h3 className="text-sm font-medium mt-0.5">{r.title}</h3><p className="text-xs text-stone-500 mt-0.5">{r.desc}</p></div>
+              <button onClick={() => explainClause(r.clause, r.title)} disabled={asking} className="ml-3 px-3 py-1 bg-lime-700/10 text-lime-700 rounded text-xs hover:bg-lime-700/20 disabled:opacity-50 flex-shrink-0">Explain</button>
             </div>
           ))}</div>
         </div>

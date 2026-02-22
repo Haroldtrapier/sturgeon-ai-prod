@@ -43,24 +43,24 @@ export default function ProposalTemplatesPage() {
     setGenerating(null);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Proposal Templates</h1><p className="text-slate-400 mt-1">AI-powered templates for every proposal volume</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Proposal Templates</h1><p className="text-stone-500 mt-1">AI-powered templates for every proposal volume</p></div>
       {generatedTemplate && (
-        <div className="mb-8 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-emerald-400">Generated Template</h2><button onClick={() => setGeneratedTemplate(null)} className="text-slate-500 hover:text-white">&times;</button></div>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{generatedTemplate}</pre>
+        <div className="mb-8 p-6 bg-white border border-lime-200 rounded-xl">
+          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-lime-700">Generated Template</h2><button onClick={() => setGeneratedTemplate(null)} className="text-stone-8000 hover:text-stone-900">&times;</button></div>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{generatedTemplate}</pre>
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {TEMPLATES.map(t => (
-          <div key={t.id} className="p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+          <div key={t.id} className="p-5 bg-white border border-stone-200 rounded-xl hover:border-stone-300 transition-colors">
             <h3 className="font-semibold mb-1">{t.name}</h3>
-            <p className="text-xs text-slate-400 mb-3">{t.desc}</p>
-            <div className="flex flex-wrap gap-1 mb-3">{t.sections.map(s => (<span key={s} className="px-2 py-0.5 bg-slate-800 rounded text-xs text-slate-300">{s}</span>))}</div>
-            <button onClick={() => generateTemplate(t)} disabled={generating !== null} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50">{generating === t.id ? "Generating..." : "Generate Template"}</button>
+            <p className="text-xs text-stone-500 mb-3">{t.desc}</p>
+            <div className="flex flex-wrap gap-1 mb-3">{t.sections.map(s => (<span key={s} className="px-2 py-0.5 bg-stone-100 rounded text-xs text-stone-600">{s}</span>))}</div>
+            <button onClick={() => generateTemplate(t)} disabled={generating !== null} className="px-4 py-2 bg-lime-700 text-white rounded-lg text-sm hover:bg-lime-800 disabled:opacity-50">{generating === t.id ? "Generating..." : "Generate Template"}</button>
           </div>
         ))}
       </div>

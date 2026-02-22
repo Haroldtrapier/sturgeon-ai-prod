@@ -29,33 +29,33 @@ export default function ComplianceHelpChatPage() {
     setSending(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto">
-      <div className="flex-shrink-0 px-4 py-3 border-b border-slate-800">
+      <div className="flex-shrink-0 px-4 py-3 border-b border-stone-200">
         <h1 className="text-xl font-bold">Compliance Help</h1>
-        <p className="text-xs text-slate-400">Powered by the Compliance Specialist Agent</p>
+        <p className="text-xs text-stone-500">Powered by the Compliance Specialist Agent</p>
       </div>
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[80%] rounded-xl px-4 py-3 ${m.role === "user" ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-200"}`}>
+            <div className={`max-w-[80%] rounded-xl px-4 py-3 ${m.role === "user" ? "bg-lime-700 text-white" : "bg-stone-100 text-stone-600"}`}>
               <pre className="text-sm whitespace-pre-wrap font-sans">{m.content}</pre>
             </div>
           </div>
         ))}
-        {sending && <div className="flex justify-start"><div className="bg-slate-800 rounded-xl px-4 py-3 text-sm text-slate-400">Analyzing compliance requirements...</div></div>}
+        {sending && <div className="flex justify-start"><div className="bg-stone-100 rounded-xl px-4 py-3 text-sm text-stone-500">Analyzing compliance requirements...</div></div>}
         <div ref={endRef} />
       </div>
       {messages.length <= 1 && (
         <div className="px-4 pb-2 flex flex-wrap gap-2">{QUICK_PROMPTS.map(p => (
-          <button key={p} onClick={() => send(p)} className="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-300 hover:border-emerald-600 hover:text-emerald-400 transition-colors">{p}</button>
+          <button key={p} onClick={() => send(p)} className="px-3 py-1.5 bg-stone-100 border border-stone-300 rounded-lg text-xs text-stone-600 hover:border-lime-600 hover:text-lime-700 transition-colors">{p}</button>
         ))}</div>
       )}
-      <form onSubmit={e => { e.preventDefault(); send(input); }} className="flex-shrink-0 px-4 py-3 border-t border-slate-800">
+      <form onSubmit={e => { e.preventDefault(); send(input); }} className="flex-shrink-0 px-4 py-3 border-t border-stone-200">
         <div className="flex gap-3">
-          <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Ask about compliance..." disabled={sending} className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:opacity-50" />
+          <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Ask about compliance..." disabled={sending} className="flex-1 px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none disabled:opacity-50" />
           <button type="submit" disabled={sending || !input.trim()} className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 font-medium">Send</button>
         </div>
       </form>

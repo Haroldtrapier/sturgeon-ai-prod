@@ -24,11 +24,11 @@ export default function MarketplacePlaceholder({
 }: MarketplacePlaceholderProps) {
   const colorClasses = {
     emerald: {
-      badge: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
-      button: "bg-emerald-500 shadow-emerald-500/30 hover:bg-emerald-400",
-      step: "bg-emerald-500/20 text-emerald-300",
-      coming: "border-emerald-500/40 bg-emerald-500/5 text-emerald-200",
-      dot: "bg-emerald-400",
+      badge: "border-lime-500/40 bg-lime-600/10 text-lime-600",
+      button: "bg-lime-600 shadow-emerald-500/30 hover:bg-lime-600",
+      step: "bg-lime-600/20 text-lime-600",
+      coming: "border-lime-500/40 bg-lime-50 text-lime-700",
+      dot: "bg-lime-600",
     },
     blue: {
       badge: "border-blue-500/40 bg-blue-500/10 text-blue-300",
@@ -49,7 +49,7 @@ export default function MarketplacePlaceholder({
   const colors = colorClasses[color];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 px-6 py-8">
+    <main className="min-h-screen bg-sand-50 text-stone-800 px-6 py-8">
       <section className="max-w-5xl mx-auto mb-10">
         <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold mb-3 ${colors.badge}`}>
           <Sparkles className="w-3 h-3 mr-1.5" />
@@ -61,7 +61,7 @@ export default function MarketplacePlaceholder({
           <h1 className="text-3xl md:text-4xl font-bold">{name} + Harpoon AI</h1>
         </div>
         
-        <p className="text-slate-300 max-w-2xl mb-6">{description}</p>
+        <p className="text-stone-600 max-w-2xl mb-6">{description}</p>
         
         <div className="flex flex-wrap gap-3">
           <a href={loginUrl} target="_blank" rel="noreferrer"
@@ -70,7 +70,7 @@ export default function MarketplacePlaceholder({
             Open {name}
           </a>
           <button type="button" disabled
-            className="inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sf font-semibold text-slate-100 hover:border-emerald-500/70 hover:text-emerald-200 transition">
+            className="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-sf font-semibold text-stone-700 hover:border-lime-500/70 hover:text-lime-700 transition">
             <Sparkles className="w-4 h-4 mr-2" />
             Coming Soon: Auto-Analysis
           </button>
@@ -78,16 +78,16 @@ export default function MarketplacePlaceholder({
       </section>
 
       <section className="max-w-5xl mx-auto grid gap-6 md:grid-cols-3">
-        <div className="md:col-span-2 rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+        <div className="md:col-span-2 rounded-2xl border border-stone-200 bg-white/60 p-5">
           <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
             <Workflow className="w-5 h-5" />
             How you&apos;ll use {name} with Harpoon
           </h2>
-          <p className="text-sm text-slate-300 mb-3">
+          <p className="text-sm text-stone-600 mb-3">
             This page is a Harpoon AI workspace dedicated to <span className="font-semibold">{name}</span>. 
             For now, it is a placeholder while we prepare deeper integrations. You will:
           </p>
-          <ul className="mt-2 space-y-1.5 text-sm text-slate-200 list-disc list-inside">
+          <ul className="mt-2 space-y-1.5 text-sm text-stone-600 list-disc list-inside">
             {bullets.map((b) => <li key={b}>{b}</li>)}
           </ul>
         </div>
@@ -106,9 +106,9 @@ export default function MarketplacePlaceholder({
       </section>
 
       <section className="max-w-5xl mx-auto mt-8 grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+        <div className="rounded-2xl border border-stone-200 bg-white/60 p-5">
           <h2 className="text-lg font-semibold mb-3">Workflow with Harpoon AI</h2>
-          <ol className="space-y-3 text-sm text-slate-200">
+          <ol className="space-y-3 text-sm text-stone-600">
             { [
               { title: `Log into ${name}`, desc: `Open the official ${name} portal in a new tab and sign in with your own account.` },
               { title: "Locate opportunities", desc: `Search for relevant buys, RFQs, or opportunities inside ${name}.` },
@@ -121,7 +121,7 @@ export default function MarketplacePlaceholder({
                 </span>
                 <div>
                   <p className="font-semibold">{step.title}</p>
-                  <p className="text-slate-400">{step.desc}</p>
+                  <p className="text-stone-500">{step.desc}</p>
                 </div>
               </li>
             ))}

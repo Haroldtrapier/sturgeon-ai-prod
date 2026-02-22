@@ -91,20 +91,20 @@ export default function HarpoonTV() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Harpoon TV</h1>
-        <p className="text-slate-400 mt-1">Training, tutorials, and government contracting breakdowns</p>
+        <p className="text-stone-500 mt-1">Training, tutorials, and government contracting breakdowns</p>
       </div>
 
       {/* Featured banner */}
-      <div className="mb-8 p-6 bg-gradient-to-r from-emerald-900/40 to-blue-900/40 border border-emerald-800/50 rounded-xl">
+      <div className="mb-8 p-6 bg-gradient-to-r from-emerald-900/40 to-blue-900/40 border border-lime-200 rounded-xl">
         <div className="flex items-center gap-3 mb-2">
-          <span className="px-2 py-0.5 bg-emerald-600 text-white text-xs font-medium rounded">NEW</span>
-          <span className="text-xs text-slate-400">Latest Episode</span>
+          <span className="px-2 py-0.5 bg-lime-700 text-white text-xs font-medium rounded">NEW</span>
+          <span className="text-xs text-stone-500">Latest Episode</span>
         </div>
         <h2 className="text-xl font-bold mb-1">Getting Started with Harpoon AI</h2>
-        <p className="text-sm text-slate-400 mb-4">Complete platform walkthrough — from profile setup to your first AI-powered proposal.</p>
+        <p className="text-sm text-stone-500 mb-4">Complete platform walkthrough — from profile setup to your first AI-powered proposal.</p>
         <div className="flex items-center gap-4">
-          <span className="text-xs text-slate-500">12 min</span>
-          <span className="text-xs text-slate-500">Getting Started</span>
+          <span className="text-xs text-stone-8000">12 min</span>
+          <span className="text-xs text-stone-8000">Getting Started</span>
         </div>
       </div>
 
@@ -116,8 +116,8 @@ export default function HarpoonTV() {
             onClick={() => setCategory(c)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               category === c
-                ? "bg-emerald-600 text-white"
-                : "bg-slate-800 text-slate-400 hover:text-white"
+                ? "bg-lime-700 text-white"
+                : "bg-stone-100 text-stone-500 hover:text-stone-900"
             }`}
           >
             {c}
@@ -128,31 +128,31 @@ export default function HarpoonTV() {
       {/* Video grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((video, i) => (
-          <div key={i} className="group p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-700/50 transition-colors cursor-pointer">
+          <div key={i} className="group p-5 bg-white border border-stone-200 rounded-xl hover:border-lime-300/50 transition-colors cursor-pointer">
             {/* Thumbnail placeholder */}
-            <div className="aspect-video bg-slate-800 rounded-lg mb-4 flex items-center justify-center text-4xl">
+            <div className="aspect-video bg-stone-100 rounded-lg mb-4 flex items-center justify-center text-4xl">
               {ICONS[video.thumbnail] || "🎬"}
             </div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-slate-800 text-slate-400 text-xs rounded">{video.category}</span>
-              <span className="text-xs text-slate-500">{video.duration}</span>
+              <span className="px-2 py-0.5 bg-stone-100 text-stone-500 text-xs rounded">{video.category}</span>
+              <span className="text-xs text-stone-8000">{video.duration}</span>
             </div>
-            <h3 className="font-medium text-sm mb-1 group-hover:text-emerald-400 transition-colors">{video.title}</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">{video.description}</p>
+            <h3 className="font-medium text-sm mb-1 group-hover:text-lime-700 transition-colors">{video.title}</h3>
+            <p className="text-xs text-stone-500 leading-relaxed">{video.description}</p>
           </div>
         ))}
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl">
-          <p className="text-slate-400">No videos in this category yet.</p>
+        <div className="text-center py-16 bg-white border border-stone-200 rounded-xl">
+          <p className="text-stone-500">No videos in this category yet.</p>
         </div>
       )}
 
       {/* Coming soon notice */}
-      <div className="mt-8 p-4 bg-slate-900/50 border border-slate-800 rounded-lg text-center">
-        <p className="text-sm text-slate-400">Video content is being produced. Check back soon for full tutorials.</p>
-        <p className="text-xs text-slate-500 mt-1">Have a topic request? Let us know via the Support page.</p>
+      <div className="mt-8 p-4 bg-stone-100 border border-stone-200 rounded-lg text-center">
+        <p className="text-sm text-stone-500">Video content is being produced. Check back soon for full tutorials.</p>
+        <p className="text-xs text-stone-8000 mt-1">Have a topic request? Let us know via the Support page.</p>
       </div>
     </div>
   );

@@ -53,27 +53,27 @@ export default function OpportunityCompetitorsPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Opportunity Competitors</h1>
-        <p className="text-slate-400 mt-1">Identify likely bidders and develop competitive strategies</p>
+        <p className="text-stone-500 mt-1">Identify likely bidders and develop competitive strategies</p>
       </div>
 
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl mb-6 space-y-4">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl mb-6 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-slate-400 mb-1">NAICS Code</label>
-            <input type="text" value={naics} onChange={e => setNaics(e.target.value)} placeholder="e.g. 541512" className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
+            <label className="block text-sm text-stone-500 mb-1">NAICS Code</label>
+            <input type="text" value={naics} onChange={e => setNaics(e.target.value)} placeholder="e.g. 541512" className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
           </div>
           <div>
-            <label className="block text-sm text-slate-400 mb-1">Agency</label>
-            <input type="text" value={agency} onChange={e => setAgency(e.target.value)} placeholder="e.g. Department of Defense" className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
+            <label className="block text-sm text-stone-500 mb-1">Agency</label>
+            <input type="text" value={agency} onChange={e => setAgency(e.target.value)} placeholder="e.g. Department of Defense" className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
           </div>
         </div>
-        <button onClick={searchCompetitors} disabled={searching} className="w-full py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">
+        <button onClick={searchCompetitors} disabled={searching} className="w-full py-2.5 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">
           {searching ? "Identifying Competitors..." : "Identify Competitors"}
         </button>
       </div>
@@ -84,22 +84,22 @@ export default function OpportunityCompetitorsPage() {
           { title: "Bid History", desc: "Track which companies bid on similar contracts" },
           { title: "Teaming Opportunities", desc: "Find potential partners to strengthen your bid" },
         ].map(card => (
-          <div key={card.title} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
-            <h3 className="font-semibold text-sm text-emerald-400">{card.title}</h3>
-            <p className="text-xs text-slate-400 mt-1">{card.desc}</p>
+          <div key={card.title} className="p-4 bg-white border border-stone-200 rounded-xl">
+            <h3 className="font-semibold text-sm text-lime-700">{card.title}</h3>
+            <p className="text-xs text-stone-500 mt-1">{card.desc}</p>
           </div>
         ))}
       </div>
 
       {competitors ? (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="font-semibold text-emerald-400 mb-3">Competitor Intelligence</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{competitors}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="font-semibold text-lime-700 mb-3">Competitor Intelligence</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">{competitors}</pre>
         </div>
       ) : !searching && (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400">Enter NAICS code and/or agency to identify competitors</p>
-          <p className="text-xs text-slate-500 mt-1">AI analyzes FPDS award data to identify likely bidders</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500">Enter NAICS code and/or agency to identify competitors</p>
+          <p className="text-xs text-stone-8000 mt-1">AI analyzes FPDS award data to identify likely bidders</p>
         </div>
       )}
     </div>

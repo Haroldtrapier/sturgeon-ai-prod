@@ -79,7 +79,7 @@ export default function ComplianceChecklistPage() {
     } : item));
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const TEMPLATE_ITEMS: ChecklistItem[] = [
     { id: "t1", section: "Administrative", requirement: "Cover letter included and properly addressed", status: "incomplete", notes: "" },
@@ -104,39 +104,39 @@ export default function ComplianceChecklistPage() {
   const sections = Array.from(new Set(displayItems.map(i => i.section)));
   const complete = displayItems.filter(i => i.status === "complete").length;
 
-  const statusIcon = (s: string) => s === "complete" ? "text-emerald-400" : s === "na" ? "text-slate-500 line-through" : "text-slate-400";
+  const statusIcon = (s: string) => s === "complete" ? "text-lime-700" : s === "na" ? "text-stone-8000 line-through" : "text-stone-500";
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Compliance Checklist</h1>
-          <p className="text-slate-400 mt-1">{proposalId ? "Proposal-specific compliance checklist" : "General proposal compliance checklist"}</p>
+          <p className="text-stone-500 mt-1">{proposalId ? "Proposal-specific compliance checklist" : "General proposal compliance checklist"}</p>
         </div>
         {proposalId && (
-          <button onClick={generateChecklist} disabled={generating} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 text-sm font-medium">
+          <button onClick={generateChecklist} disabled={generating} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 text-sm font-medium">
             {generating ? "Generating..." : "Generate from RFP"}
           </button>
         )}
       </div>
 
-      <div className="mb-6 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-6 p-4 bg-white border border-stone-200 rounded-xl">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">Progress</span>
-          <span className="text-sm text-emerald-400">{complete} / {displayItems.length} complete</span>
+          <span className="text-sm text-lime-700">{complete} / {displayItems.length} complete</span>
         </div>
-        <div className="w-full bg-slate-800 rounded-full h-2">
-          <div className="bg-emerald-500 h-2 rounded-full transition-all" style={{ width: `${displayItems.length > 0 ? (complete / displayItems.length) * 100 : 0}%` }} />
+        <div className="w-full bg-stone-100 rounded-full h-2">
+          <div className="bg-lime-600 h-2 rounded-full transition-all" style={{ width: `${displayItems.length > 0 ? (complete / displayItems.length) * 100 : 0}%` }} />
         </div>
       </div>
 
       {sections.map(section => (
         <div key={section} className="mb-6">
-          <h2 className="text-sm font-semibold text-slate-300 mb-2">{section}</h2>
+          <h2 className="text-sm font-semibold text-stone-600 mb-2">{section}</h2>
           <div className="space-y-2">
             {displayItems.filter(i => i.section === section).map(item => (
-              <button key={item.id} onClick={() => toggleStatus(item.id)} className="w-full flex items-center gap-3 p-3 bg-slate-900 border border-slate-800 rounded-lg text-left hover:bg-slate-800/50 transition-colors">
-                <span className={`text-lg ${item.status === "complete" ? "text-emerald-400" : item.status === "na" ? "text-slate-600" : "text-slate-600"}`}>
+              <button key={item.id} onClick={() => toggleStatus(item.id)} className="w-full flex items-center gap-3 p-3 bg-white border border-stone-200 rounded-lg text-left hover:bg-stone-100 transition-colors">
+                <span className={`text-lg ${item.status === "complete" ? "text-lime-700" : item.status === "na" ? "text-stone-500" : "text-stone-500"}`}>
                   {item.status === "complete" ? "\u2611" : item.status === "na" ? "\u2013" : "\u2610"}
                 </span>
                 <span className={`text-sm flex-1 ${statusIcon(item.status)}`}>{item.requirement}</span>
@@ -146,7 +146,7 @@ export default function ComplianceChecklistPage() {
         </div>
       ))}
 
-      <p className="text-xs text-slate-500 mt-4">Click items to cycle through: incomplete → complete → N/A</p>
+      <p className="text-xs text-stone-8000 mt-4">Click items to cycle through: incomplete → complete → N/A</p>
     </div>
   );
 }

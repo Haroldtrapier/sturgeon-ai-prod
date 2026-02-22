@@ -57,33 +57,33 @@ export default function ProposalHistoryPage() {
     init();
   }, [router, proposalId]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const actionIcon = (a: string) => {
-    if (a.includes("created")) return { icon: "+", color: "text-emerald-400 bg-emerald-900/50" };
-    if (a.includes("submitted")) return { icon: "→", color: "text-blue-400 bg-blue-900/50" };
-    if (a.includes("edited") || a.includes("updated")) return { icon: "✎", color: "text-yellow-400 bg-yellow-900/50" };
-    if (a.includes("generated")) return { icon: "✦", color: "text-purple-400 bg-purple-900/50" };
-    if (a.includes("deleted")) return { icon: "×", color: "text-red-400 bg-red-900/50" };
-    if (a.includes("reviewed")) return { icon: "✓", color: "text-cyan-400 bg-cyan-900/50" };
-    return { icon: "•", color: "text-slate-400 bg-slate-700" };
+    if (a.includes("created")) return { icon: "+", color: "text-lime-700 bg-lime-50" };
+    if (a.includes("submitted")) return { icon: "→", color: "text-blue-600 bg-blue-50" };
+    if (a.includes("edited") || a.includes("updated")) return { icon: "✎", color: "text-yellow-600 bg-yellow-50" };
+    if (a.includes("generated")) return { icon: "✦", color: "text-purple-600 bg-purple-50" };
+    if (a.includes("deleted")) return { icon: "×", color: "text-red-600 bg-red-50" };
+    if (a.includes("reviewed")) return { icon: "✓", color: "text-cyan-600 bg-cyan-900/50" };
+    return { icon: "•", color: "text-stone-500 bg-stone-200" };
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Proposal History</h1>
-        <p className="text-slate-400 mt-1">{proposalId ? "Version history for this proposal" : "Activity log across all proposals"}</p>
+        <p className="text-stone-500 mt-1">{proposalId ? "Version history for this proposal" : "Activity log across all proposals"}</p>
       </div>
 
       {entries.length === 0 ? (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400 mb-2">No history entries found</p>
-          <p className="text-xs text-slate-500">Proposal creation, edits, reviews, and submissions will appear here</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500 mb-2">No history entries found</p>
+          <p className="text-xs text-stone-8000">Proposal creation, edits, reviews, and submissions will appear here</p>
         </div>
       ) : (
         <div className="relative">
-          <div className="absolute left-5 top-0 bottom-0 w-px bg-slate-800" />
+          <div className="absolute left-5 top-0 bottom-0 w-px bg-stone-100" />
           <div className="space-y-4">
             {entries.map(entry => {
               const { icon, color } = actionIcon(entry.action);
@@ -92,14 +92,14 @@ export default function ProposalHistoryPage() {
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 z-10 ${color}`}>
                     {icon}
                   </div>
-                  <div className="flex-1 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                  <div className="flex-1 p-4 bg-white border border-stone-200 rounded-xl">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-medium">{entry.action.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</span>
-                      <span className="text-xs text-slate-500">{new Date(entry.created_at).toLocaleString()}</span>
+                      <span className="text-xs text-stone-8000">{new Date(entry.created_at).toLocaleString()}</span>
                     </div>
-                    {entry.proposal_title && <p className="text-xs text-slate-400">{entry.proposal_title}</p>}
-                    {entry.details && <p className="text-xs text-slate-500 mt-1">{entry.details}</p>}
-                    {entry.user_email && <p className="text-xs text-slate-500 mt-1">by {entry.user_email}</p>}
+                    {entry.proposal_title && <p className="text-xs text-stone-500">{entry.proposal_title}</p>}
+                    {entry.details && <p className="text-xs text-stone-8000 mt-1">{entry.details}</p>}
+                    {entry.user_email && <p className="text-xs text-stone-8000 mt-1">by {entry.user_email}</p>}
                   </div>
                 </div>
               );

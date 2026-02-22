@@ -15,10 +15,10 @@ const marketplaces = [
 
 export default function MarketplacesIndexPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 px-6 py-8">
+    <main className="min-h-screen bg-sand-50 text-stone-800 px-6 py-8">
       <section className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Marketplaces & Portals</h1>
-        <p className="text-slate-300 mb-6">
+        <p className="text-stone-600 mb-6">
           These pages are placeholders that explain how Harpoon AI will work
           alongside each marketplace. You&apos;ll always log in directly on the
           official portal, then use Harpoon for analysis, strategy, and
@@ -29,10 +29,10 @@ export default function MarketplacesIndexPage() {
             <a
               key={m.slug}
               href={`/${m.slug}`}
-              className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 hover:border-emerald-500/60 hover:bg-slate-900 transition"
+              className="rounded-2xl border border-stone-200 bg-white/60 p-4 hover:border-lime-500/60 hover:bg-white transition"
             >
               <h2 className="text-lg font-semibold mb-1">{m.name}</h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-stone-500">
                 Click to view the placeholder workspace for {m.name} and how
                 it will connect to your Harpoon AI workflow.
               </p>

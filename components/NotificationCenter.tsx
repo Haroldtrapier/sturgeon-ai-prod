@@ -90,9 +90,9 @@ export default function NotificationCenter({ userId }: { userId: string }) {
       case 'high':
         return 'border-amber-500 bg-amber-900/20'
       case 'medium':
-        return 'border-blue-500 bg-blue-900/20'
+        return 'border-blue-500 bg-blue-50'
       default:
-        return 'border-slate-600 bg-slate-900/20'
+        return 'border-stone-300 bg-white/20'
     }
   }
 
@@ -116,7 +116,7 @@ export default function NotificationCenter({ userId }: { userId: string }) {
       {/* Notification Bell */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 hover:bg-slate-800 rounded-lg transition"
+        className="relative p-2 hover:bg-stone-100 rounded-lg transition"
       >
         <Bell className="w-6 h-6" />
         {unreadCount > 0 && (
@@ -133,22 +133,22 @@ export default function NotificationCenter({ userId }: { userId: string }) {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-12 w-96 max-h-[600px] bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden">
+          <div className="absolute right-0 top-12 w-96 max-h-[600px] bg-white border border-stone-300 rounded-xl shadow-2xl z-50 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+            <div className="flex items-center justify-between p-4 border-b border-stone-300">
               <h3 className="font-semibold text-lg">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
-                    className="text-xs text-emerald-400 hover:text-emerald-300"
+                    className="text-xs text-lime-700 hover:text-lime-600"
                   >
                     Mark all read
                   </button>
                 )}
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1 hover:bg-slate-800 rounded"
+                  className="p-1 hover:bg-stone-100 rounded"
                   aria-label="Close notifications"
                 >
                   <X className="w-5 h-5" />
@@ -159,11 +159,11 @@ export default function NotificationCenter({ userId }: { userId: string }) {
             {/* Notification List */}
             <div className="overflow-y-auto max-h-[500px]">
               {loading ? (
-                <div className="p-8 text-center text-slate-400">
+                <div className="p-8 text-center text-stone-500">
                   Loading...
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="p-8 text-center text-slate-400">
+                <div className="p-8 text-center text-stone-500">
                   No notifications
                 </div>
               ) : (
@@ -171,8 +171,8 @@ export default function NotificationCenter({ userId }: { userId: string }) {
                   {notifications.map((notification) => (
                     <div
                       key={notification.id}
-                      className={`p-4 hover:bg-slate-800/50 transition ${
-                        !notification.is_read ? 'bg-slate-800/30' : ''
+                      className={`p-4 hover:bg-stone-100 transition ${
+                        !notification.is_read ? 'bg-stone-50' : ''
                       }`}
                     >
                       <div className="flex items-start gap-3">
@@ -187,24 +187,24 @@ export default function NotificationCenter({ userId }: { userId: string }) {
                             {!notification.is_read && (
                               <button
                                 onClick={() => markAsRead(notification.id)}
-                                className="text-emerald-400 hover:text-emerald-300 flex-shrink-0"
+                                className="text-lime-700 hover:text-lime-600 flex-shrink-0"
                                 title="Mark as read"
                               >
                                 <Check className="w-4 h-4" />
                               </button>
                             )}
                           </div>
-                          <p className="text-sm text-slate-300 mb-2">
+                          <p className="text-sm text-stone-600 mb-2">
                             {notification.message}
                           </p>
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-slate-500">
+                            <span className="text-xs text-stone-8000">
                               {new Date(notification.created_at).toLocaleString()}
                             </span>
                             {notification.action_url && (
                               <a
                                 href={notification.action_url}
-                                className="text-xs text-emerald-400 hover:text-emerald-300"
+                                className="text-xs text-lime-700 hover:text-lime-600"
                                 onClick={() => {
                                   markAsRead(notification.id)
                                   setIsOpen(false)

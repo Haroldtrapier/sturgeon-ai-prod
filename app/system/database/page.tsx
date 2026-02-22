@@ -38,7 +38,7 @@ export default function DatabasePage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const totalRows = stats.filter(s => s.count >= 0).reduce((sum, s) => sum + s.count, 0);
 
@@ -46,28 +46,28 @@ export default function DatabasePage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Database Administration</h1>
-        <p className="text-slate-400 mt-1">Monitor database tables and row counts</p>
+        <p className="text-stone-500 mt-1">Monitor database tables and row counts</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-emerald-400">{stats.length}</p>
-          <p className="text-xs text-slate-400">Tables</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-lime-700">{stats.length}</p>
+          <p className="text-xs text-stone-500">Tables</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-blue-400">{totalRows.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">Total Rows</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-blue-600">{totalRows.toLocaleString()}</p>
+          <p className="text-xs text-stone-500">Total Rows</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-emerald-400">Supabase</p>
-          <p className="text-xs text-slate-400">Provider</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-lime-700">Supabase</p>
+          <p className="text-xs text-stone-500">Provider</p>
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+      <div className="bg-white border border-stone-200 rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-slate-400 border-b border-slate-800">
+            <tr className="text-left text-stone-500 border-b border-stone-200">
               <th className="px-4 py-3">Table</th>
               <th className="px-4 py-3 text-right">Row Count</th>
               <th className="px-4 py-3 text-right">Status</th>
@@ -75,11 +75,11 @@ export default function DatabasePage() {
           </thead>
           <tbody>
             {stats.map(s => (
-              <tr key={s.table} className="border-b border-slate-800/50 hover:bg-slate-800/30">
+              <tr key={s.table} className="border-b border-stone-200 hover:bg-stone-50">
                 <td className="px-4 py-3 font-mono text-xs">{s.table}</td>
                 <td className="px-4 py-3 text-right">{s.count >= 0 ? s.count.toLocaleString() : "—"}</td>
                 <td className="px-4 py-3 text-right">
-                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${s.count >= 0 ? "bg-emerald-900/50 text-emerald-400" : "bg-red-900/50 text-red-400"}`}>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${s.count >= 0 ? "bg-lime-50 text-lime-700" : "bg-red-50 text-red-600"}`}>
                     {s.count >= 0 ? "OK" : "Error"}
                   </span>
                 </td>
@@ -90,11 +90,11 @@ export default function DatabasePage() {
       </div>
 
       <div className="mt-6 flex gap-3">
-        <button onClick={() => router.push("/system/backup")} className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm hover:bg-slate-700">Create Backup</button>
-        <button onClick={() => router.push("/system/audit-log")} className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm hover:bg-slate-700">View Audit Log</button>
+        <button onClick={() => router.push("/system/backup")} className="px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-sm hover:bg-stone-200">Create Backup</button>
+        <button onClick={() => router.push("/system/audit-log")} className="px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-sm hover:bg-stone-200">View Audit Log</button>
       </div>
 
-      <p className="text-xs text-slate-500 mt-4">Database is managed by Supabase (PostgreSQL). Enterprise plans include direct SQL access and custom migrations.</p>
+      <p className="text-xs text-stone-8000 mt-4">Database is managed by Supabase (PostgreSQL). Enterprise plans include direct SQL access and custom migrations.</p>
     </div>
   );
 }

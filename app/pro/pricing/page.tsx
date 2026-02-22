@@ -27,26 +27,26 @@ export default function PricingPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="text-center mb-12"><h1 className="text-3xl font-bold">Pricing Plans</h1><p className="text-slate-400 mt-2">Choose the plan that fits your government contracting needs</p></div>
+      <div className="text-center mb-12"><h1 className="text-3xl font-bold">Pricing Plans</h1><p className="text-stone-500 mt-2">Choose the plan that fits your government contracting needs</p></div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {PLANS.map(p => (
-          <div key={p.id} className={`p-6 bg-slate-900 border rounded-xl ${p.highlight ? "border-emerald-600 ring-2 ring-emerald-600/20" : "border-slate-800"}`}>
-            {p.highlight && <p className="text-xs text-emerald-400 font-medium mb-2">MOST POPULAR</p>}
+          <div key={p.id} className={`p-6 bg-white border rounded-xl ${p.highlight ? "border-lime-600 ring-2 ring-emerald-600/20" : "border-stone-200"}`}>
+            {p.highlight && <p className="text-xs text-lime-700 font-medium mb-2">MOST POPULAR</p>}
             <h2 className="text-xl font-bold">{p.name}</h2>
-            <div className="mt-2 mb-6"><span className="text-4xl font-bold text-emerald-400">{p.price}</span><span className="text-slate-400">{p.period}</span></div>
-            <ul className="space-y-2 mb-6">{p.features.map(f => (<li key={f} className="flex items-start gap-2 text-sm text-slate-300"><span className="text-emerald-400 mt-0.5">&#10003;</span>{f}</li>))}</ul>
-            <button onClick={() => router.push("/billing")} className={`w-full py-3 rounded-lg font-medium transition-colors ${p.highlight ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-slate-800 text-slate-300 hover:bg-slate-700"} ${currentPlan === p.id ? "opacity-50 cursor-default" : ""}`}>{currentPlan === p.id ? "Current Plan" : p.cta}</button>
+            <div className="mt-2 mb-6"><span className="text-4xl font-bold text-lime-700">{p.price}</span><span className="text-stone-500">{p.period}</span></div>
+            <ul className="space-y-2 mb-6">{p.features.map(f => (<li key={f} className="flex items-start gap-2 text-sm text-stone-600"><span className="text-lime-700 mt-0.5">&#10003;</span>{f}</li>))}</ul>
+            <button onClick={() => router.push("/billing")} className={`w-full py-3 rounded-lg font-medium transition-colors ${p.highlight ? "bg-lime-700 text-white hover:bg-lime-800" : "bg-stone-100 text-stone-600 hover:bg-stone-200"} ${currentPlan === p.id ? "opacity-50 cursor-default" : ""}`}>{currentPlan === p.id ? "Current Plan" : p.cta}</button>
           </div>
         ))}
       </div>
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl text-center">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl text-center">
         <h2 className="font-semibold mb-2">Need a custom plan?</h2>
-        <p className="text-sm text-slate-400 mb-4">We offer custom pricing for large organizations and special requirements.</p>
-        <button onClick={() => router.push("/support")} className="px-6 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 text-sm">Contact Sales</button>
+        <p className="text-sm text-stone-500 mb-4">We offer custom pricing for large organizations and special requirements.</p>
+        <button onClick={() => router.push("/support")} className="px-6 py-2 bg-stone-100 text-stone-600 rounded-lg hover:bg-stone-200 text-sm">Contact Sales</button>
       </div>
     </div>
   );

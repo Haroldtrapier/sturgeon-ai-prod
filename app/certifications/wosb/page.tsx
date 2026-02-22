@@ -45,48 +45,48 @@ export default function WOSBPage() {
     setAsking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <div><h1 className="text-3xl font-bold">WOSB / EDWOSB Certification</h1><p className="text-slate-400 mt-1">Women-Owned Small Business programs</p></div>
-        <button onClick={getGuidance} disabled={asking} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">{asking ? "Loading..." : "Get AI Guidance"}</button>
+        <div><h1 className="text-3xl font-bold">WOSB / EDWOSB Certification</h1><p className="text-stone-500 mt-1">Women-Owned Small Business programs</p></div>
+        <button onClick={getGuidance} disabled={asking} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">{asking ? "Loading..." : "Get AI Guidance"}</button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="p-5 bg-slate-900 border border-blue-800 rounded-xl">
-          <h3 className="font-semibold text-blue-400 mb-1">WOSB</h3>
-          <p className="text-xs text-slate-400">Set-asides in industries where women are underrepresented</p>
-          <p className="text-lg font-bold text-emerald-400 mt-2">Sole-source up to $4.5M</p>
+        <div className="p-5 bg-white border border-blue-200 rounded-xl">
+          <h3 className="font-semibold text-blue-600 mb-1">WOSB</h3>
+          <p className="text-xs text-stone-500">Set-asides in industries where women are underrepresented</p>
+          <p className="text-lg font-bold text-lime-700 mt-2">Sole-source up to $4.5M</p>
         </div>
-        <div className="p-5 bg-slate-900 border border-purple-800 rounded-xl">
-          <h3 className="font-semibold text-purple-400 mb-1">EDWOSB</h3>
-          <p className="text-xs text-slate-400">Set-asides in industries where women are substantially underrepresented</p>
-          <p className="text-lg font-bold text-emerald-400 mt-2">Sole-source up to $4.5M</p>
+        <div className="p-5 bg-white border border-purple-800 rounded-xl">
+          <h3 className="font-semibold text-purple-600 mb-1">EDWOSB</h3>
+          <p className="text-xs text-stone-500">Set-asides in industries where women are substantially underrepresented</p>
+          <p className="text-lg font-bold text-lime-700 mt-2">Sole-source up to $4.5M</p>
         </div>
       </div>
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl mb-6">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl mb-6">
         <h2 className="font-semibold mb-4">WOSB Requirements</h2>
         <div className="space-y-3">{REQUIREMENTS_WOSB.map(r => (
-          <div key={r.title} className="flex items-start gap-3 p-3 bg-slate-800 rounded-lg">
+          <div key={r.title} className="flex items-start gap-3 p-3 bg-stone-100 rounded-lg">
             <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-slate-400 mt-0.5">{r.desc}</p></div>
+            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-stone-500 mt-0.5">{r.desc}</p></div>
           </div>
         ))}</div>
       </div>
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl mb-6">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl mb-6">
         <h2 className="font-semibold mb-4">Additional EDWOSB Requirements</h2>
         <div className="space-y-3">{EDWOSB_ADDITIONAL.map(r => (
-          <div key={r.title} className="flex items-start gap-3 p-3 bg-slate-800 rounded-lg">
+          <div key={r.title} className="flex items-start gap-3 p-3 bg-stone-100 rounded-lg">
             <div className="w-2 h-2 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
-            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-slate-400 mt-0.5">{r.desc}</p></div>
+            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-stone-500 mt-0.5">{r.desc}</p></div>
           </div>
         ))}</div>
       </div>
       {guidance && (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-3 text-emerald-400">AI Certification Guidance</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{guidance}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-3 text-lime-700">AI Certification Guidance</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{guidance}</pre>
         </div>
       )}
     </div>

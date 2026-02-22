@@ -62,56 +62,56 @@ export default function DecisionToolsPage() {
     setAnalyzing(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const decision = percentage >= 70 ? "GO" : percentage >= 50 ? "CONDITIONAL GO" : "NO-GO";
-  const decisionColor = percentage >= 70 ? "text-emerald-400" : percentage >= 50 ? "text-yellow-400" : "text-red-400";
+  const decisionColor = percentage >= 70 ? "text-lime-700" : percentage >= 50 ? "text-yellow-600" : "text-red-600";
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Go/No-Go Decision Tool</h1>
-        <p className="text-slate-400 mt-1">Structured framework for bid/no-bid decisions</p>
+        <p className="text-stone-500 mt-1">Structured framework for bid/no-bid decisions</p>
       </div>
 
       <div className="mb-6">
-        <label className="block text-sm text-slate-400 mb-1">Opportunity Title</label>
-        <input type="text" value={oppTitle} onChange={e => setOppTitle(e.target.value)} placeholder="Enter opportunity name..." className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
+        <label className="block text-sm text-stone-500 mb-1">Opportunity Title</label>
+        <input type="text" value={oppTitle} onChange={e => setOppTitle(e.target.value)} placeholder="Enter opportunity name..." className="w-full px-4 py-2 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
       </div>
 
       <div className="space-y-3 mb-6">
         {CRITERIA.map(c => (
-          <div key={c.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={c.id} className="p-4 bg-white border border-stone-200 rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <p className="text-sm font-medium">{c.label} <span className="text-xs text-slate-500">({c.weight}% weight)</span></p>
-                <p className="text-xs text-slate-400">{c.desc}</p>
+                <p className="text-sm font-medium">{c.label} <span className="text-xs text-stone-8000">({c.weight}% weight)</span></p>
+                <p className="text-xs text-stone-500">{c.desc}</p>
               </div>
-              <span className="text-lg font-bold text-emerald-400 w-8 text-right">{scores[c.id] || 0}</span>
+              <span className="text-lg font-bold text-lime-700 w-8 text-right">{scores[c.id] || 0}</span>
             </div>
             <input type="range" min={0} max={10} value={scores[c.id] || 0} onChange={e => setScores(prev => ({ ...prev, [c.id]: parseInt(e.target.value) }))} className="w-full accent-emerald-500" />
-            <div className="flex justify-between text-xs text-slate-500 mt-1">
+            <div className="flex justify-between text-xs text-stone-8000 mt-1">
               <span>Low</span><span>High</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div className={`p-6 bg-slate-900 border rounded-xl mb-6 text-center ${percentage >= 70 ? "border-emerald-800" : percentage >= 50 ? "border-yellow-800" : "border-red-800"}`}>
-        <p className="text-sm text-slate-400 mb-1">Weighted Score</p>
+      <div className={`p-6 bg-white border rounded-xl mb-6 text-center ${percentage >= 70 ? "border-lime-200" : percentage >= 50 ? "border-yellow-800" : "border-red-200"}`}>
+        <p className="text-sm text-stone-500 mb-1">Weighted Score</p>
         <p className="text-4xl font-bold mb-1">{percentage}%</p>
         <p className={`text-2xl font-bold ${decisionColor}`}>{decision}</p>
-        <p className="text-xs text-slate-500 mt-2">70%+ = GO | 50-69% = Conditional | Below 50% = NO-GO</p>
+        <p className="text-xs text-stone-8000 mt-2">70%+ = GO | 50-69% = Conditional | Below 50% = NO-GO</p>
       </div>
 
-      <button onClick={getAIRecommendation} disabled={analyzing || Object.keys(scores).length < 3} className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium mb-6">
+      <button onClick={getAIRecommendation} disabled={analyzing || Object.keys(scores).length < 3} className="w-full py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium mb-6">
         {analyzing ? "Analyzing..." : "Get AI Recommendation"}
       </button>
 
       {result && (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="font-semibold text-emerald-400 mb-3">AI Recommendation</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{result}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="font-semibold text-lime-700 mb-3">AI Recommendation</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">{result}</pre>
         </div>
       )}
     </div>

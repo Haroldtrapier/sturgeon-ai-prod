@@ -43,7 +43,7 @@ export default function ProDocumentsPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const CATEGORIES = [
     { id: "all", label: "All Documents" },
@@ -70,48 +70,48 @@ export default function ProDocumentsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Document Management</h1>
-          <p className="text-slate-400 mt-1">Manage proposals, certifications, and supporting documents</p>
+          <p className="text-stone-500 mt-1">Manage proposals, certifications, and supporting documents</p>
         </div>
-        <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">Upload Document</button>
+        <button className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 text-sm font-medium">Upload Document</button>
       </div>
 
       <div className="flex gap-2 mb-6 overflow-x-auto">
         {CATEGORIES.map(c => (
-          <button key={c.id} onClick={() => setActiveCategory(c.id)} className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${activeCategory === c.id ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:text-white"}`}>
+          <button key={c.id} onClick={() => setActiveCategory(c.id)} className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${activeCategory === c.id ? "bg-lime-700 text-white" : "bg-stone-100 text-stone-500 hover:text-stone-900"}`}>
             {c.label}
           </button>
         ))}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-emerald-400">{documents.length}</p>
-          <p className="text-xs text-slate-400">Total Files</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-lime-700">{documents.length}</p>
+          <p className="text-xs text-stone-500">Total Files</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-blue-400">{documents.filter(d => d.category === "proposals").length}</p>
-          <p className="text-xs text-slate-400">Proposals</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-blue-600">{documents.filter(d => d.category === "proposals").length}</p>
+          <p className="text-xs text-stone-500">Proposals</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-purple-400">{documents.filter(d => d.category === "certifications").length}</p>
-          <p className="text-xs text-slate-400">Certifications</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-purple-600">{documents.filter(d => d.category === "certifications").length}</p>
+          <p className="text-xs text-stone-500">Certifications</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-yellow-400">{documents.filter(d => d.category === "templates").length}</p>
-          <p className="text-xs text-slate-400">Templates</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-yellow-600">{documents.filter(d => d.category === "templates").length}</p>
+          <p className="text-xs text-stone-500">Templates</p>
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400 mb-2">No documents found</p>
-          <p className="text-xs text-slate-500">Upload documents to organize your proposals, certifications, and supporting files</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500 mb-2">No documents found</p>
+          <p className="text-xs text-stone-8000">Upload documents to organize your proposals, certifications, and supporting files</p>
         </div>
       ) : (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+        <div className="bg-white border border-stone-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-slate-400 border-b border-slate-800">
+              <tr className="text-left text-stone-500 border-b border-stone-200">
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Category</th>
                 <th className="px-4 py-3">Size</th>
@@ -120,14 +120,14 @@ export default function ProDocumentsPage() {
             </thead>
             <tbody>
               {filtered.map(doc => (
-                <tr key={doc.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 cursor-pointer">
+                <tr key={doc.id} className="border-b border-stone-200 hover:bg-stone-50 cursor-pointer">
                   <td className="px-4 py-3 flex items-center gap-2">
                     <span>{typeIcon(doc.type)}</span>
-                    <span className="text-slate-200">{doc.name}</span>
+                    <span className="text-stone-600">{doc.name}</span>
                   </td>
-                  <td className="px-4 py-3 capitalize text-slate-400">{doc.category.replace(/_/g, " ")}</td>
-                  <td className="px-4 py-3 text-slate-400">{doc.size}</td>
-                  <td className="px-4 py-3 text-slate-400">{new Date(doc.uploaded_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 capitalize text-stone-500">{doc.category.replace(/_/g, " ")}</td>
+                  <td className="px-4 py-3 text-stone-500">{doc.size}</td>
+                  <td className="px-4 py-3 text-stone-500">{new Date(doc.uploaded_at).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -135,7 +135,7 @@ export default function ProDocumentsPage() {
         </div>
       )}
 
-      <p className="text-xs text-slate-500 mt-4">Document management is available on Professional and Enterprise plans. Max file size: 50MB.</p>
+      <p className="text-xs text-stone-8000 mt-4">Document management is available on Professional and Enterprise plans. Max file size: 50MB.</p>
     </div>
   );
 }

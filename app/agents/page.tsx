@@ -155,11 +155,11 @@ export default function AgentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
+    <div className="min-h-screen bg-sand-50 text-stone-800">
       <div className="max-w-7xl mx-auto p-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-emerald-400">AI Agents</h1>
-          <p className="text-slate-400 mt-1">
+          <h1 className="text-3xl font-bold text-lime-700">AI Agents</h1>
+          <p className="text-stone-500 mt-1">
             Choose a specialized agent for your task
           </p>
         </div>
@@ -177,8 +177,8 @@ export default function AgentsPage() {
                 }}
                 className={`cursor-pointer transition-all border ${
                   selectedAgent.id === agent.id
-                    ? 'border-emerald-500 bg-emerald-950/30'
-                    : 'border-slate-700 hover:border-emerald-500/50 bg-slate-900/50'
+                    ? 'border-lime-500 bg-lime-50'
+                    : 'border-stone-300 hover:border-lime-500/50 bg-stone-100'
                 }`}
               >
                 <div className="p-4">
@@ -186,7 +186,7 @@ export default function AgentsPage() {
                     <span className="text-2xl">{agent.icon}</span>
                     <div className="flex-1">
                       <h3 className="font-semibold text-sm">{agent.name}</h3>
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-stone-500 mt-1">
                         {agent.description}
                       </p>
                     </div>
@@ -198,13 +198,13 @@ export default function AgentsPage() {
 
           {/* Chat Area */}
           <div className="lg:col-span-2 flex flex-col h-[calc(100vh-200px)]">
-            <Card className="flex-1 flex flex-col bg-slate-900/50 border-slate-800">
-              <div className="p-4 border-b border-slate-800">
+            <Card className="flex-1 flex flex-col bg-stone-100 border-stone-200">
+              <div className="p-4 border-b border-stone-200">
                 <div className="flex items-center gap-3">
                   <span className="text-3xl">{selectedAgent.icon}</span>
                   <div>
                     <h2 className="font-bold text-lg">{selectedAgent.name}</h2>
-                    <p className="text-sm text-slate-400">{selectedAgent.description}</p>
+                    <p className="text-sm text-stone-500">{selectedAgent.description}</p>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function AgentsPage() {
               {/* Messages */}
               <div className="flex-1 p-4 overflow-y-auto space-y-4">
                 {messages.length === 0 ? (
-                  <div className="text-center text-slate-500 mt-8">
+                  <div className="text-center text-stone-8000 mt-8">
                     <p className="mb-2">👋 {selectedAgent.name} ready to help!</p>
                     <p className="text-sm">Start by asking a question...</p>
                   </div>
@@ -227,8 +227,8 @@ export default function AgentsPage() {
                         <div
                           className={`max-w-[80%] rounded-lg px-4 py-3 ${
                             msg.role === 'user'
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-slate-800 text-slate-100'
+                              ? 'bg-lime-700 text-white'
+                              : 'bg-stone-100 text-stone-700'
                           }`}
                         >
                           <div className="text-sm font-semibold mb-1">
@@ -245,16 +245,16 @@ export default function AgentsPage() {
                 
                 {loading && (
                   <div className="flex justify-start">
-                    <div className="bg-slate-800 text-slate-100 rounded-lg px-4 py-3 max-w-[80%]">
+                    <div className="bg-stone-100 text-stone-700 rounded-lg px-4 py-3 max-w-[80%]">
                       <div className="text-sm font-semibold mb-1">{selectedAgent.icon} {selectedAgent.name}</div>
-                      <div className="text-sm text-slate-400 animate-pulse">Thinking...</div>
+                      <div className="text-sm text-stone-500 animate-pulse">Thinking...</div>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-slate-800">
+              <div className="p-4 border-t border-stone-200">
                 <div className="flex gap-2">
                   <textarea
                     value={input}
@@ -262,12 +262,12 @@ export default function AgentsPage() {
                     onKeyDown={handleKeyPress}
                     placeholder={`Ask ${selectedAgent.name} anything... (Press Enter to send)`}
                     rows={2}
-                    className="flex-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition resize-none"
+                    className="flex-1 px-4 py-3 bg-white border border-stone-300 rounded-lg text-stone-700 placeholder-slate-500 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/20 outline-none transition resize-none"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={loading || !input.trim()}
-                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
+                    className="px-6 py-3 bg-lime-700 hover:bg-lime-800 disabled:bg-stone-200 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
                   >
                     Send
                   </Button>

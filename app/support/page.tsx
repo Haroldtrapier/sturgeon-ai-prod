@@ -87,52 +87,52 @@ export default function SupportPage() {
   }
 
   const priorityColor: Record<string, string> = {
-    low: "text-blue-400", normal: "text-slate-400", high: "text-yellow-400", urgent: "text-red-400",
+    low: "text-blue-600", normal: "text-stone-500", high: "text-yellow-600", urgent: "text-red-600",
   };
 
   const statusColor: Record<string, string> = {
-    open: "bg-emerald-600/20 text-emerald-400", "in-progress": "bg-blue-600/20 text-blue-400", closed: "bg-slate-600/20 text-slate-400",
+    open: "bg-lime-700/20 text-lime-700", "in-progress": "bg-blue-600/20 text-blue-600", closed: "bg-slate-600/20 text-stone-500",
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Support</h1>
-          <p className="text-slate-400 mt-1">Get help and manage support tickets</p>
+          <p className="text-stone-500 mt-1">Get help and manage support tickets</p>
         </div>
-        <button onClick={() => setActiveTab("new")} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">New Ticket</button>
+        <button onClick={() => setActiveTab("new")} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 font-medium">New Ticket</button>
       </div>
 
-      {message && <div className="mb-6 p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm">{message}</div>}
+      {message && <div className="mb-6 p-4 bg-stone-100 border border-stone-300 rounded-lg text-sm">{message}</div>}
 
       <div className="flex gap-2 mb-6">
         {(["tickets", "faq", "new"] as const).map((tab) => (
-          <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-lg font-medium text-sm capitalize ${activeTab === tab ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700"}`}>{tab === "new" ? "New Ticket" : tab === "faq" ? "FAQ" : "My Tickets"}</button>
+          <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 rounded-lg font-medium text-sm capitalize ${activeTab === tab ? "bg-lime-700 text-white" : "bg-stone-100 text-stone-500 hover:bg-stone-200"}`}>{tab === "new" ? "New Ticket" : tab === "faq" ? "FAQ" : "My Tickets"}</button>
         ))}
       </div>
 
       {activeTab === "tickets" && (
         <div className="space-y-3">
           {tickets.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl">
-              <p className="text-slate-400">No support tickets yet</p>
+            <div className="text-center py-16 bg-white border border-stone-200 rounded-xl">
+              <p className="text-stone-500">No support tickets yet</p>
             </div>
           ) : (
             tickets.map((t) => (
-              <div key={t.ticket_id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+              <div key={t.ticket_id} className="p-4 bg-white border border-stone-200 rounded-xl">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium">{t.subject}</h3>
                     <div className="flex items-center gap-3 mt-2 text-sm">
-                      <span className="text-slate-500">{t.ticket_id}</span>
-                      <span className={priorityColor[t.priority] || "text-slate-400"}>{t.priority}</span>
-                      <span className="text-slate-500">{new Date(t.created_at).toLocaleDateString()}</span>
+                      <span className="text-stone-8000">{t.ticket_id}</span>
+                      <span className={priorityColor[t.priority] || "text-stone-500"}>{t.priority}</span>
+                      <span className="text-stone-8000">{new Date(t.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  <span className={`px-2 py-1 text-xs rounded ${statusColor[t.status] || "bg-slate-700 text-slate-400"}`}>{t.status}</span>
+                  <span className={`px-2 py-1 text-xs rounded ${statusColor[t.status] || "bg-stone-200 text-stone-500"}`}>{t.status}</span>
                 </div>
               </div>
             ))
@@ -143,13 +143,13 @@ export default function SupportPage() {
       {activeTab === "faq" && (
         <div className="space-y-6">
           {faq.map((cat, i) => (
-            <div key={i} className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-              <h2 className="text-lg font-semibold mb-4 text-emerald-400">{cat.name}</h2>
+            <div key={i} className="p-6 bg-white border border-stone-200 rounded-xl">
+              <h2 className="text-lg font-semibold mb-4 text-lime-700">{cat.name}</h2>
               <div className="space-y-4">
                 {cat.questions.map((q, j) => (
                   <div key={j}>
                     <h3 className="font-medium text-sm mb-1">{q.question}</h3>
-                    <p className="text-sm text-slate-400">{q.answer}</p>
+                    <p className="text-sm text-stone-500">{q.answer}</p>
                   </div>
                 ))}
               </div>
@@ -159,26 +159,26 @@ export default function SupportPage() {
       )}
 
       {activeTab === "new" && (
-        <form onSubmit={handleSubmit} className="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 bg-white border border-stone-200 rounded-xl space-y-4">
           <h2 className="text-lg font-semibold">Create Support Ticket</h2>
-          <input type="text" placeholder="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} required className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          <input type="text" placeholder="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} required className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
           <div className="grid grid-cols-2 gap-4">
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none">
               <option value="general">General</option>
               <option value="billing">Billing</option>
               <option value="technical">Technical</option>
               <option value="feature">Feature Request</option>
               <option value="bug">Bug Report</option>
             </select>
-            <select value={priority} onChange={(e) => setPriority(e.target.value)} className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <select value={priority} onChange={(e) => setPriority(e.target.value)} className="px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none">
               <option value="low">Low</option>
               <option value="normal">Normal</option>
               <option value="high">High</option>
               <option value="urgent">Urgent</option>
             </select>
           </div>
-          <textarea placeholder="Describe your issue..." value={description} onChange={(e) => setDescription(e.target.value)} required rows={6} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <button type="submit" disabled={submitting} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">
+          <textarea placeholder="Describe your issue..." value={description} onChange={(e) => setDescription(e.target.value)} required rows={6} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <button type="submit" disabled={submitting} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">
             {submitting ? "Submitting..." : "Submit Ticket"}
           </button>
         </form>

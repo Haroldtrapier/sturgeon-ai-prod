@@ -79,24 +79,24 @@ export default function UpdatePassword() {
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" />
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" />
       </div>
     );
   }
 
   if (!ready && !success) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center px-4">
         <div className="max-w-sm w-full text-center">
           <div className="text-4xl mb-4">&#9888;&#65039;</div>
           <h1 className="text-2xl font-bold text-white mb-2">Invalid Link</h1>
-          <p className="text-slate-400 text-sm mb-6">{error}</p>
-          <button onClick={() => router.push('/forgot-password')} className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">
+          <p className="text-stone-500 text-sm mb-6">{error}</p>
+          <button onClick={() => router.push('/forgot-password')} className="px-6 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 text-sm font-medium">
             Request New Reset Link
           </button>
           <div className="mt-4">
-            <button onClick={() => router.push('/login')} className="text-sm text-emerald-400 hover:underline">
+            <button onClick={() => router.push('/login')} className="text-sm text-lime-700 hover:underline">
               Back to login
             </button>
           </div>
@@ -107,27 +107,27 @@ export default function UpdatePassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center px-4">
         <div className="max-w-sm w-full text-center">
           <div className="text-4xl mb-4">&#9989;</div>
-          <h1 className="text-2xl font-bold text-emerald-400 mb-2">Password Updated</h1>
-          <p className="text-slate-400 text-sm">Your password has been reset successfully. Redirecting to login...</p>
+          <h1 className="text-2xl font-bold text-lime-700 mb-2">Password Updated</h1>
+          <p className="text-stone-500 text-sm">Your password has been reset successfully. Redirecting to login...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-sand-50 flex items-center justify-center px-4">
       <div className="max-w-sm w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-emerald-400">Harpoon AI</h1>
-          <p className="text-slate-400 mt-2 text-sm">Set your new password</p>
+          <h1 className="text-3xl font-bold text-lime-700">Harpoon AI</h1>
+          <p className="text-stone-500 mt-2 text-sm">Set your new password</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">New Password</label>
+            <label className="block text-sm font-medium text-stone-600 mb-1">New Password</label>
             <input
               type="password"
               value={password}
@@ -135,12 +135,12 @@ export default function UpdatePassword() {
               required
               placeholder="Min 8 characters"
               minLength={8}
-              className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm text-white"
+              className="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Confirm Password</label>
+            <label className="block text-sm font-medium text-stone-600 mb-1">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
@@ -148,23 +148,23 @@ export default function UpdatePassword() {
               required
               placeholder="Confirm password"
               minLength={8}
-              className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm text-white"
+              className="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm text-white"
             />
           </div>
 
-          {error && <p className="text-sm text-red-400 bg-red-900/20 border border-red-800 rounded-lg px-3 py-2">{error}</p>}
+          {error && <p className="text-sm text-red-600 bg-red-900/20 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm"
+            className="w-full py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm"
           >
             {loading ? 'Updating...' : 'Update Password'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-400">
-          <button onClick={() => router.push('/login')} className="text-emerald-400 hover:underline font-medium">Back to login</button>
+        <p className="mt-6 text-center text-sm text-stone-500">
+          <button onClick={() => router.push('/login')} className="text-lime-700 hover:underline font-medium">Back to login</button>
         </p>
       </div>
     </div>

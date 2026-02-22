@@ -66,22 +66,22 @@ export default function EligibilityPage() {
     setChecking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Certification Eligibility Checker</h1>
-        <p className="text-slate-400 mt-1">Answer questions below to see which certifications your business may qualify for</p>
+        <p className="text-stone-500 mt-1">Answer questions below to see which certifications your business may qualify for</p>
       </div>
 
       <form onSubmit={checkEligibility} className="space-y-4 mb-8">
         {QUESTIONS.map(q => (
-          <div key={q.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={q.id} className="p-4 bg-white border border-stone-200 rounded-xl">
             <p className="text-sm font-medium mb-3">{q.label}</p>
             <div className="flex flex-wrap gap-2">
               {q.options.map(o => (
-                <button key={o} type="button" onClick={() => setAnswers(prev => ({ ...prev, [q.id]: o }))} className={`px-4 py-2 rounded-lg text-sm border transition-colors ${answers[q.id] === o ? "bg-emerald-600 border-emerald-600 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600"}`}>
+                <button key={o} type="button" onClick={() => setAnswers(prev => ({ ...prev, [q.id]: o }))} className={`px-4 py-2 rounded-lg text-sm border transition-colors ${answers[q.id] === o ? "bg-lime-700 border-lime-600 text-white" : "bg-stone-100 border-stone-300 text-stone-600 hover:border-stone-300"}`}>
                   {o}
                 </button>
               ))}
@@ -89,7 +89,7 @@ export default function EligibilityPage() {
           </div>
         ))}
 
-        <button type="submit" disabled={checking || Object.keys(answers).length < 3} className="w-full py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">
+        <button type="submit" disabled={checking || Object.keys(answers).length < 3} className="w-full py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">
           {checking ? "Analyzing Eligibility..." : "Check Eligibility"}
         </button>
       </form>
@@ -99,14 +99,14 @@ export default function EligibilityPage() {
           <h2 className="text-lg font-semibold mb-4">Eligibility Results</h2>
           <div className="space-y-3">
             {results.map(r => (
-              <div key={r.cert} className={`p-4 rounded-xl border ${r.eligible ? "bg-emerald-900/20 border-emerald-800" : "bg-slate-900 border-slate-800"}`}>
+              <div key={r.cert} className={`p-4 rounded-xl border ${r.eligible ? "bg-lime-50 border-lime-200" : "bg-white border-stone-200"}`}>
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-sm">{r.cert}</h3>
-                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${r.eligible ? "bg-emerald-900/50 text-emerald-400" : "bg-red-900/50 text-red-400"}`}>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${r.eligible ? "bg-lime-50 text-lime-700" : "bg-red-50 text-red-600"}`}>
                     {r.eligible ? "Likely Eligible" : "May Not Qualify"}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">{r.reason}</p>
+                <p className="text-xs text-stone-500 mt-1">{r.reason}</p>
               </div>
             ))}
           </div>

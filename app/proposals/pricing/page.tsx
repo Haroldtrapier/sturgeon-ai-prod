@@ -83,7 +83,7 @@ export default function ProposalPricingPage() {
     setGenerating(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const directCost = items.reduce((sum, i) => sum + i.total, 0);
   const overheadAmt = directCost * (overhead / 100);
@@ -97,18 +97,18 @@ export default function ProposalPricingPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Cost/Pricing Volume</h1>
-          <p className="text-slate-400 mt-1">Build your pricing proposal with rate analysis</p>
+          <p className="text-stone-500 mt-1">Build your pricing proposal with rate analysis</p>
         </div>
-        <button onClick={generatePricing} disabled={generating} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 text-sm font-medium">
+        <button onClick={generatePricing} disabled={generating} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 text-sm font-medium">
           {generating ? "Analyzing..." : "AI Rate Analysis"}
         </button>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden mb-6">
+      <div className="bg-white border border-stone-200 rounded-xl overflow-hidden mb-6">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-slate-400 border-b border-slate-800">
+              <tr className="text-left text-stone-500 border-b border-stone-200">
                 <th className="px-3 py-3 w-20">CLIN</th>
                 <th className="px-3 py-3">Description</th>
                 <th className="px-3 py-3 w-20">Qty</th>
@@ -120,67 +120,67 @@ export default function ProposalPricingPage() {
             </thead>
             <tbody>
               {items.map(item => (
-                <tr key={item.id} className="border-b border-slate-800/50">
-                  <td className="px-3 py-2"><input type="text" value={item.clin} onChange={e => updateItem(item.id, "clin", e.target.value)} className="w-full px-2 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs" /></td>
-                  <td className="px-3 py-2"><input type="text" value={item.description} onChange={e => updateItem(item.id, "description", e.target.value)} className="w-full px-2 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs" placeholder="Line item description" /></td>
-                  <td className="px-3 py-2"><input type="number" value={item.quantity} onChange={e => updateItem(item.id, "quantity", parseFloat(e.target.value) || 0)} className="w-full px-2 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs" /></td>
+                <tr key={item.id} className="border-b border-stone-200">
+                  <td className="px-3 py-2"><input type="text" value={item.clin} onChange={e => updateItem(item.id, "clin", e.target.value)} className="w-full px-2 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs" /></td>
+                  <td className="px-3 py-2"><input type="text" value={item.description} onChange={e => updateItem(item.id, "description", e.target.value)} className="w-full px-2 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs" placeholder="Line item description" /></td>
+                  <td className="px-3 py-2"><input type="number" value={item.quantity} onChange={e => updateItem(item.id, "quantity", parseFloat(e.target.value) || 0)} className="w-full px-2 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs" /></td>
                   <td className="px-3 py-2">
-                    <select value={item.unit} onChange={e => updateItem(item.id, "unit", e.target.value)} className="w-full px-2 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs">
+                    <select value={item.unit} onChange={e => updateItem(item.id, "unit", e.target.value)} className="w-full px-2 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs">
                       {["Each", "Hours", "Months", "Lot", "Year"].map(u => <option key={u}>{u}</option>)}
                     </select>
                   </td>
-                  <td className="px-3 py-2"><input type="number" value={item.unit_price} onChange={e => updateItem(item.id, "unit_price", parseFloat(e.target.value) || 0)} className="w-full px-2 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs" /></td>
+                  <td className="px-3 py-2"><input type="number" value={item.unit_price} onChange={e => updateItem(item.id, "unit_price", parseFloat(e.target.value) || 0)} className="w-full px-2 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs" /></td>
                   <td className="px-3 py-2 text-right font-mono text-xs">${item.total.toLocaleString()}</td>
-                  <td className="px-3 py-2"><button onClick={() => removeItem(item.id)} className="text-red-400 hover:text-red-300 text-xs">&#x2715;</button></td>
+                  <td className="px-3 py-2"><button onClick={() => removeItem(item.id)} className="text-red-600 hover:text-red-700 text-xs">&#x2715;</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="px-3 py-2 border-t border-slate-800">
-          <button onClick={addItem} className="text-xs text-emerald-400 hover:underline">+ Add Line Item</button>
+        <div className="px-3 py-2 border-t border-stone-200">
+          <button onClick={addItem} className="text-xs text-lime-700 hover:underline">+ Add Line Item</button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Rate Structure</h2>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-1">
                 <label className="text-sm">Overhead Rate</label>
-                <span className="text-sm text-emerald-400">{overhead}%</span>
+                <span className="text-sm text-lime-700">{overhead}%</span>
               </div>
               <input type="range" min={0} max={100} value={overhead} onChange={e => setOverhead(parseInt(e.target.value))} className="w-full accent-emerald-500" />
             </div>
             <div>
               <div className="flex justify-between mb-1">
                 <label className="text-sm">G&A Rate</label>
-                <span className="text-sm text-emerald-400">{gna}%</span>
+                <span className="text-sm text-lime-700">{gna}%</span>
               </div>
               <input type="range" min={0} max={50} value={gna} onChange={e => setGna(parseInt(e.target.value))} className="w-full accent-emerald-500" />
             </div>
             <div>
               <div className="flex justify-between mb-1">
                 <label className="text-sm">Profit/Fee</label>
-                <span className="text-sm text-emerald-400">{profit}%</span>
+                <span className="text-sm text-lime-700">{profit}%</span>
               </div>
               <input type="range" min={0} max={15} value={profit} onChange={e => setProfit(parseInt(e.target.value))} className="w-full accent-emerald-500" />
             </div>
           </div>
         </div>
 
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Price Summary</h2>
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between"><span className="text-slate-400">Direct Costs</span><span className="font-mono">${directCost.toLocaleString()}</span></div>
-            <div className="flex justify-between"><span className="text-slate-400">Overhead ({overhead}%)</span><span className="font-mono">${overheadAmt.toLocaleString()}</span></div>
-            <div className="flex justify-between"><span className="text-slate-400">G&A ({gna}%)</span><span className="font-mono">${gnaAmt.toLocaleString()}</span></div>
-            <div className="flex justify-between border-t border-slate-700 pt-2"><span className="text-slate-400">Subtotal</span><span className="font-mono">${subtotal.toLocaleString()}</span></div>
-            <div className="flex justify-between"><span className="text-slate-400">Profit/Fee ({profit}%)</span><span className="font-mono">${profitAmt.toLocaleString()}</span></div>
-            <div className="flex justify-between border-t border-emerald-800 pt-2 text-lg font-bold">
-              <span className="text-emerald-400">Total Price</span>
-              <span className="text-emerald-400 font-mono">${totalPrice.toLocaleString()}</span>
+            <div className="flex justify-between"><span className="text-stone-500">Direct Costs</span><span className="font-mono">${directCost.toLocaleString()}</span></div>
+            <div className="flex justify-between"><span className="text-stone-500">Overhead ({overhead}%)</span><span className="font-mono">${overheadAmt.toLocaleString()}</span></div>
+            <div className="flex justify-between"><span className="text-stone-500">G&A ({gna}%)</span><span className="font-mono">${gnaAmt.toLocaleString()}</span></div>
+            <div className="flex justify-between border-t border-stone-300 pt-2"><span className="text-stone-500">Subtotal</span><span className="font-mono">${subtotal.toLocaleString()}</span></div>
+            <div className="flex justify-between"><span className="text-stone-500">Profit/Fee ({profit}%)</span><span className="font-mono">${profitAmt.toLocaleString()}</span></div>
+            <div className="flex justify-between border-t border-lime-200 pt-2 text-lg font-bold">
+              <span className="text-lime-700">Total Price</span>
+              <span className="text-lime-700 font-mono">${totalPrice.toLocaleString()}</span>
             </div>
           </div>
         </div>

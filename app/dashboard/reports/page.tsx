@@ -49,34 +49,34 @@ export default function DashboardReportsPage() {
     URL.revokeObjectURL(url);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Reports</h1><p className="text-slate-400 mt-1">Generate and export business intelligence reports</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Reports</h1><p className="text-stone-500 mt-1">Generate and export business intelligence reports</p></div>
       {report && (
-        <div className="mb-8 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
+        <div className="mb-8 p-6 bg-white border border-lime-200 rounded-xl">
           <div className="flex justify-between items-start mb-4">
-            <h2 className="text-lg font-semibold text-emerald-400">Generated Report</h2>
+            <h2 className="text-lg font-semibold text-lime-700">Generated Report</h2>
             <div className="flex gap-2">
               <button onClick={() => exportReport("pdf")} className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Export</button>
-              <button onClick={() => setReport(null)} className="text-slate-500 hover:text-white text-lg">&times;</button>
+              <button onClick={() => setReport(null)} className="text-stone-8000 hover:text-stone-900 text-lg">&times;</button>
             </div>
           </div>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{report}</pre>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{report}</pre>
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {REPORT_TYPES.map(r => (
-          <div key={r.id} className="p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors">
+          <div key={r.id} className="p-5 bg-white border border-stone-200 rounded-xl hover:border-stone-300 transition-colors">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-bold text-lg">{r.icon}</div>
+              <div className="w-10 h-10 rounded-lg bg-lime-700/20 text-lime-700 flex items-center justify-center font-bold text-lg">{r.icon}</div>
               <div className="flex-1">
                 <h3 className="font-semibold text-sm">{r.name}</h3>
-                <p className="text-xs text-slate-400 mt-1">{r.desc}</p>
+                <p className="text-xs text-stone-500 mt-1">{r.desc}</p>
               </div>
             </div>
-            <button onClick={() => generateReport(r.id)} disabled={generating !== null} className="mt-4 w-full px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 font-medium">{generating === r.id ? "Generating..." : "Generate Report"}</button>
+            <button onClick={() => generateReport(r.id)} disabled={generating !== null} className="mt-4 w-full px-4 py-2 bg-lime-700 text-white rounded-lg text-sm hover:bg-lime-800 disabled:opacity-50 font-medium">{generating === r.id ? "Generating..." : "Generate Report"}</button>
           </div>
         ))}
       </div>

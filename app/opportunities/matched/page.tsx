@@ -37,21 +37,21 @@ export default function MatchedOpportunitiesPage() {
     setRunning(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <div><h1 className="text-3xl font-bold">Matched Opportunities</h1><p className="text-slate-400 mt-1">AI-matched opportunities based on your profile</p></div>
-        <button onClick={runMatch} disabled={running} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">{running ? "Matching..." : "Run ContractMatch"}</button>
+        <div><h1 className="text-3xl font-bold">Matched Opportunities</h1><p className="text-stone-500 mt-1">AI-matched opportunities based on your profile</p></div>
+        <button onClick={runMatch} disabled={running} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">{running ? "Matching..." : "Run ContractMatch"}</button>
       </div>
       {matches.length > 0 ? (
         <div className="space-y-3">{matches.map((m, i) => (
-          <div key={i} className="p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors cursor-pointer" onClick={() => m.opportunity_id && router.push(`/opportunities/${m.opportunity_id}`)}>
+          <div key={i} className="p-5 bg-white border border-stone-200 rounded-xl hover:border-stone-300 transition-colors cursor-pointer" onClick={() => m.opportunity_id && router.push(`/opportunities/${m.opportunity_id}`)}>
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="font-medium">{m.title || "Matched Opportunity"}</h3>
-                <div className="flex flex-wrap gap-3 mt-2 text-xs text-slate-400">
+                <div className="flex flex-wrap gap-3 mt-2 text-xs text-stone-500">
                   {m.agency && <span>{m.agency}</span>}
                   {m.naics_code && <span>NAICS: {m.naics_code}</span>}
                   {m.set_aside && <span className="text-amber-400">{m.set_aside}</span>}
@@ -59,16 +59,16 @@ export default function MatchedOpportunitiesPage() {
                 </div>
               </div>
               <div className={`text-right ml-4`}>
-                <p className={`text-2xl font-bold ${(m.match_score || 0) >= 80 ? "text-emerald-400" : (m.match_score || 0) >= 60 ? "text-amber-400" : "text-red-400"}`}>{m.match_score || 0}%</p>
-                <p className="text-xs text-slate-500">match</p>
+                <p className={`text-2xl font-bold ${(m.match_score || 0) >= 80 ? "text-lime-700" : (m.match_score || 0) >= 60 ? "text-amber-400" : "text-red-600"}`}>{m.match_score || 0}%</p>
+                <p className="text-xs text-stone-8000">match</p>
               </div>
             </div>
           </div>
         ))}</div>
       ) : (
-        <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl">
-          <p className="text-slate-400 mb-3">No matched opportunities yet</p>
-          <button onClick={runMatch} disabled={running} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50">{running ? "Running..." : "Run ContractMatch Engine"}</button>
+        <div className="text-center py-16 bg-white border border-stone-200 rounded-xl">
+          <p className="text-stone-500 mb-3">No matched opportunities yet</p>
+          <button onClick={runMatch} disabled={running} className="px-4 py-2 bg-lime-700 text-white rounded-lg text-sm hover:bg-lime-800 disabled:opacity-50">{running ? "Running..." : "Run ContractMatch Engine"}</button>
         </div>
       )}
     </div>

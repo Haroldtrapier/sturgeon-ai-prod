@@ -61,28 +61,28 @@ export default function CompetitorResearchPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Competitor Analysis</h1>
-        <p className="text-slate-400 mt-1">Research competitors and their government contracting history</p>
+        <p className="text-stone-500 mt-1">Research competitors and their government contracting history</p>
       </div>
 
       <div className="flex gap-3 mb-6">
-        <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} onKeyDown={e => e.key === "Enter" && searchCompetitor()} placeholder="Enter competitor company name..." className="flex-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
-        <button onClick={() => searchCompetitor()} disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">
+        <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} onKeyDown={e => e.key === "Enter" && searchCompetitor()} placeholder="Enter competitor company name..." className="flex-1 px-4 py-3 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
+        <button onClick={() => searchCompetitor()} disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">
           {searching ? "Researching..." : "Research"}
         </button>
       </div>
 
       {savedCompetitors.length > 0 && (
         <div className="mb-6">
-          <p className="text-xs text-slate-400 mb-2">Saved Competitors:</p>
+          <p className="text-xs text-stone-500 mb-2">Saved Competitors:</p>
           <div className="flex flex-wrap gap-2">
             {savedCompetitors.map(c => (
-              <button key={c} onClick={() => { setCompanyName(c); searchCompetitor(c); }} className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs hover:border-emerald-600 transition-colors">{c}</button>
+              <button key={c} onClick={() => { setCompanyName(c); searchCompetitor(c); }} className="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs hover:border-lime-600 transition-colors">{c}</button>
             ))}
           </div>
         </div>
@@ -94,22 +94,22 @@ export default function CompetitorResearchPage() {
           { title: "Agency Spending", desc: "See which agencies they work with", action: () => router.push("/research/agency-spending") },
           { title: "Market Position", desc: "Analyze market share and positioning", action: () => router.push("/research/market-research") },
         ].map(card => (
-          <button key={card.title} onClick={card.action} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-left hover:border-emerald-600 transition-colors">
-            <h3 className="font-semibold text-sm text-emerald-400">{card.title}</h3>
-            <p className="text-xs text-slate-400 mt-1">{card.desc}</p>
+          <button key={card.title} onClick={card.action} className="p-4 bg-white border border-stone-200 rounded-xl text-left hover:border-lime-600 transition-colors">
+            <h3 className="font-semibold text-sm text-lime-700">{card.title}</h3>
+            <p className="text-xs text-stone-500 mt-1">{card.desc}</p>
           </button>
         ))}
       </div>
 
       {results ? (
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <h2 className="font-semibold text-emerald-400 mb-3">Analysis: {companyName}</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{results}</pre>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
+          <h2 className="font-semibold text-lime-700 mb-3">Analysis: {companyName}</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{results}</pre>
         </div>
       ) : (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400">Enter a company name to research their government contracting activity</p>
-          <p className="text-xs text-slate-500 mt-1">Data sourced from FPDS, USASpending.gov, and SAM.gov</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500">Enter a company name to research their government contracting activity</p>
+          <p className="text-xs text-stone-8000 mt-1">Data sourced from FPDS, USASpending.gov, and SAM.gov</p>
         </div>
       )}
     </div>

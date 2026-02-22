@@ -60,44 +60,44 @@ export default function ChatExportPage() {
     setExporting(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <div><h1 className="text-3xl font-bold">Export Chats</h1><p className="text-slate-400 mt-1">Download your chat conversations</p></div>
-        <button onClick={() => router.push("/chat")} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-sm hover:bg-slate-700">Back to Chat</button>
+        <div><h1 className="text-3xl font-bold">Export Chats</h1><p className="text-stone-500 mt-1">Download your chat conversations</p></div>
+        <button onClick={() => router.push("/chat")} className="px-4 py-2 bg-stone-100 text-stone-600 rounded-lg text-sm hover:bg-stone-200">Back to Chat</button>
       </div>
       {selected.size > 0 && (
-        <div className="mb-6 p-4 bg-slate-900 border border-emerald-800 rounded-xl flex items-center justify-between">
+        <div className="mb-6 p-4 bg-white border border-lime-200 rounded-xl flex items-center justify-between">
           <p className="text-sm">{selected.size} session(s) selected</p>
           <div className="flex gap-2">
             <button onClick={() => exportSelected("json")} disabled={exporting} className="px-3 py-1.5 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 disabled:opacity-50">Export JSON</button>
             <button onClick={() => exportSelected("csv")} disabled={exporting} className="px-3 py-1.5 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 disabled:opacity-50">Export CSV</button>
-            <button onClick={() => exportSelected("txt")} disabled={exporting} className="px-3 py-1.5 bg-emerald-600 text-white rounded text-xs hover:bg-emerald-700 disabled:opacity-50">Export TXT</button>
+            <button onClick={() => exportSelected("txt")} disabled={exporting} className="px-3 py-1.5 bg-lime-700 text-white rounded text-xs hover:bg-lime-800 disabled:opacity-50">Export TXT</button>
           </div>
         </div>
       )}
       <div className="mb-4 flex items-center gap-3">
-        <button onClick={selectAll} className="px-3 py-1 bg-slate-800 text-slate-300 rounded text-xs hover:bg-slate-700">{selected.size === sessions.length ? "Deselect All" : "Select All"}</button>
-        <span className="text-xs text-slate-500">{sessions.length} sessions available</span>
+        <button onClick={selectAll} className="px-3 py-1 bg-stone-100 text-stone-600 rounded text-xs hover:bg-stone-200">{selected.size === sessions.length ? "Deselect All" : "Select All"}</button>
+        <span className="text-xs text-stone-8000">{sessions.length} sessions available</span>
       </div>
       {sessions.length > 0 ? (
         <div className="space-y-2">
           {sessions.map(s => (
-            <div key={s.id} onClick={() => toggleSelect(s.id)} className={`p-4 bg-slate-900 border rounded-xl cursor-pointer transition-colors ${selected.has(s.id) ? "border-emerald-600" : "border-slate-800 hover:border-slate-700"}`}>
+            <div key={s.id} onClick={() => toggleSelect(s.id)} className={`p-4 bg-white border rounded-xl cursor-pointer transition-colors ${selected.has(s.id) ? "border-lime-600" : "border-stone-200 hover:border-stone-300"}`}>
               <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${selected.has(s.id) ? "border-emerald-500 bg-emerald-600" : "border-slate-600"}`}>{selected.has(s.id) && <span className="text-white text-xs">&#10003;</span>}</div>
+                <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${selected.has(s.id) ? "border-lime-500 bg-lime-700" : "border-stone-300"}`}>{selected.has(s.id) && <span className="text-white text-xs">&#10003;</span>}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm truncate">{s.title || s.first_message || "Chat session"}</p>
-                  <p className="text-xs text-slate-500">{new Date(s.created_at).toLocaleDateString()} &middot; {s.agent_type || "general"} &middot; {s.message_count || 0} messages</p>
+                  <p className="text-xs text-stone-8000">{new Date(s.created_at).toLocaleDateString()} &middot; {s.agent_type || "general"} &middot; {s.message_count || 0} messages</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl"><p className="text-slate-400">No chat sessions to export</p></div>
+        <div className="text-center py-16 bg-white border border-stone-200 rounded-xl"><p className="text-stone-500">No chat sessions to export</p></div>
       )}
     </div>
   );

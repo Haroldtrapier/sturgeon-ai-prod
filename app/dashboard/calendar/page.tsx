@@ -32,16 +32,16 @@ export default function CalendarPage() {
     if (days <= 3) return "border-red-500 bg-red-500/10";
     if (days <= 7) return "border-yellow-500 bg-yellow-500/10";
     if (days <= 14) return "border-blue-500 bg-blue-500/10";
-    return "border-slate-700 bg-slate-900";
+    return "border-stone-300 bg-white";
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Deadlines & Calendar</h1><p className="text-slate-400 mt-1">Upcoming opportunity response deadlines</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Deadlines & Calendar</h1><p className="text-stone-500 mt-1">Upcoming opportunity response deadlines</p></div>
       {deadlines.length === 0 ? (
-        <div className="text-center py-20 bg-slate-900 border border-slate-800 rounded-xl"><p className="text-slate-400 text-lg">No upcoming deadlines</p><p className="text-slate-500 mt-2">Save opportunities with response deadlines to see them here</p></div>
+        <div className="text-center py-20 bg-white border border-stone-200 rounded-xl"><p className="text-stone-500 text-lg">No upcoming deadlines</p><p className="text-stone-8000 mt-2">Save opportunities with response deadlines to see them here</p></div>
       ) : (
         <div className="space-y-3">
           {deadlines.map(d => {
@@ -51,11 +51,11 @@ export default function CalendarPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-sm">{d.title}</h3>
-                    <p className="text-xs text-slate-400 mt-1">{d.agency_name || "Agency not specified"}</p>
+                    <p className="text-xs text-stone-500 mt-1">{d.agency_name || "Agency not specified"}</p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-bold ${days <= 3 ? "text-red-400" : days <= 7 ? "text-yellow-400" : "text-slate-300"}`}>{days}d</p>
-                    <p className="text-xs text-slate-500">{new Date(d.response_deadline).toLocaleDateString()}</p>
+                    <p className={`text-lg font-bold ${days <= 3 ? "text-red-600" : days <= 7 ? "text-yellow-600" : "text-stone-600"}`}>{days}d</p>
+                    <p className="text-xs text-stone-8000">{new Date(d.response_deadline).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>

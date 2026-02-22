@@ -63,21 +63,21 @@ export default function SAMIntegrationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 px-6 py-8">
+    <main className="min-h-screen bg-sand-50 text-stone-800 px-6 py-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/marketplaces" className="text-emerald-400 hover:text-emerald-300 mb-4 inline-block">
+          <Link href="/marketplaces" className="text-lime-700 hover:text-lime-600 mb-4 inline-block">
             ← Back to Marketplaces
           </Link>
           <h1 className="text-4xl font-bold mb-2">SAM.gov Integration</h1>
-          <p className="text-slate-300">
+          <p className="text-stone-600">
             Live federal contract opportunities from SAM.gov
           </p>
         </div>
 
         {/* Search Controls */}
-        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 mb-6">
+        <div className="bg-white/60 rounded-2xl border border-stone-200 p-6 mb-6">
           <div className="grid md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium mb-2">Search Keywords</label>
@@ -86,7 +86,7 @@ export default function SAMIntegrationPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="e.g., IT services, janitorial"
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-stone-700 placeholder-slate-500 focus:outline-none focus:border-lime-500"
                 onKeyDown={(e) => e.key === 'Enter' && searchOpportunities()}
               />
             </div>
@@ -96,7 +96,7 @@ export default function SAMIntegrationPage() {
               <select
                 value={setAsideFilter}
                 onChange={(e) => setSetAsideFilter(e.target.value)}
-                className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-stone-700 focus:outline-none focus:border-lime-500"
               >
                 <option value="">All Types</option>
                 <option value="SDVOSBC">SDVOSB</option>
@@ -111,14 +111,14 @@ export default function SAMIntegrationPage() {
               <button
                 onClick={searchOpportunities}
                 disabled={loading}
-                className="flex-1 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 rounded-lg font-semibold transition"
+                className="flex-1 px-6 py-2 bg-lime-700 hover:bg-lime-800 disabled:bg-stone-200 rounded-lg font-semibold transition"
               >
                 {loading ? 'Searching...' : 'Search'}
               </button>
               <button
                 onClick={loadSDVOSBOpportunities}
                 disabled={loading}
-                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 rounded-lg font-semibold transition"
+                className="flex-1 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-stone-200 rounded-lg font-semibold transition"
               >
                 SDVOSB
               </button>
@@ -126,7 +126,7 @@ export default function SAMIntegrationPage() {
           </div>
 
           {error && (
-            <div className="mt-4 p-4 bg-red-900/30 border border-red-700 rounded-lg text-red-300">
+            <div className="mt-4 p-4 bg-red-50 border border-red-700 rounded-lg text-red-700">
               {error}
             </div>
           )}
@@ -135,43 +135,43 @@ export default function SAMIntegrationPage() {
         {/* Results */}
         <div className="space-y-4">
           {loading && (
-            <div className="text-center py-12 text-slate-400">
+            <div className="text-center py-12 text-stone-500">
               Loading opportunities...
             </div>
           )}
 
           {!loading && opportunities.length === 0 && (
-            <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-12 text-center">
-              <p className="text-slate-400 mb-4">No opportunities found. Try searching above.</p>
+            <div className="bg-white/60 rounded-2xl border border-stone-200 p-12 text-center">
+              <p className="text-stone-500 mb-4">No opportunities found. Try searching above.</p>
             </div>
           )}
 
           {opportunities.map((opp) => (
             <div
               key={opp.id}
-              className="bg-slate-900/60 rounded-2xl border border-slate-800 p-6 hover:border-emerald-500/50 transition"
+              className="bg-white/60 rounded-2xl border border-stone-200 p-6 hover:border-lime-500/50 transition"
             >
               <div className="flex justify-between items-start mb-3">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-2 text-emerald-400">
+                  <h3 className="text-xl font-semibold mb-2 text-lime-700">
                     {opp.title}
                   </h3>
-                  <div className="flex flex-wrap gap-3 text-sm text-slate-400">
+                  <div className="flex flex-wrap gap-3 text-sm text-stone-500">
                     <span className="flex items-center gap-1">
-                      <span className="text-slate-500">📍</span>
+                      <span className="text-stone-8000">📍</span>
                       {opp.department}
                     </span>
                     <span className="flex items-center gap-1">
-                      <span className="text-slate-500">🏷️</span>
+                      <span className="text-stone-8000">🏷️</span>
                       {opp.naics_code}
                     </span>
                     {opp.set_aside && (
-                      <span className="px-2 py-1 bg-blue-900/40 border border-blue-700 rounded text-blue-300">
+                      <span className="px-2 py-1 bg-blue-50 border border-blue-700 rounded text-blue-300">
                         {opp.set_aside}
                       </span>
                     )}
                     <span className="flex items-center gap-1">
-                      <span className="text-slate-500">📅</span>
+                      <span className="text-stone-8000">📅</span>
                       Posted: {new Date(opp.posted_date).toLocaleDateString()}
                     </span>
                     {opp.response_deadline && (
@@ -184,7 +184,7 @@ export default function SAMIntegrationPage() {
                 </div>
               </div>
 
-              <p className="text-slate-300 mb-4 line-clamp-3">
+              <p className="text-stone-600 mb-4 line-clamp-3">
                 {opp.description}
               </p>
 
@@ -193,11 +193,11 @@ export default function SAMIntegrationPage() {
                   href={`https://sam.gov/opp/${opp.id}/view`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm font-medium transition"
+                  className="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-sm font-medium transition"
                 >
                   View on SAM.gov →
                 </a>
-                <button className="px-4 py-2 bg-emerald-900/40 hover:bg-emerald-900/60 border border-emerald-700 rounded-lg text-sm font-medium text-emerald-300 transition">
+                <button className="px-4 py-2 bg-lime-50 hover:bg-lime-50/60 border border-lime-300 rounded-lg text-sm font-medium text-lime-600 transition">
                   Analyze with AI
                 </button>
               </div>
@@ -206,9 +206,9 @@ export default function SAMIntegrationPage() {
         </div>
 
         {/* Info Box */}
-        <div className="mt-8 bg-blue-900/20 border border-blue-700/50 rounded-2xl p-6">
+        <div className="mt-8 bg-blue-50 border border-blue-700/50 rounded-2xl p-6">
           <h3 className="text-lg font-semibold mb-3 text-blue-300">💡 How to Use</h3>
-          <ul className="space-y-2 text-slate-300 text-sm">
+          <ul className="space-y-2 text-stone-600 text-sm">
             <li>• Search by keywords or filter by set-aside type</li>
             <li>• Click "SDVOSB" for Service-Disabled Veteran-Owned opportunities</li>
             <li>• Click "Analyze with AI" to get Harpoon AI insights on any opportunity</li>

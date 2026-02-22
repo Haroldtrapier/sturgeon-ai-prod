@@ -18,24 +18,24 @@ export default function FeaturesPage() {
 
   useEffect(() => { const init = async () => { const supabase = createClient(); const { data: { session } } = await supabase.auth.getSession(); if (!session) { router.push("/login"); return; } setLoading(false); }; init(); }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="text-center mb-12"><h1 className="text-3xl font-bold">Platform Features</h1><p className="text-slate-400 mt-2">Everything you need to win government contracts</p></div>
+      <div className="text-center mb-12"><h1 className="text-3xl font-bold">Platform Features</h1><p className="text-stone-500 mt-2">Everything you need to win government contracts</p></div>
       {FEATURES.map(f => (
         <div key={f.category} className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-emerald-400">{f.category}</h2>
+          <h2 className="text-xl font-semibold mb-4 text-lime-700">{f.category}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">{f.items.map(item => (
-            <div key={item.name} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+            <div key={item.name} className="p-4 bg-white border border-stone-200 rounded-xl">
               <h3 className="font-medium text-sm">{item.name}</h3>
-              <p className="text-xs text-slate-400 mt-1">{item.desc}</p>
+              <p className="text-xs text-stone-500 mt-1">{item.desc}</p>
             </div>
           ))}</div>
         </div>
       ))}
       <div className="text-center mt-8">
-        <button onClick={() => router.push("/pro/pricing")} className="px-8 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">View Pricing</button>
+        <button onClick={() => router.push("/pro/pricing")} className="px-8 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 font-medium">View Pricing</button>
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export default function HelpPage() {
     setAsking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const FAQ = [
     { q: "How do I search for government contracts?", a: "Navigate to Opportunities > SAM.gov Search to search by keyword, NAICS code, set-aside type, or agency. You can also use ContractMatch for AI-powered opportunity matching." },
@@ -61,23 +61,23 @@ export default function HelpPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Help Center</h1>
-        <p className="text-slate-400 mt-1">Find answers and get support</p>
+        <p className="text-stone-500 mt-1">Find answers and get support</p>
       </div>
 
-      <form onSubmit={askQuestion} className="mb-8 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
+      <form onSubmit={askQuestion} className="mb-8 p-6 bg-white border border-lime-200 rounded-xl">
         <h2 className="text-lg font-semibold mb-3">Ask AI Help Assistant</h2>
         <div className="flex gap-3">
-          <input type="text" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Ask anything about Harpoon AI..." className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <button type="submit" disabled={asking} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{asking ? "Thinking..." : "Ask"}</button>
+          <input type="text" value={question} onChange={e => setQuestion(e.target.value)} placeholder="Ask anything about Harpoon AI..." className="flex-1 px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <button type="submit" disabled={asking} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{asking ? "Thinking..." : "Ask"}</button>
         </div>
-        {answer && <pre className="mt-4 text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 p-4 rounded-lg">{answer}</pre>}
+        {answer && <pre className="mt-4 text-sm text-stone-600 whitespace-pre-wrap bg-stone-100 p-4 rounded-lg">{answer}</pre>}
       </form>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         {QUICK_LINKS.map(l => (
-          <button key={l.href} onClick={() => router.push(l.href)} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-left hover:border-emerald-600 transition-colors">
-            <h3 className="font-semibold text-sm text-emerald-400">{l.title}</h3>
-            <p className="text-xs text-slate-400 mt-1">{l.desc}</p>
+          <button key={l.href} onClick={() => router.push(l.href)} className="p-4 bg-white border border-stone-200 rounded-xl text-left hover:border-lime-600 transition-colors">
+            <h3 className="font-semibold text-sm text-lime-700">{l.title}</h3>
+            <p className="text-xs text-stone-500 mt-1">{l.desc}</p>
           </button>
         ))}
       </div>
@@ -85,9 +85,9 @@ export default function HelpPage() {
       <h2 className="text-lg font-semibold mb-4">Frequently Asked Questions</h2>
       <div className="space-y-3">
         {FAQ.map(f => (
-          <details key={f.q} className="p-4 bg-slate-900 border border-slate-800 rounded-xl group">
-            <summary className="font-medium text-sm cursor-pointer text-slate-200 group-open:text-emerald-400">{f.q}</summary>
-            <p className="text-sm text-slate-400 mt-2">{f.a}</p>
+          <details key={f.q} className="p-4 bg-white border border-stone-200 rounded-xl group">
+            <summary className="font-medium text-sm cursor-pointer text-stone-600 group-open:text-lime-700">{f.q}</summary>
+            <p className="text-sm text-stone-500 mt-2">{f.a}</p>
           </details>
         ))}
       </div>

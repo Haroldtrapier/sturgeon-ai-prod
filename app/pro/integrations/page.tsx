@@ -25,26 +25,26 @@ export default function IntegrationsPage() {
 
   useEffect(() => { const init = async () => { const supabase = createClient(); const { data: { session } } = await supabase.auth.getSession(); if (!session) { router.push("/login"); return; } setLoading(false); }; init(); }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const categories = Array.from(new Set(INTEGRATIONS.map(i => i.category)));
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Integrations</h1><p className="text-slate-400 mt-1">Connect Harpoon AI with your existing tools</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Integrations</h1><p className="text-stone-500 mt-1">Connect Harpoon AI with your existing tools</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">{INTEGRATIONS.filter(i => i.status === "active").length}</p><p className="text-xs text-slate-400 mt-1">Active</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-amber-400">{INTEGRATIONS.filter(i => i.status === "coming_soon").length}</p><p className="text-xs text-slate-400 mt-1">Coming Soon</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-blue-400">{categories.length}</p><p className="text-xs text-slate-400 mt-1">Categories</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-purple-400">API</p><p className="text-xs text-slate-400 mt-1">REST API Available</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-lime-700">{INTEGRATIONS.filter(i => i.status === "active").length}</p><p className="text-xs text-stone-500 mt-1">Active</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-amber-400">{INTEGRATIONS.filter(i => i.status === "coming_soon").length}</p><p className="text-xs text-stone-500 mt-1">Coming Soon</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-blue-600">{categories.length}</p><p className="text-xs text-stone-500 mt-1">Categories</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-purple-600">API</p><p className="text-xs text-stone-500 mt-1">REST API Available</p></div>
       </div>
       {categories.map(cat => (
         <div key={cat} className="mb-6">
-          <h2 className="text-lg font-semibold mb-3 text-emerald-400">{cat}</h2>
+          <h2 className="text-lg font-semibold mb-3 text-lime-700">{cat}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">{INTEGRATIONS.filter(i => i.category === cat).map(i => (
-            <div key={i.name} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between">
-              <div><h3 className="font-medium text-sm">{i.name}</h3><p className="text-xs text-slate-400 mt-0.5">{i.desc}</p></div>
-              <span className={`px-2 py-1 rounded text-xs font-medium ${i.status === "active" ? "bg-emerald-900/30 text-emerald-400" : "bg-amber-900/30 text-amber-400"}`}>{i.status === "active" ? "Active" : "Coming Soon"}</span>
+            <div key={i.name} className="p-4 bg-white border border-stone-200 rounded-xl flex items-center justify-between">
+              <div><h3 className="font-medium text-sm">{i.name}</h3><p className="text-xs text-stone-500 mt-0.5">{i.desc}</p></div>
+              <span className={`px-2 py-1 rounded text-xs font-medium ${i.status === "active" ? "bg-lime-50 text-lime-700" : "bg-amber-900/30 text-amber-400"}`}>{i.status === "active" ? "Active" : "Coming Soon"}</span>
             </div>
           ))}</div>
         </div>

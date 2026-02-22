@@ -52,7 +52,7 @@ export default function ResearchReportsPage() {
     setGenerating(null);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const REPORT_TYPES = [
     { id: "market_overview", title: "Market Overview", desc: "Comprehensive overview of the GovCon IT market", icon: "📈" },
@@ -67,27 +67,27 @@ export default function ResearchReportsPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Research Reports</h1>
-        <p className="text-slate-400 mt-1">Generate AI-powered market research reports</p>
+        <p className="text-stone-500 mt-1">Generate AI-powered market research reports</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {REPORT_TYPES.map(rt => (
-          <button key={rt.id} onClick={() => generateReport(rt.id, rt.title)} disabled={generating !== null} className="p-5 bg-slate-900 border border-slate-800 rounded-xl text-left hover:border-emerald-600 transition-colors disabled:opacity-50">
+          <button key={rt.id} onClick={() => generateReport(rt.id, rt.title)} disabled={generating !== null} className="p-5 bg-white border border-stone-200 rounded-xl text-left hover:border-lime-600 transition-colors disabled:opacity-50">
             <div className="text-2xl mb-2">{rt.icon}</div>
             <h3 className="font-semibold text-sm">{rt.title}</h3>
-            <p className="text-xs text-slate-400 mt-1">{rt.desc}</p>
-            {generating === rt.id && <p className="text-xs text-emerald-400 mt-2">Generating...</p>}
+            <p className="text-xs text-stone-500 mt-1">{rt.desc}</p>
+            {generating === rt.id && <p className="text-xs text-lime-700 mt-2">Generating...</p>}
           </button>
         ))}
       </div>
 
       {report && (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-emerald-400">{reportTitle}</h2>
-            <button onClick={() => navigator.clipboard.writeText(report)} className="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-xs hover:bg-slate-700">Copy</button>
+            <h2 className="font-semibold text-lime-700">{reportTitle}</h2>
+            <button onClick={() => navigator.clipboard.writeText(report)} className="px-3 py-1.5 bg-stone-100 border border-stone-300 rounded text-xs hover:bg-stone-200">Copy</button>
           </div>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{report}</pre>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">{report}</pre>
         </div>
       )}
     </div>

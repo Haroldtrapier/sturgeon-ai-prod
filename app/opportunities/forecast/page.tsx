@@ -35,28 +35,28 @@ export default function OpportunityForecastPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Opportunity Forecast</h1><p className="text-slate-400 mt-1">AI-powered procurement forecasting and trend predictions</p></div>
-      <form onSubmit={runForecast} className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Opportunity Forecast</h1><p className="text-stone-500 mt-1">AI-powered procurement forecasting and trend predictions</p></div>
+      <form onSubmit={runForecast} className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <input type="text" placeholder="Agency (optional)" value={agency} onChange={e => setAgency(e.target.value)} className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <input type="text" placeholder="NAICS Code (optional)" value={naics} onChange={e => setNaics(e.target.value)} className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          <input type="text" placeholder="Agency (optional)" value={agency} onChange={e => setAgency(e.target.value)} className="px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <input type="text" placeholder="NAICS Code (optional)" value={naics} onChange={e => setNaics(e.target.value)} className="px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
         </div>
-        <button type="submit" disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{searching ? "Forecasting..." : "Generate Forecast"}</button>
+        <button type="submit" disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{searching ? "Forecasting..." : "Generate Forecast"}</button>
       </form>
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-blue-400">Q1-Q2</p><p className="text-xs text-slate-400 mt-1">Peak New Awards</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-amber-400">Q3</p><p className="text-xs text-slate-400 mt-1">Use-or-Lose Spending</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-red-400">Q4</p><p className="text-xs text-slate-400 mt-1">Year-End Surge</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-blue-600">Q1-Q2</p><p className="text-xs text-stone-500 mt-1">Peak New Awards</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-amber-400">Q3</p><p className="text-xs text-stone-500 mt-1">Use-or-Lose Spending</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-red-600">Q4</p><p className="text-xs text-stone-500 mt-1">Year-End Surge</p></div>
       </div>
-      {searching && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400 mx-auto mb-3" /><p className="text-sm text-slate-400">Generating procurement forecast...</p></div>}
+      {searching && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-lime-500 mx-auto mb-3" /><p className="text-sm text-stone-500">Generating procurement forecast...</p></div>}
       {forecast && (
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4 text-emerald-400">Procurement Forecast</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{forecast}</pre>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-4 text-lime-700">Procurement Forecast</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{forecast}</pre>
         </div>
       )}
     </div>

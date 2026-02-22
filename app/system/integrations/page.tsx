@@ -38,7 +38,7 @@ export default function SystemIntegrationsPage() {
     setTesting(null);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const INTEGRATIONS = [
     { key: "supabase", name: "Supabase", desc: "PostgreSQL database, auth, and real-time subscriptions", category: "Core" },
@@ -59,26 +59,26 @@ export default function SystemIntegrationsPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">System Integrations</h1>
-        <p className="text-slate-400 mt-1">Monitor and test platform integrations</p>
+        <p className="text-stone-500 mt-1">Monitor and test platform integrations</p>
       </div>
 
       {categories.map(cat => (
         <div key={cat} className="mb-8">
-          <h2 className="text-lg font-semibold mb-3 text-slate-300">{cat}</h2>
+          <h2 className="text-lg font-semibold mb-3 text-stone-600">{cat}</h2>
           <div className="space-y-3">
             {INTEGRATIONS.filter(i => i.category === cat).map(i => (
-              <div key={i.key} className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl">
+              <div key={i.key} className="flex items-center justify-between p-4 bg-white border border-stone-200 rounded-xl">
                 <div>
                   <h3 className="font-semibold text-sm">{i.name}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">{i.desc}</p>
+                  <p className="text-xs text-stone-500 mt-0.5">{i.desc}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   {statuses[i.key] && (
-                    <span className={`text-xs font-medium ${statuses[i.key] === "connected" ? "text-emerald-400" : "text-red-400"}`}>
+                    <span className={`text-xs font-medium ${statuses[i.key] === "connected" ? "text-lime-700" : "text-red-600"}`}>
                       {statuses[i.key] === "connected" ? "Connected" : "Error"}
                     </span>
                   )}
-                  <button onClick={() => testConnection(i.key)} disabled={testing === i.key} className="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs hover:bg-slate-700 disabled:opacity-50">
+                  <button onClick={() => testConnection(i.key)} disabled={testing === i.key} className="px-3 py-1.5 bg-stone-100 border border-stone-300 rounded-lg text-xs hover:bg-stone-200 disabled:opacity-50">
                     {testing === i.key ? "Testing..." : "Test"}
                   </button>
                 </div>

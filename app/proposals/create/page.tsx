@@ -36,27 +36,27 @@ export default function CreateProposalPage() {
     setCreating(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Create Proposal</h1><p className="text-slate-400 mt-1">Start a new proposal from scratch or from an RFP</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Create Proposal</h1><p className="text-stone-500 mt-1">Start a new proposal from scratch or from an RFP</p></div>
       <form onSubmit={createProposal} className="space-y-6">
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
-          <div><label className="block text-sm text-slate-300 mb-1">Proposal Title *</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. IT Modernization Support Services" required className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
-          <div><label className="block text-sm text-slate-300 mb-1">Linked Opportunity ID (optional)</label><input type="text" value={opportunityId} onChange={e => setOpportunityId(e.target.value)} placeholder="SAM.gov Notice ID" className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
-          <div><label className="block text-sm text-slate-300 mb-1">RFP / Solicitation Text (optional)</label><textarea value={rfpText} onChange={e => setRfpText(e.target.value)} rows={8} placeholder="Paste the full RFP text here. Our AI will extract requirements, compliance items, and evaluation criteria automatically..." className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" /></div>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl space-y-4">
+          <div><label className="block text-sm text-stone-600 mb-1">Proposal Title *</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. IT Modernization Support Services" required className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
+          <div><label className="block text-sm text-stone-600 mb-1">Linked Opportunity ID (optional)</label><input type="text" value={opportunityId} onChange={e => setOpportunityId(e.target.value)} placeholder="SAM.gov Notice ID" className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
+          <div><label className="block text-sm text-stone-600 mb-1">RFP / Solicitation Text (optional)</label><textarea value={rfpText} onChange={e => setRfpText(e.target.value)} rows={8} placeholder="Paste the full RFP text here. Our AI will extract requirements, compliance items, and evaluation criteria automatically..." className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" /></div>
         </div>
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-3">What happens next</h2>
-          <div className="space-y-2 text-sm text-slate-400">
+          <div className="space-y-2 text-sm text-stone-500">
             <p>1. AI extracts compliance requirements from your RFP text</p>
             <p>2. A compliance matrix is auto-generated</p>
             <p>3. Proposal sections are created based on standard structure</p>
             <p>4. You can use AI to draft each section individually</p>
           </div>
         </div>
-        <button type="submit" disabled={creating || !title.trim()} className="w-full px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-lg">{creating ? "Creating..." : "Create Proposal"}</button>
+        <button type="submit" disabled={creating || !title.trim()} className="w-full px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-lg">{creating ? "Creating..." : "Create Proposal"}</button>
       </form>
     </div>
   );

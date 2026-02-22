@@ -25,7 +25,7 @@ export default function PermissionsPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const ROLES: Role[] = [
     {
@@ -74,31 +74,31 @@ export default function PermissionsPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Permissions & Roles</h1>
-        <p className="text-slate-400 mt-1">Manage role-based access control</p>
+        <p className="text-stone-500 mt-1">Manage role-based access control</p>
       </div>
 
       <div className="flex gap-2 mb-6">
         {ROLES.map(r => (
-          <button key={r.name} onClick={() => setActiveRole(r.name)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${activeRole === r.name ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:text-white"}`}>
+          <button key={r.name} onClick={() => setActiveRole(r.name)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${activeRole === r.name ? "bg-lime-700 text-white" : "bg-stone-100 text-stone-500 hover:text-stone-900"}`}>
             {r.name}
           </button>
         ))}
       </div>
 
-      <div className="mb-6 p-4 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-6 p-4 bg-white border border-stone-200 rounded-xl">
         <h2 className="font-semibold capitalize">{active.name} Role</h2>
-        <p className="text-sm text-slate-400 mt-1">{active.description}</p>
-        <p className="text-xs text-emerald-400 mt-2">{active.permissions.length} of {ALL_PERMISSIONS.length} permissions enabled</p>
+        <p className="text-sm text-stone-500 mt-1">{active.description}</p>
+        <p className="text-xs text-lime-700 mt-2">{active.permissions.length} of {ALL_PERMISSIONS.length} permissions enabled</p>
       </div>
 
       {categories.map(cat => (
         <div key={cat} className="mb-6">
-          <h3 className="text-sm font-semibold text-slate-400 mb-2">{cat}</h3>
+          <h3 className="text-sm font-semibold text-stone-500 mb-2">{cat}</h3>
           <div className="space-y-2">
             {ALL_PERMISSIONS.filter(p => p.category === cat).map(p => (
-              <div key={p.key} className="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-lg">
+              <div key={p.key} className="flex items-center justify-between p-3 bg-white border border-stone-200 rounded-lg">
                 <span className="text-sm">{p.label}</span>
-                <span className={`text-xs font-medium px-2 py-0.5 rounded ${active.permissions.includes(p.key) ? "bg-emerald-900/50 text-emerald-400" : "bg-slate-800 text-slate-500"}`}>
+                <span className={`text-xs font-medium px-2 py-0.5 rounded ${active.permissions.includes(p.key) ? "bg-lime-50 text-lime-700" : "bg-stone-100 text-stone-8000"}`}>
                   {active.permissions.includes(p.key) ? "Enabled" : "Disabled"}
                 </span>
               </div>
@@ -107,7 +107,7 @@ export default function PermissionsPage() {
         </div>
       ))}
 
-      <p className="text-xs text-slate-500 mt-4">Custom roles are available on Enterprise plans. Contact sales to configure custom permission sets.</p>
+      <p className="text-xs text-stone-8000 mt-4">Custom roles are available on Enterprise plans. Contact sales to configure custom permission sets.</p>
     </div>
   );
 }

@@ -45,13 +45,13 @@ export default function ProposalTrackerPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const COLUMNS = [
-    { id: "draft", label: "Draft", color: "border-slate-600" },
+    { id: "draft", label: "Draft", color: "border-stone-300" },
     { id: "in_progress", label: "In Progress", color: "border-blue-600" },
     { id: "review", label: "In Review", color: "border-yellow-600" },
-    { id: "submitted", label: "Submitted", color: "border-emerald-600" },
+    { id: "submitted", label: "Submitted", color: "border-lime-600" },
     { id: "won", label: "Won", color: "border-purple-600" },
   ];
 
@@ -60,28 +60,28 @@ export default function ProposalTrackerPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Proposal Tracker</h1>
-          <p className="text-slate-400 mt-1">Kanban view of your proposal pipeline</p>
+          <p className="text-stone-500 mt-1">Kanban view of your proposal pipeline</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => router.push("/proposals/library")} className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm hover:bg-slate-700">List View</button>
-          <button onClick={() => router.push("/proposals/create")} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">+ New Proposal</button>
+          <button onClick={() => router.push("/proposals/library")} className="px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-sm hover:bg-stone-200">List View</button>
+          <button onClick={() => router.push("/proposals/create")} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 text-sm font-medium">+ New Proposal</button>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-emerald-400">{proposals.length}</p>
-          <p className="text-xs text-slate-400">Total Proposals</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-lime-700">{proposals.length}</p>
+          <p className="text-xs text-stone-500">Total Proposals</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-blue-400">{proposals.filter(p => ["draft", "in_progress", "review"].includes(p.status)).length}</p>
-          <p className="text-xs text-slate-400">Active</p>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-blue-600">{proposals.filter(p => ["draft", "in_progress", "review"].includes(p.status)).length}</p>
+          <p className="text-xs text-stone-500">Active</p>
         </div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-2xl font-bold text-yellow-400">
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-2xl font-bold text-yellow-600">
             {proposals.filter(p => p.deadline && new Date(p.deadline) > new Date() && new Date(p.deadline) < new Date(Date.now() + 7 * 86400000)).length}
           </p>
-          <p className="text-xs text-slate-400">Due This Week</p>
+          <p className="text-xs text-stone-500">Due This Week</p>
         </div>
       </div>
 
@@ -92,19 +92,19 @@ export default function ProposalTrackerPage() {
             <div key={col.id} className={`min-w-[250px] flex-1 border-t-2 ${col.color}`}>
               <div className="flex items-center justify-between px-2 py-3">
                 <h3 className="text-sm font-semibold">{col.label}</h3>
-                <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">{colProposals.length}</span>
+                <span className="text-xs text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">{colProposals.length}</span>
               </div>
               <div className="space-y-2">
                 {colProposals.length === 0 ? (
-                  <div className="p-4 bg-slate-900/50 border border-dashed border-slate-800 rounded-lg text-center text-xs text-slate-500">
+                  <div className="p-4 bg-stone-100 border border-dashed border-stone-200 rounded-lg text-center text-xs text-stone-8000">
                     No proposals
                   </div>
                 ) : colProposals.map(p => (
-                  <button key={p.id} onClick={() => router.push(`/proposals/editor?proposal_id=${p.id}`)} className="w-full p-3 bg-slate-900 border border-slate-800 rounded-lg text-left hover:border-emerald-800 transition-colors">
+                  <button key={p.id} onClick={() => router.push(`/proposals/editor?proposal_id=${p.id}`)} className="w-full p-3 bg-white border border-stone-200 rounded-lg text-left hover:border-lime-200 transition-colors">
                     <p className="text-sm font-medium truncate">{p.title}</p>
-                    {p.agency && <p className="text-xs text-slate-400 mt-1">{p.agency}</p>}
+                    {p.agency && <p className="text-xs text-stone-500 mt-1">{p.agency}</p>}
                     {p.deadline && (
-                      <p className={`text-xs mt-1 ${new Date(p.deadline) < new Date() ? "text-red-400" : new Date(p.deadline) < new Date(Date.now() + 3 * 86400000) ? "text-yellow-400" : "text-slate-500"}`}>
+                      <p className={`text-xs mt-1 ${new Date(p.deadline) < new Date() ? "text-red-600" : new Date(p.deadline) < new Date(Date.now() + 3 * 86400000) ? "text-yellow-600" : "text-stone-8000"}`}>
                         Due: {new Date(p.deadline).toLocaleDateString()}
                       </p>
                     )}

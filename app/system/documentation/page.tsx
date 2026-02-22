@@ -19,7 +19,7 @@ export default function DocumentationPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const SECTIONS = [
     { id: "getting-started", title: "Getting Started", items: [
@@ -69,7 +69,7 @@ export default function DocumentationPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Documentation</h1>
-        <p className="text-slate-400 mt-1">Learn how to get the most from Harpoon AI</p>
+        <p className="text-stone-500 mt-1">Learn how to get the most from Harpoon AI</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
@@ -77,7 +77,7 @@ export default function DocumentationPage() {
           <ul className="space-y-1">
             {SECTIONS.map(s => (
               <li key={s.id}>
-                <button onClick={() => setActiveSection(s.id)} className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${activeSection === s.id ? "bg-emerald-600/20 text-emerald-400 font-medium" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"}`}>
+                <button onClick={() => setActiveSection(s.id)} className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${activeSection === s.id ? "bg-lime-700/20 text-lime-700 font-medium" : "text-stone-500 hover:text-stone-600 hover:bg-stone-100"}`}>
                   {s.title}
                 </button>
               </li>
@@ -89,9 +89,9 @@ export default function DocumentationPage() {
           <h2 className="text-xl font-bold mb-4">{active.title}</h2>
           <div className="space-y-3">
             {active.items.map(item => (
-              <div key={item.title} className="p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-800 transition-colors cursor-pointer">
-                <h3 className="font-semibold text-emerald-400">{item.title}</h3>
-                <p className="text-sm text-slate-400 mt-1">{item.desc}</p>
+              <div key={item.title} className="p-5 bg-white border border-stone-200 rounded-xl hover:border-lime-200 transition-colors cursor-pointer">
+                <h3 className="font-semibold text-lime-700">{item.title}</h3>
+                <p className="text-sm text-stone-500 mt-1">{item.desc}</p>
               </div>
             ))}
           </div>

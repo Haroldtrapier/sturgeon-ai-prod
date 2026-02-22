@@ -39,13 +39,13 @@ function useInView(threshold = 0.2) {
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-slate-800 rounded-xl overflow-hidden transition-colors hover:border-slate-700">
+    <div className="border border-stone-200 rounded-xl overflow-hidden transition-colors hover:border-stone-300">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-6 py-5 text-left">
         <span className="font-semibold text-sm sm:text-base pr-4">{q}</span>
-        <svg className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        <svg className={`w-5 h-5 text-stone-500 flex-shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </button>
       <div className={`overflow-hidden transition-all duration-300 ${open ? "max-h-96" : "max-h-0"}`}>
-        <p className="px-6 pb-5 text-sm text-slate-400 leading-relaxed">{a}</p>
+        <p className="px-6 pb-5 text-sm text-stone-500 leading-relaxed">{a}</p>
       </div>
     </div>
   );
@@ -84,7 +84,7 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (checking) return <div className="min-h-screen flex items-center justify-center bg-slate-950"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (checking) return <div className="min-h-screen flex items-center justify-center bg-sand-50"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const goSignup = () => router.push("/signup");
   const goLogin = () => router.push("/login");
@@ -141,12 +141,12 @@ export default function LandingPage() {
   ];
 
   const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-    emerald: { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
-    blue: { bg: "bg-blue-500/10", text: "text-blue-400", border: "border-blue-500/20" },
-    purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
+    emerald: { bg: "bg-lime-600/10", text: "text-lime-700", border: "border-lime-500/20" },
+    blue: { bg: "bg-blue-500/10", text: "text-blue-600", border: "border-blue-500/20" },
+    purple: { bg: "bg-purple-500/10", text: "text-purple-600", border: "border-purple-500/20" },
     amber: { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/20" },
     rose: { bg: "bg-rose-500/10", text: "text-rose-400", border: "border-rose-500/20" },
-    cyan: { bg: "bg-cyan-500/10", text: "text-cyan-400", border: "border-cyan-500/20" },
+    cyan: { bg: "bg-cyan-500/10", text: "text-cyan-600", border: "border-cyan-500/20" },
   };
 
   const HOW_IT_WORKS = [
@@ -202,28 +202,28 @@ export default function LandingPage() {
   const LOGOS = ["Department of Defense", "NASA", "GSA", "DHS", "VA", "HHS"];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-sand-50 text-white overflow-x-hidden">
 
       {/* ─── Sticky Navigation ──────────────────────────────────── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/50 shadow-xl shadow-black/20" : "bg-transparent"}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-sand-50/90 backdrop-blur-xl border-b border-stone-200 shadow-xl shadow-black/20" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-20">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
             </div>
-            <span className="text-xl font-bold tracking-tight">Harpoon<span className="text-emerald-400"> AI</span></span>
+            <span className="text-xl font-bold tracking-tight">Harpoon<span className="text-lime-700"> AI</span></span>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 text-sm text-slate-400">
-            <a href="#features" className="hover:text-white transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+          <div className="hidden md:flex items-center gap-8 text-sm text-stone-500">
+            <a href="#features" className="hover:text-stone-900 transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-stone-900 transition-colors">How It Works</a>
+            <a href="#pricing" className="hover:text-stone-900 transition-colors">Pricing</a>
+            <a href="#faq" className="hover:text-stone-900 transition-colors">FAQ</a>
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={goLogin} className="px-4 py-2 text-sm text-slate-300 hover:text-white transition-colors hidden sm:inline-block">Log In</button>
-            <button onClick={goSignup} className="px-5 py-2.5 text-sm bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition-all font-semibold shadow-lg shadow-emerald-600/25 hover:shadow-emerald-500/30">Get Started Free</button>
+            <button onClick={goLogin} className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors hidden sm:inline-block">Log In</button>
+            <button onClick={goSignup} className="px-5 py-2.5 text-sm bg-lime-700 text-white rounded-lg hover:bg-lime-600 transition-all font-semibold shadow-lg shadow-emerald-600/25 hover:shadow-emerald-500/30">Get Started Free</button>
           </div>
         </div>
       </nav>
@@ -231,14 +231,14 @@ export default function LandingPage() {
       {/* ─── Hero Section ───────────────────────────────────────── */}
       <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-32 hero-gradient">
         {/* Floating orbs */}
-        <div className="absolute top-20 left-[10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-float pointer-events-none" />
+        <div className="absolute top-20 left-[10%] w-72 h-72 bg-lime-600/10 rounded-full blur-3xl animate-float pointer-events-none" />
         <div className="absolute top-40 right-[15%] w-56 h-56 bg-blue-500/8 rounded-full blur-3xl animate-float-delayed pointer-events-none" />
         <div className="absolute bottom-10 left-[40%] w-64 h-64 bg-purple-500/6 rounded-full blur-3xl animate-pulse-glow pointer-events-none" />
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-8 animate-fade-in">
-            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-lime-600/10 border border-lime-500/20 text-lime-700 text-xs font-medium mb-8 animate-fade-in">
+            <span className="w-2 h-2 bg-lime-600 rounded-full animate-pulse" />
             Now with Claude AI &amp; GPT-4o Intelligence
           </div>
 
@@ -251,33 +251,33 @@ export default function LandingPage() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-slate-400 mt-6 max-w-2xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: "200ms" }}>
+          <p className="text-lg sm:text-xl text-stone-500 mt-6 max-w-2xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: "200ms" }}>
             The all-in-one platform for small businesses competing in federal contracting.
             AI-powered proposals, smart contract matching, and compliance automation.
           </p>
 
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10 animate-slide-up" style={{ animationDelay: "400ms" }}>
-            <button onClick={goSignup} className="group px-8 py-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-semibold text-lg shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
+            <button onClick={goSignup} className="group px-8 py-4 bg-lime-700 text-white rounded-xl hover:bg-lime-600 font-semibold text-lg shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
               Start Free Trial
               <svg className="inline-block w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
-            <button onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })} className="px-8 py-4 bg-slate-800/80 text-slate-200 rounded-xl hover:bg-slate-700 font-semibold text-lg border border-slate-700 hover:border-slate-600 transition-all">
+            <button onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })} className="px-8 py-4 bg-stone-100/80 text-stone-600 rounded-xl hover:bg-stone-200 font-semibold text-lg border border-stone-300 hover:border-stone-300 transition-all">
               See How It Works
             </button>
           </div>
 
-          <p className="text-xs text-slate-500 mt-4">No credit card required. Free plan available.</p>
+          <p className="text-xs text-stone-8000 mt-4">No credit card required. Free plan available.</p>
         </div>
 
         {/* Dashboard preview mockup */}
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 animate-slide-up" style={{ animationDelay: "600ms" }}>
-          <div className="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-black/50">
-            <div className="bg-slate-900 px-4 py-3 flex items-center gap-2 border-b border-slate-800">
+          <div className="rounded-2xl overflow-hidden border border-stone-200 shadow-2xl shadow-black/50">
+            <div className="bg-white px-4 py-3 flex items-center gap-2 border-b border-stone-200">
               <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500/80" /><div className="w-3 h-3 rounded-full bg-yellow-500/80" /><div className="w-3 h-3 rounded-full bg-green-500/80" /></div>
-              <div className="flex-1 flex justify-center"><div className="px-6 py-1 bg-slate-800 rounded-md text-xs text-slate-400">app.harpoon.ai/dashboard</div></div>
+              <div className="flex-1 flex justify-center"><div className="px-6 py-1 bg-stone-100 rounded-md text-xs text-stone-500">app.harpoon.ai/dashboard</div></div>
             </div>
-            <div className="bg-slate-950 p-6 sm:p-8">
+            <div className="bg-sand-50 p-6 sm:p-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {[
                   { label: "Active Opportunities", value: "847", change: "+12%" },
@@ -285,16 +285,16 @@ export default function LandingPage() {
                   { label: "Proposals In Progress", value: "3", change: "Due in 5 days" },
                   { label: "Win Rate", value: "38%", change: "+8% vs avg" },
                 ].map(s => (
-                  <div key={s.label} className="p-4 bg-slate-900/80 rounded-xl border border-slate-800">
-                    <p className="text-xs text-slate-500 mb-1">{s.label}</p>
+                  <div key={s.label} className="p-4 bg-white/80 rounded-xl border border-stone-200">
+                    <p className="text-xs text-stone-8000 mb-1">{s.label}</p>
                     <p className="text-2xl font-bold text-white">{s.value}</p>
-                    <p className="text-xs text-emerald-400 mt-1">{s.change}</p>
+                    <p className="text-xs text-lime-700 mt-1">{s.change}</p>
                   </div>
                 ))}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2 p-4 bg-slate-900/80 rounded-xl border border-slate-800 h-32 flex items-center justify-center text-slate-600 text-sm">Opportunity Pipeline Chart</div>
-                <div className="p-4 bg-slate-900/80 rounded-xl border border-slate-800 h-32 flex items-center justify-center text-slate-600 text-sm">AI Agent Activity</div>
+                <div className="md:col-span-2 p-4 bg-white/80 rounded-xl border border-stone-200 h-32 flex items-center justify-center text-stone-500 text-sm">Opportunity Pipeline Chart</div>
+                <div className="p-4 bg-white/80 rounded-xl border border-stone-200 h-32 flex items-center justify-center text-stone-500 text-sm">AI Agent Activity</div>
               </div>
             </div>
           </div>
@@ -303,12 +303,12 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Trusted by agencies bar ────────────────────────────── */}
-      <section className="border-y border-slate-800/50 bg-slate-900/30">
+      <section className="border-y border-stone-200 bg-stone-100/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-          <p className="text-center text-xs text-slate-500 uppercase tracking-widest mb-6">Trusted by contractors working with</p>
+          <p className="text-center text-xs text-stone-8000 uppercase tracking-widest mb-6">Trusted by contractors working with</p>
           <div className="flex flex-wrap justify-center gap-8 sm:gap-12 items-center">
             {LOGOS.map(name => (
-              <span key={name} className="text-sm font-semibold text-slate-600 tracking-wide">{name}</span>
+              <span key={name} className="text-sm font-semibold text-stone-500 tracking-wide">{name}</span>
             ))}
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function LandingPage() {
             ].map((s, i) => (
               <div key={s.label} className={`text-center ${statsView.inView ? "animate-count-up" : "opacity-0"}`} style={{ animationDelay: `${i * 150}ms` }}>
                 <p className="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">{s.value}</p>
-                <p className="text-sm text-slate-400 mt-2">{s.label}</p>
+                <p className="text-sm text-stone-500 mt-2">{s.label}</p>
               </div>
             ))}
           </div>
@@ -337,9 +337,9 @@ export default function LandingPage() {
       <section id="features" ref={featuresView.ref} className="py-16 sm:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-3">Platform Features</p>
+            <p className="text-lime-700 text-sm font-semibold tracking-wide uppercase mb-3">Platform Features</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold">Everything You Need to Win</h2>
-            <p className="text-slate-400 mt-3 max-w-xl mx-auto">Six powerful modules working together to give your small business an unfair advantage in federal contracting.</p>
+            <p className="text-stone-500 mt-3 max-w-xl mx-auto">Six powerful modules working together to give your small business an unfair advantage in federal contracting.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -355,7 +355,7 @@ export default function LandingPage() {
                     {f.icon}
                   </div>
                   <h3 className="font-bold text-lg mb-2">{f.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+                  <p className="text-sm text-stone-500 leading-relaxed">{f.desc}</p>
                 </div>
               );
             })}
@@ -364,10 +364,10 @@ export default function LandingPage() {
       </section>
 
       {/* ─── How It Works Section ───────────────────────────────── */}
-      <section id="how-it-works" ref={howItWorksView.ref} className="py-16 sm:py-24 bg-slate-900/30 border-y border-slate-800/50">
+      <section id="how-it-works" ref={howItWorksView.ref} className="py-16 sm:py-24 bg-stone-100/60 border-y border-stone-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-3">How It Works</p>
+            <p className="text-lime-700 text-sm font-semibold tracking-wide uppercase mb-3">How It Works</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold">From RFP to Award in 4 Steps</h2>
           </div>
 
@@ -375,12 +375,12 @@ export default function LandingPage() {
             {HOW_IT_WORKS.map((item, i) => (
               <div
                 key={item.step}
-                className={`relative p-8 rounded-2xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition-all group ${howItWorksView.inView ? "animate-slide-up" : "opacity-0"}`}
+                className={`relative p-8 rounded-2xl bg-sand-50 border border-stone-200 hover:border-stone-300 transition-all group ${howItWorksView.inView ? "animate-slide-up" : "opacity-0"}`}
                 style={{ animationDelay: `${i * 150}ms` }}
               >
-                <span className="text-6xl font-black text-emerald-500/10 absolute top-4 right-6 group-hover:text-emerald-500/20 transition-colors">{item.step}</span>
+                <span className="text-6xl font-black text-lime-600/10 absolute top-4 right-6 group-hover:text-lime-600/20 transition-colors">{item.step}</span>
                 <h3 className="text-lg font-bold mb-2 relative">{item.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed relative">{item.desc}</p>
+                <p className="text-sm text-stone-500 leading-relaxed relative">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -391,7 +391,7 @@ export default function LandingPage() {
       <section className="py-16 sm:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-3">Testimonials</p>
+            <p className="text-lime-700 text-sm font-semibold tracking-wide uppercase mb-3">Testimonials</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold">Trusted by Government Contractors</h2>
           </div>
 
@@ -403,12 +403,12 @@ export default function LandingPage() {
                     <svg key={j} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
                   ))}
                 </div>
-                <p className="text-sm text-slate-300 leading-relaxed mb-6">&ldquo;{t.text}&rdquo;</p>
+                <p className="text-sm text-stone-600 leading-relaxed mb-6">&ldquo;{t.text}&rdquo;</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-xs font-bold text-white">{t.avatar}</div>
                   <div>
                     <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-slate-500">{t.role}</p>
+                    <p className="text-xs text-stone-8000">{t.role}</p>
                   </div>
                 </div>
               </div>
@@ -418,16 +418,16 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Pricing Section ────────────────────────────────────── */}
-      <section id="pricing" className="py-16 sm:py-24 bg-slate-900/30 border-y border-slate-800/50">
+      <section id="pricing" className="py-16 sm:py-24 bg-stone-100/60 border-y border-stone-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-3">Pricing</p>
+            <p className="text-lime-700 text-sm font-semibold tracking-wide uppercase mb-3">Pricing</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold">Simple, Transparent Pricing</h2>
-            <p className="text-slate-400 mt-3">No hidden fees. Cancel anytime.</p>
+            <p className="text-stone-500 mt-3">No hidden fees. Cancel anytime.</p>
 
-            <div className="inline-flex items-center gap-3 mt-6 bg-slate-800 rounded-full p-1">
-              <button onClick={() => setAnnual(false)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${!annual ? "bg-emerald-600 text-white shadow-lg" : "text-slate-400 hover:text-white"}`}>Monthly</button>
-              <button onClick={() => setAnnual(true)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${annual ? "bg-emerald-600 text-white shadow-lg" : "text-slate-400 hover:text-white"}`}>Annual <span className="text-emerald-300 text-xs ml-1">Save 20%</span></button>
+            <div className="inline-flex items-center gap-3 mt-6 bg-stone-100 rounded-full p-1">
+              <button onClick={() => setAnnual(false)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${!annual ? "bg-lime-700 text-white shadow-lg" : "text-stone-500 hover:text-stone-900"}`}>Monthly</button>
+              <button onClick={() => setAnnual(true)} className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${annual ? "bg-lime-700 text-white shadow-lg" : "text-stone-500 hover:text-stone-900"}`}>Annual <span className="text-lime-600 text-xs ml-1">Save 20%</span></button>
             </div>
           </div>
 
@@ -435,31 +435,31 @@ export default function LandingPage() {
             {PLANS.map(p => {
               const price = annual ? p.annualPrice : p.monthlyPrice;
               return (
-                <div key={p.name} className={`relative rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${p.popular ? "bg-gradient-to-b from-emerald-950/50 to-slate-950 border-2 border-emerald-500/40 shadow-2xl shadow-emerald-500/10" : "glass-card"}`}>
+                <div key={p.name} className={`relative rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${p.popular ? "bg-gradient-to-b from-emerald-950/50 to-slate-950 border-2 border-lime-500/40 shadow-2xl shadow-emerald-500/10" : "glass-card"}`}>
                   {p.popular && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                      <span className="px-4 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full shadow-lg shadow-emerald-500/30 uppercase tracking-wide">Most Popular</span>
+                      <span className="px-4 py-1 bg-lime-600 text-white text-xs font-bold rounded-full shadow-lg shadow-emerald-500/30 uppercase tracking-wide">Most Popular</span>
                     </div>
                   )}
 
                   <h3 className="text-lg font-bold">{p.name}</h3>
-                  <p className="text-sm text-slate-500 mt-1">{p.desc}</p>
+                  <p className="text-sm text-stone-8000 mt-1">{p.desc}</p>
 
                   <div className="mt-5 mb-6">
                     <span className="text-4xl font-extrabold">${price}</span>
-                    <span className="text-slate-400 text-sm">/month</span>
-                    {annual && <p className="text-xs text-emerald-400 mt-1">Billed annually (${price * 12}/year)</p>}
+                    <span className="text-stone-500 text-sm">/month</span>
+                    {annual && <p className="text-xs text-lime-700 mt-1">Billed annually (${price * 12}/year)</p>}
                   </div>
 
-                  <button onClick={goSignup} className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${p.popular ? "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg shadow-emerald-600/25" : "bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700"}`}>
+                  <button onClick={goSignup} className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${p.popular ? "bg-lime-700 text-white hover:bg-lime-600 shadow-lg shadow-emerald-600/25" : "bg-stone-100 text-stone-600 hover:bg-stone-200 border border-stone-300"}`}>
                     {p.cta}
                   </button>
 
                   <ul className="mt-7 space-y-3">
                     {p.features.map(f => (
                       <li key={f} className="flex items-start gap-3 text-sm">
-                        <svg className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                        <span className="text-slate-300">{f}</span>
+                        <svg className="w-5 h-5 text-lime-700 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                        <span className="text-stone-600">{f}</span>
                       </li>
                     ))}
                   </ul>
@@ -474,7 +474,7 @@ export default function LandingPage() {
       <section id="faq" className="py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <p className="text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-3">FAQ</p>
+            <p className="text-lime-700 text-sm font-semibold tracking-wide uppercase mb-3">FAQ</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold">Frequently Asked Questions</h2>
           </div>
 
@@ -487,24 +487,24 @@ export default function LandingPage() {
       {/* ─── Final CTA Section ──────────────────────────────────── */}
       <section className="py-20 sm:py-28 relative overflow-hidden">
         <div className="absolute inset-0 hero-gradient pointer-events-none" />
-        <div className="absolute top-10 left-[20%] w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-10 left-[20%] w-96 h-96 bg-lime-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 right-[20%] w-80 h-80 bg-blue-500/8 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">Ready to Win More<br /><span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Government Contracts?</span></h2>
-          <p className="text-lg text-slate-400 mt-4 max-w-xl mx-auto">Join hundreds of small businesses using Harpoon AI to compete and win in federal contracting.</p>
+          <p className="text-lg text-stone-500 mt-4 max-w-xl mx-auto">Join hundreds of small businesses using Harpoon AI to compete and win in federal contracting.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-            <button onClick={goSignup} className="group px-10 py-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 font-semibold text-lg shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
+            <button onClick={goSignup} className="group px-10 py-4 bg-lime-700 text-white rounded-xl hover:bg-lime-600 font-semibold text-lg shadow-2xl shadow-emerald-600/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5">
               Get Started Free
               <svg className="inline-block w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
           </div>
-          <p className="text-xs text-slate-500 mt-4">No credit card required. Free plan available.</p>
+          <p className="text-xs text-stone-8000 mt-4">No credit card required. Free plan available.</p>
         </div>
       </section>
 
       {/* ─── Footer ─────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-800 bg-slate-950">
+      <footer className="border-t border-stone-200 bg-sand-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
@@ -514,44 +514,44 @@ export default function LandingPage() {
                 </div>
                 <span className="text-lg font-bold">Harpoon AI</span>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">AI-powered government contracting intelligence for small businesses.</p>
+              <p className="text-xs text-stone-8000 leading-relaxed">AI-powered government contracting intelligence for small businesses.</p>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold mb-4 text-slate-300">Platform</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li><button onClick={() => router.push("/pro/features")} className="hover:text-emerald-400 transition-colors">Features</button></li>
-                <li><button onClick={() => router.push("/pro/pricing")} className="hover:text-emerald-400 transition-colors">Pricing</button></li>
-                <li><button onClick={() => router.push("/system/documentation")} className="hover:text-emerald-400 transition-colors">Documentation</button></li>
-                <li><button onClick={() => router.push("/system/status")} className="hover:text-emerald-400 transition-colors">Status</button></li>
+              <h4 className="text-sm font-semibold mb-4 text-stone-600">Platform</h4>
+              <ul className="space-y-2 text-sm text-stone-8000">
+                <li><button onClick={() => router.push("/pro/features")} className="hover:text-lime-700 transition-colors">Features</button></li>
+                <li><button onClick={() => router.push("/pro/pricing")} className="hover:text-lime-700 transition-colors">Pricing</button></li>
+                <li><button onClick={() => router.push("/system/documentation")} className="hover:text-lime-700 transition-colors">Documentation</button></li>
+                <li><button onClick={() => router.push("/system/status")} className="hover:text-lime-700 transition-colors">Status</button></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold mb-4 text-slate-300">Resources</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li><button onClick={() => router.push("/support")} className="hover:text-emerald-400 transition-colors">Support</button></li>
-                <li><button onClick={() => router.push("/system/help")} className="hover:text-emerald-400 transition-colors">Help Center</button></li>
-                <li><button onClick={() => router.push("/system/integrations")} className="hover:text-emerald-400 transition-colors">Integrations</button></li>
+              <h4 className="text-sm font-semibold mb-4 text-stone-600">Resources</h4>
+              <ul className="space-y-2 text-sm text-stone-8000">
+                <li><button onClick={() => router.push("/support")} className="hover:text-lime-700 transition-colors">Support</button></li>
+                <li><button onClick={() => router.push("/system/help")} className="hover:text-lime-700 transition-colors">Help Center</button></li>
+                <li><button onClick={() => router.push("/system/integrations")} className="hover:text-lime-700 transition-colors">Integrations</button></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold mb-4 text-slate-300">Company</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li><button onClick={() => router.push("/system/security")} className="hover:text-emerald-400 transition-colors">Security</button></li>
-                <li><button onClick={() => router.push("/login")} className="hover:text-emerald-400 transition-colors">Sign In</button></li>
-                <li><button onClick={goSignup} className="hover:text-emerald-400 transition-colors">Sign Up</button></li>
+              <h4 className="text-sm font-semibold mb-4 text-stone-600">Company</h4>
+              <ul className="space-y-2 text-sm text-stone-8000">
+                <li><button onClick={() => router.push("/system/security")} className="hover:text-lime-700 transition-colors">Security</button></li>
+                <li><button onClick={() => router.push("/login")} className="hover:text-lime-700 transition-colors">Sign In</button></li>
+                <li><button onClick={goSignup} className="hover:text-lime-700 transition-colors">Sign Up</button></li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-slate-600">&copy; {new Date().getFullYear()} Harpoon AI. All rights reserved.</p>
-            <div className="flex gap-6 text-xs text-slate-600">
-              <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-slate-400 cursor-pointer">Terms of Service</span>
-              <span className="hover:text-slate-400 cursor-pointer">SDVOSB Certified</span>
+          <div className="border-t border-stone-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-stone-500">&copy; {new Date().getFullYear()} Harpoon AI. All rights reserved.</p>
+            <div className="flex gap-6 text-xs text-stone-500">
+              <span className="hover:text-stone-500 cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-stone-500 cursor-pointer">Terms of Service</span>
+              <span className="hover:text-stone-500 cursor-pointer">SDVOSB Certified</span>
             </div>
           </div>
         </div>

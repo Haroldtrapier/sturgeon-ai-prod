@@ -51,31 +51,31 @@ export default function MatchConfigPage() {
     setSaving(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Match Configuration</h1><p className="text-slate-400 mt-1">Configure your ContractMatch preferences</p></div>
-      {message && <div className="mb-6 p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm">{message}</div>}
+      <div className="mb-8"><h1 className="text-3xl font-bold">Match Configuration</h1><p className="text-stone-500 mt-1">Configure your ContractMatch preferences</p></div>
+      {message && <div className="mb-6 p-4 bg-stone-100 border border-stone-300 rounded-lg text-sm">{message}</div>}
       <div className="space-y-6">
         {[{ label: "NAICS Codes", items: naicsCodes, setItems: setNaicsCodes, input: naicsInput, setInput: setNaicsInput, placeholder: "e.g. 541512" },
           { label: "Keywords", items: keywords, setItems: setKeywords, input: keywordInput, setInput: setKeywordInput, placeholder: "e.g. cybersecurity" },
           { label: "Preferred Agencies", items: agencies, setItems: setAgencies, input: agencyInput, setInput: setAgencyInput, placeholder: "e.g. Department of Defense" }
         ].map(section => (
-          <div key={section.label} className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={section.label} className="p-6 bg-white border border-stone-200 rounded-xl">
             <h2 className="font-semibold mb-3">{section.label}</h2>
             <div className="flex gap-2 mb-3">
-              <input type="text" placeholder={section.placeholder} value={section.input} onChange={e => section.setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addItem(section.input, section.setInput, section.items, section.setItems))} className="flex-1 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
-              <button type="button" onClick={() => addItem(section.input, section.setInput, section.items, section.setItems)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm">Add</button>
+              <input type="text" placeholder={section.placeholder} value={section.input} onChange={e => section.setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addItem(section.input, section.setInput, section.items, section.setItems))} className="flex-1 px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
+              <button type="button" onClick={() => addItem(section.input, section.setInput, section.items, section.setItems)} className="px-4 py-2 bg-lime-700 text-white rounded-lg text-sm">Add</button>
             </div>
-            <div className="flex flex-wrap gap-2">{section.items.map(item => (<span key={item} className="px-3 py-1 bg-emerald-600/10 text-emerald-400 rounded-full text-xs flex items-center gap-2">{item}<button onClick={() => section.setItems(section.items.filter(i => i !== item))} className="hover:text-white">&times;</button></span>))}</div>
+            <div className="flex flex-wrap gap-2">{section.items.map(item => (<span key={item} className="px-3 py-1 bg-lime-700/10 text-lime-700 rounded-full text-xs flex items-center gap-2">{item}<button onClick={() => section.setItems(section.items.filter(i => i !== item))} className="hover:text-stone-900">&times;</button></span>))}</div>
           </div>
         ))}
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-3">Set-Aside Preferences</h2>
-          <div className="grid grid-cols-2 gap-2">{SET_ASIDE_OPTIONS.map(sa => (<label key={sa} className="flex items-center gap-2 p-2 bg-slate-800 rounded-lg cursor-pointer text-sm"><input type="checkbox" checked={setAsides.includes(sa)} onChange={e => setSetAsides(e.target.checked ? [...setAsides, sa] : setAsides.filter(s => s !== sa))} className="accent-emerald-500" />{sa}</label>))}</div>
+          <div className="grid grid-cols-2 gap-2">{SET_ASIDE_OPTIONS.map(sa => (<label key={sa} className="flex items-center gap-2 p-2 bg-stone-100 rounded-lg cursor-pointer text-sm"><input type="checkbox" checked={setAsides.includes(sa)} onChange={e => setSetAsides(e.target.checked ? [...setAsides, sa] : setAsides.filter(s => s !== sa))} className="accent-emerald-500" />{sa}</label>))}</div>
         </div>
-        <button onClick={saveConfig} disabled={saving} className="w-full px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{saving ? "Saving..." : "Save Configuration"}</button>
+        <button onClick={saveConfig} disabled={saving} className="w-full px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{saving ? "Saving..." : "Save Configuration"}</button>
       </div>
     </div>
   );

@@ -50,33 +50,33 @@ export default function SDVOSBPage() {
     setAsking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <div><h1 className="text-3xl font-bold">SDVOSB Certification</h1><p className="text-slate-400 mt-1">Service-Disabled Veteran-Owned Small Business</p></div>
-        <button onClick={getGuidance} disabled={asking} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">{asking ? "Loading..." : "Get AI Guidance"}</button>
+        <div><h1 className="text-3xl font-bold">SDVOSB Certification</h1><p className="text-stone-500 mt-1">Service-Disabled Veteran-Owned Small Business</p></div>
+        <button onClick={getGuidance} disabled={asking} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">{asking ? "Loading..." : "Get AI Guidance"}</button>
       </div>
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl mb-6">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl mb-6">
         <h2 className="font-semibold mb-4">Eligibility Requirements</h2>
         <div className="space-y-3">{REQUIREMENTS.map(r => (
-          <div key={r.title} className="flex items-start gap-3 p-3 bg-slate-800 rounded-lg">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
-            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-slate-400 mt-0.5">{r.desc}</p></div>
+          <div key={r.title} className="flex items-start gap-3 p-3 bg-stone-100 rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-lime-600 mt-1.5 flex-shrink-0" />
+            <div><p className="text-sm font-medium">{r.title}</p><p className="text-xs text-stone-500 mt-0.5">{r.desc}</p></div>
           </div>
         ))}</div>
       </div>
-      <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl mb-6">
+      <div className="p-6 bg-white border border-stone-200 rounded-xl mb-6">
         <h2 className="font-semibold mb-4">Benefits</h2>
         <ul className="space-y-2">{BENEFITS.map((b, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-slate-300"><span className="text-emerald-400 mt-0.5">+</span>{b}</li>
+          <li key={i} className="flex items-start gap-2 text-sm text-stone-600"><span className="text-lime-700 mt-0.5">+</span>{b}</li>
         ))}</ul>
       </div>
       {guidance && (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-3 text-emerald-400">AI Certification Guidance</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{guidance}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-3 text-lime-700">AI Certification Guidance</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{guidance}</pre>
         </div>
       )}
     </div>

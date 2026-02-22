@@ -36,35 +36,35 @@ export default function SetAsideAnalysisPage() {
     setAnalyzing(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Set-Aside Analysis</h1><p className="text-slate-400 mt-1">Understand small business set-aside programs and opportunities</p></div>
-      <div className="mb-6 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Set-Aside Analysis</h1><p className="text-stone-500 mt-1">Understand small business set-aside programs and opportunities</p></div>
+      <div className="mb-6 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="flex gap-3">
-          <input type="text" value={naics} onChange={e => setNaics(e.target.value)} placeholder="NAICS code (optional)" className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <button onClick={analyzeSetAsides} disabled={analyzing} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{analyzing ? "Analyzing..." : "Analyze Set-Asides"}</button>
+          <input type="text" value={naics} onChange={e => setNaics(e.target.value)} placeholder="NAICS code (optional)" className="flex-1 px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <button onClick={analyzeSetAsides} disabled={analyzing} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{analyzing ? "Analyzing..." : "Analyze Set-Asides"}</button>
         </div>
       </div>
       {analysis && (
-        <div className="mb-6 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-3 text-emerald-400">Set-Aside Market Analysis</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{analysis}</pre>
+        <div className="mb-6 p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-3 text-lime-700">Set-Aside Market Analysis</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{analysis}</pre>
         </div>
       )}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead><tr className="text-left text-slate-400 border-b border-slate-800">
+          <thead><tr className="text-left text-stone-500 border-b border-stone-200">
             <th className="pb-3 pr-3">Set-Aside Type</th><th className="pb-3 pr-3">Code</th><th className="pb-3 pr-3">Gov Goal</th><th className="pb-3 pr-3">Threshold</th><th className="pb-3">Description</th>
           </tr></thead>
           <tbody>{SET_ASIDES.map(s => (
-            <tr key={s.type} className="border-b border-slate-800/50">
-              <td className="py-3 pr-3 font-medium text-emerald-400">{s.type}</td>
+            <tr key={s.type} className="border-b border-stone-200">
+              <td className="py-3 pr-3 font-medium text-lime-700">{s.type}</td>
               <td className="py-3 pr-3 font-mono text-xs">{s.code}</td>
               <td className="py-3 pr-3">{s.goal || "—"}</td>
-              <td className="py-3 pr-3 text-slate-400">{s.threshold}</td>
-              <td className="py-3 text-slate-400">{s.desc}</td>
+              <td className="py-3 pr-3 text-stone-500">{s.threshold}</td>
+              <td className="py-3 text-stone-500">{s.desc}</td>
             </tr>
           ))}</tbody>
         </table>

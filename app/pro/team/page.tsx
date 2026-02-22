@@ -46,7 +46,7 @@ export default function ProTeamPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const TABS = [
     { id: "members" as const, label: "Team Members" },
@@ -59,14 +59,14 @@ export default function ProTeamPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Team Management</h1>
-          <p className="text-slate-400 mt-1">Manage your capture team and collaboration settings</p>
+          <p className="text-stone-500 mt-1">Manage your capture team and collaboration settings</p>
         </div>
-        <button onClick={() => router.push("/system/team")} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">Invite Member</button>
+        <button onClick={() => router.push("/system/team")} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 text-sm font-medium">Invite Member</button>
       </div>
 
       <div className="flex gap-2 mb-6">
         {TABS.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === t.id ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:text-white"}`}>
+          <button key={t.id} onClick={() => setActiveTab(t.id)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === t.id ? "bg-lime-700 text-white" : "bg-stone-100 text-stone-500 hover:text-stone-900"}`}>
             {t.label}
           </button>
         ))}
@@ -75,35 +75,35 @@ export default function ProTeamPage() {
       {activeTab === "members" && (
         <>
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-              <p className="text-2xl font-bold text-emerald-400">{members.length}</p>
-              <p className="text-xs text-slate-400">Team Members</p>
+            <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+              <p className="text-2xl font-bold text-lime-700">{members.length}</p>
+              <p className="text-xs text-stone-500">Team Members</p>
             </div>
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-              <p className="text-2xl font-bold text-blue-400">{members.filter(m => m.status === "active").length}</p>
-              <p className="text-xs text-slate-400">Active</p>
+            <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+              <p className="text-2xl font-bold text-blue-600">{members.filter(m => m.status === "active").length}</p>
+              <p className="text-xs text-stone-500">Active</p>
             </div>
-            <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-              <p className="text-2xl font-bold text-purple-400">{members.filter(m => m.role === "admin").length}</p>
-              <p className="text-xs text-slate-400">Admins</p>
+            <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+              <p className="text-2xl font-bold text-purple-600">{members.filter(m => m.role === "admin").length}</p>
+              <p className="text-xs text-stone-500">Admins</p>
             </div>
           </div>
 
           <div className="space-y-3">
             {members.map(m => (
-              <div key={m.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between">
+              <div key={m.id} className="p-4 bg-white border border-stone-200 rounded-xl flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-900/50 rounded-full flex items-center justify-center text-emerald-400 font-bold text-sm">
+                  <div className="w-10 h-10 bg-lime-50 rounded-full flex items-center justify-center text-lime-700 font-bold text-sm">
                     {(m.full_name || m.email).charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <p className="font-medium text-sm">{m.full_name || "—"}</p>
-                    <p className="text-xs text-slate-400">{m.email}</p>
+                    <p className="text-xs text-stone-500">{m.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="px-2 py-0.5 rounded text-xs font-medium capitalize bg-slate-800 text-slate-300">{m.role}</span>
-                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${m.status === "active" ? "bg-emerald-900/50 text-emerald-400" : "bg-slate-700 text-slate-500"}`}>{m.status}</span>
+                  <span className="px-2 py-0.5 rounded text-xs font-medium capitalize bg-stone-100 text-stone-600">{m.role}</span>
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${m.status === "active" ? "bg-lime-50 text-lime-700" : "bg-stone-200 text-stone-8000"}`}>{m.status}</span>
                 </div>
               </div>
             ))}
@@ -112,10 +112,10 @@ export default function ProTeamPage() {
       )}
 
       {activeTab === "activity" && (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400 mb-2">Team activity feed</p>
-          <p className="text-xs text-slate-500">See proposal edits, reviews, and collaboration activity from your team members</p>
-          <button onClick={() => router.push("/pro/audit-trail")} className="mt-4 px-4 py-2 bg-slate-800 rounded-lg text-sm hover:bg-slate-700">View Audit Trail</button>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500 mb-2">Team activity feed</p>
+          <p className="text-xs text-stone-8000">See proposal edits, reviews, and collaboration activity from your team members</p>
+          <button onClick={() => router.push("/pro/audit-trail")} className="mt-4 px-4 py-2 bg-stone-100 rounded-lg text-sm hover:bg-stone-200">View Audit Trail</button>
         </div>
       )}
 
@@ -127,12 +127,12 @@ export default function ProTeamPage() {
             { label: "Share opportunity watchlist", desc: "All team members can see the shared opportunity watchlist" },
             { label: "Enable real-time collaboration", desc: "Allow multiple team members to edit proposals simultaneously" },
           ].map(setting => (
-            <div key={setting.label} className="flex items-center justify-between p-4 bg-slate-900 border border-slate-800 rounded-xl">
+            <div key={setting.label} className="flex items-center justify-between p-4 bg-white border border-stone-200 rounded-xl">
               <div>
                 <p className="text-sm font-medium">{setting.label}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{setting.desc}</p>
+                <p className="text-xs text-stone-500 mt-0.5">{setting.desc}</p>
               </div>
-              <div className="w-11 h-6 bg-slate-700 rounded-full relative cursor-pointer">
+              <div className="w-11 h-6 bg-stone-200 rounded-full relative cursor-pointer">
                 <span className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full" />
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function ProTeamPage() {
         </div>
       )}
 
-      <p className="text-xs text-slate-500 mt-6">Team features require Professional plan. Enterprise plans support unlimited team members with custom roles.</p>
+      <p className="text-xs text-stone-8000 mt-6">Team features require Professional plan. Enterprise plans support unlimited team members with custom roles.</p>
     </div>
   );
 }

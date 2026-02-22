@@ -79,13 +79,13 @@ export default function ProposalsPage() {
   }
 
   const statusColor: Record<string, string> = {
-    draft: "bg-yellow-600", in_progress: "bg-blue-600", submitted: "bg-emerald-600", review: "bg-purple-600",
+    draft: "bg-yellow-600", in_progress: "bg-blue-600", submitted: "bg-lime-700", review: "bg-purple-600",
   };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" />
       </div>
     );
   }
@@ -95,46 +95,46 @@ export default function ProposalsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Proposals</h1>
-          <p className="text-slate-400 mt-1">Manage your government contract proposals</p>
+          <p className="text-stone-500 mt-1">Manage your government contract proposals</p>
         </div>
-        <button onClick={() => setShowCreate(!showCreate)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">
+        <button onClick={() => setShowCreate(!showCreate)} className="px-4 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 font-medium">
           + New Proposal
         </button>
       </div>
 
-      {message && <div className="mb-6 p-4 bg-slate-800 border border-slate-700 rounded-lg text-sm">{message}</div>}
+      {message && <div className="mb-6 p-4 bg-stone-100 border border-stone-300 rounded-lg text-sm">{message}</div>}
 
       {showCreate && (
-        <form onSubmit={handleCreate} className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+        <form onSubmit={handleCreate} className="mb-8 p-6 bg-white border border-stone-200 rounded-xl space-y-4">
           <h2 className="text-xl font-semibold">Create New Proposal</h2>
-          <input type="text" placeholder="Proposal Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <input type="text" placeholder="Opportunity ID" value={oppId} onChange={(e) => setOppId(e.target.value)} required className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <textarea placeholder="Paste RFP text here for compliance extraction..." value={rfpText} onChange={(e) => setRfpText(e.target.value)} required rows={6} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          <input type="text" placeholder="Proposal Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <input type="text" placeholder="Opportunity ID" value={oppId} onChange={(e) => setOppId(e.target.value)} required className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <textarea placeholder="Paste RFP text here for compliance extraction..." value={rfpText} onChange={(e) => setRfpText(e.target.value)} required rows={6} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
           <div className="flex gap-3">
-            <button type="submit" disabled={creating} className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">
+            <button type="submit" disabled={creating} className="px-6 py-2 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">
               {creating ? "Creating..." : "Create & Extract Requirements"}
             </button>
-            <button type="button" onClick={() => setShowCreate(false)} className="px-6 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600">Cancel</button>
+            <button type="button" onClick={() => setShowCreate(false)} className="px-6 py-2 bg-stone-200 text-white rounded-lg hover:bg-slate-600">Cancel</button>
           </div>
         </form>
       )}
 
       {proposals.length === 0 ? (
-        <div className="text-center py-20 bg-slate-900 border border-slate-800 rounded-xl">
-          <p className="text-slate-400 text-lg">No proposals yet</p>
-          <p className="text-slate-500 mt-2">Create your first proposal from a saved opportunity</p>
+        <div className="text-center py-20 bg-white border border-stone-200 rounded-xl">
+          <p className="text-stone-500 text-lg">No proposals yet</p>
+          <p className="text-stone-8000 mt-2">Create your first proposal from a saved opportunity</p>
         </div>
       ) : (
         <div className="space-y-4">
           {proposals.map((p) => (
-            <Link key={p.id} href={`/proposals/${p.id}`} className="block p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-600 transition-colors">
+            <Link key={p.id} href={`/proposals/${p.id}`} className="block p-6 bg-white border border-stone-200 rounded-xl hover:border-lime-600 transition-colors">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold">{p.title}</h3>
-                  {p.opportunities && <p className="text-sm text-slate-400 mt-1">{p.opportunities.agency} - {p.opportunities.title}</p>}
-                  <p className="text-xs text-slate-500 mt-2">Created {new Date(p.created_at).toLocaleDateString()}</p>
+                  {p.opportunities && <p className="text-sm text-stone-500 mt-1">{p.opportunities.agency} - {p.opportunities.title}</p>}
+                  <p className="text-xs text-stone-8000 mt-2">Created {new Date(p.created_at).toLocaleDateString()}</p>
                 </div>
-                <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusColor[p.status] || "bg-slate-700"}`}>{p.status}</span>
+                <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusColor[p.status] || "bg-stone-200"}`}>{p.status}</span>
               </div>
             </Link>
           ))}

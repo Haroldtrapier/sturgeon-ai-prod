@@ -40,7 +40,7 @@ export default function Footer() {
               <ul className="mt-4 space-y-3">
                 {links.map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href} className="hover:text-white transition">
+                    <Link href={link.href} className="hover:text-stone-900 transition">
                       {link.name}
                     </Link>
                   </li>

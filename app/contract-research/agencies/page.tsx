@@ -38,19 +38,19 @@ export default function AgencySpendingPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Agency Spending</h1><p className="text-slate-400 mt-1">Analyze federal agency spending patterns and trends</p></div>
-      <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Agency Spending</h1><p className="text-stone-500 mt-1">Analyze federal agency spending patterns and trends</p></div>
+      <div className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="flex gap-3 mb-4">
-          <input type="text" placeholder="Agency name..." value={agencyName} onChange={e => setAgencyName(e.target.value)} onKeyDown={e => e.key === "Enter" && searchAgency()} className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-          <button onClick={() => searchAgency()} disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{searching ? "Loading..." : "Analyze"}</button>
+          <input type="text" placeholder="Agency name..." value={agencyName} onChange={e => setAgencyName(e.target.value)} onKeyDown={e => e.key === "Enter" && searchAgency()} className="flex-1 px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" />
+          <button onClick={() => searchAgency()} disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{searching ? "Loading..." : "Analyze"}</button>
         </div>
         <div className="flex flex-wrap gap-2">
           {TOP_AGENCIES.map(a => (
-            <button key={a} onClick={() => searchAgency(a)} className="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-slate-300 hover:border-emerald-600 hover:text-emerald-400 transition-colors">{a}</button>
+            <button key={a} onClick={() => searchAgency(a)} className="px-3 py-1 bg-stone-100 border border-stone-300 rounded-full text-xs text-stone-600 hover:border-lime-600 hover:text-lime-700 transition-colors">{a}</button>
           ))}
         </div>
       </div>
@@ -63,32 +63,32 @@ export default function AgencySpendingPage() {
               { label: "Avg Award Size", value: agencyData.avg_award ? `$${Number(agencyData.avg_award).toLocaleString()}` : "—" },
               { label: "Small Biz %", value: agencyData.small_business_pct ? `${agencyData.small_business_pct}%` : "—" },
             ].map(s => (
-              <div key={s.label} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-                <p className="text-2xl font-bold text-emerald-400">{s.value}</p>
-                <p className="text-xs text-slate-400 mt-1">{s.label}</p>
+              <div key={s.label} className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+                <p className="text-2xl font-bold text-lime-700">{s.value}</p>
+                <p className="text-xs text-stone-500 mt-1">{s.label}</p>
               </div>
             ))}
           </div>
           {agencyData.analysis && (
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-              <h2 className="text-lg font-semibold mb-3 text-emerald-400">AI Analysis</h2>
-              <pre className="text-sm text-slate-300 whitespace-pre-wrap">{typeof agencyData.analysis === "string" ? agencyData.analysis : JSON.stringify(agencyData.analysis, null, 2)}</pre>
+            <div className="p-6 bg-white border border-stone-200 rounded-xl">
+              <h2 className="text-lg font-semibold mb-3 text-lime-700">AI Analysis</h2>
+              <pre className="text-sm text-stone-600 whitespace-pre-wrap">{typeof agencyData.analysis === "string" ? agencyData.analysis : JSON.stringify(agencyData.analysis, null, 2)}</pre>
             </div>
           )}
           {agencyData.top_vendors && agencyData.top_vendors.length > 0 && (
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+            <div className="p-6 bg-white border border-stone-200 rounded-xl">
               <h2 className="text-lg font-semibold mb-3">Top Vendors</h2>
               <div className="space-y-2">{agencyData.top_vendors.map((v: any, i: number) => (
-                <div key={i} className="flex justify-between items-center py-2 border-b border-slate-800/50 last:border-0">
+                <div key={i} className="flex justify-between items-center py-2 border-b border-stone-200 last:border-0">
                   <span className="text-sm">{v.name || v.recipient_name}</span>
-                  <span className="text-sm text-emerald-400 font-medium">{v.total ? `$${Number(v.total).toLocaleString()}` : "—"}</span>
+                  <span className="text-sm text-lime-700 font-medium">{v.total ? `$${Number(v.total).toLocaleString()}` : "—"}</span>
                 </div>
               ))}</div>
             </div>
           )}
         </div>
       )}
-      {!agencyData && !searching && <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl"><p className="text-slate-400">Select or search for an agency to view spending analysis</p></div>}
+      {!agencyData && !searching && <div className="text-center py-16 bg-white border border-stone-200 rounded-xl"><p className="text-stone-500">Select or search for an agency to view spending analysis</p></div>}
     </div>
   );
 }

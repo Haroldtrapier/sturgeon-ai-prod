@@ -43,29 +43,29 @@ Provide: 1) Types of companies to partner with 2) Where to find teaming partners
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Teaming Partner Finder</h1><p className="text-slate-400 mt-1">Find strategic partners for joint ventures and teaming arrangements</p></div>
-      <form onSubmit={findPartners} className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Teaming Partner Finder</h1><p className="text-stone-500 mt-1">Find strategic partners for joint ventures and teaming arrangements</p></div>
+      <form onSubmit={findPartners} className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <div><label className="block text-xs text-slate-400 mb-1">NAICS Code</label><input type="text" placeholder="e.g. 541512" value={naics} onChange={e => setNaics(e.target.value)} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
-          <div><label className="block text-xs text-slate-400 mb-1">Capability Needed</label><input type="text" placeholder="e.g. Cloud Migration" value={capability} onChange={e => setCapability(e.target.value)} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
-          <div><label className="block text-xs text-slate-400 mb-1">Location</label><input type="text" placeholder="e.g. Washington DC" value={location} onChange={e => setLocation(e.target.value)} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
+          <div><label className="block text-xs text-stone-500 mb-1">NAICS Code</label><input type="text" placeholder="e.g. 541512" value={naics} onChange={e => setNaics(e.target.value)} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
+          <div><label className="block text-xs text-stone-500 mb-1">Capability Needed</label><input type="text" placeholder="e.g. Cloud Migration" value={capability} onChange={e => setCapability(e.target.value)} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
+          <div><label className="block text-xs text-stone-500 mb-1">Location</label><input type="text" placeholder="e.g. Washington DC" value={location} onChange={e => setLocation(e.target.value)} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
         </div>
-        <button type="submit" disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{searching ? "Finding Partners..." : "Find Partners"}</button>
+        <button type="submit" disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{searching ? "Finding Partners..." : "Find Partners"}</button>
       </form>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-blue-400">Mentor-Protege</p><p className="text-xs text-slate-400 mt-1">Large business mentorship</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-purple-400">Joint Venture</p><p className="text-xs text-slate-400 mt-1">Combined entity bidding</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-lg font-bold text-emerald-400">Subcontracting</p><p className="text-xs text-slate-400 mt-1">Team under a prime</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-blue-600">Mentor-Protege</p><p className="text-xs text-stone-500 mt-1">Large business mentorship</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-purple-600">Joint Venture</p><p className="text-xs text-stone-500 mt-1">Combined entity bidding</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-lg font-bold text-lime-700">Subcontracting</p><p className="text-xs text-stone-500 mt-1">Team under a prime</p></div>
       </div>
-      {searching && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400 mx-auto mb-3" /><p className="text-sm text-slate-400">Finding teaming partners...</p></div>}
+      {searching && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-lime-500 mx-auto mb-3" /><p className="text-sm text-stone-500">Finding teaming partners...</p></div>}
       {results && (
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4 text-emerald-400">Teaming Recommendations</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{results}</pre>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-4 text-lime-700">Teaming Recommendations</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{results}</pre>
         </div>
       )}
     </div>

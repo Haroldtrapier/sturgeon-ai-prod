@@ -11,7 +11,7 @@ export default function PageHeader({ title, description, actions }: PageHeaderPr
     <div className="flex items-center justify-between mb-8">
       <div>
         <h1 className="text-3xl font-bold">{title}</h1>
-        {description && <p className="text-slate-400 mt-1">{description}</p>}
+        {description && <p className="text-stone-500 mt-1">{description}</p>}
       </div>
       {actions && <div className="flex items-center gap-3">{actions}</div>}
     </div>

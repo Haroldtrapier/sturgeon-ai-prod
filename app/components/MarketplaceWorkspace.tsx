@@ -165,18 +165,18 @@ export default function MarketplaceWorkspace({
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 px-6 py-8">
+    <main className="min-h-screen bg-sand-50 text-stone-800 px-6 py-8">
       <section className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-2">{name} + Harpoon AI</h1>
-            <p className="text-slate-300">{description}</p>
+            <p className="text-stone-600">{description}</p>
           </div>
           <a
             href={loginUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-slate-950 bg-emerald-500 shadow-lg hover:bg-emerald-400 transition"
+            className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-slate-950 bg-lime-600 shadow-lg hover:bg-lime-600 transition"
           >
             <ExternalLink className="w-4 h-4 mr-2" />
             Open {name}
@@ -186,15 +186,15 @@ export default function MarketplaceWorkspace({
         {message && (
           <div className={`mb-4 p-3 rounded-lg ${
             message.includes("Error") || message.includes("failed")
-              ? "bg-red-500/20 text-red-300"
-              : "bg-emerald-500/20 text-emerald-300"
+              ? "bg-red-500/20 text-red-700"
+              : "bg-lime-600/20 text-lime-600"
           }`}>
             {message}
           </div>
         )}
 
         {/* Import Panel */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 mb-6">
+        <div className="rounded-2xl border border-stone-200 bg-white/60 p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Upload className="w-5 h-5" />
             Import Opportunity
@@ -205,8 +205,8 @@ export default function MarketplaceWorkspace({
               onClick={() => setImportMode("url")}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 importMode === "url"
-                  ? "bg-emerald-500 text-slate-950"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  ? "bg-lime-600 text-slate-950"
+                  : "bg-stone-100 text-stone-600 hover:bg-stone-200"
               }`}
             >
               Paste URL
@@ -215,8 +215,8 @@ export default function MarketplaceWorkspace({
               onClick={() => setImportMode("text")}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 importMode === "text"
-                  ? "bg-emerald-500 text-slate-950"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  ? "bg-lime-600 text-slate-950"
+                  : "bg-stone-100 text-stone-600 hover:bg-stone-200"
               }`}
             >
               Paste Text
@@ -229,7 +229,7 @@ export default function MarketplaceWorkspace({
               placeholder="Paste opportunity URL here..."
               value={opportunityUrl}
               onChange={(e) => setOpportunityUrl(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 mb-4"
+              className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg text-stone-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-lime-500 mb-4"
             />
           ) : (
             <textarea
@@ -237,38 +237,38 @@ export default function MarketplaceWorkspace({
               value={opportunityText}
               onChange={(e) => setOpportunityText(e.target.value)}
               rows={6}
-              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 mb-4 resize-none"
+              className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg text-stone-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-lime-500 mb-4 resize-none"
             />
           )}
 
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-6 py-3 bg-emerald-500 text-slate-950 font-semibold rounded-lg hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="px-6 py-3 bg-lime-600 text-slate-950 font-semibold rounded-lg hover:bg-lime-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             {saving ? "Saving..." : "Save to Harpoon"}
           </button>
         </div>
 
         {/* Recent Imports */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+        <div className="rounded-2xl border border-stone-200 bg-white/60 p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <FileText className="w-5 h-5" />
             Recent Imports
           </h2>
 
           {opportunities.length === 0 ? (
-            <p className="text-slate-400 text-sm">No opportunities imported yet.</p>
+            <p className="text-stone-500 text-sm">No opportunities imported yet.</p>
           ) : (
             <div className="space-y-4">
               {opportunities.map((opp) => (
                 <div
                   key={opp.id}
-                  className="border border-slate-700 rounded-lg p-4 bg-slate-800/40"
+                  className="border border-stone-300 rounded-lg p-4 bg-stone-100/40"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-slate-50">{opp.title}</h3>
-                    <span className="text-xs text-slate-400 flex items-center gap-1">
+                    <h3 className="font-semibold text-stone-800">{opp.title}</h3>
+                    <span className="text-xs text-stone-500 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {new Date(opp.created_at).toLocaleDateString()}
                     </span>
@@ -279,18 +279,18 @@ export default function MarketplaceWorkspace({
                       href={opp.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-sm text-emerald-400 hover:text-emerald-300 mb-2 inline-block"
+                      className="text-sm text-lime-700 hover:text-lime-600 mb-2 inline-block"
                     >
                       {opp.url}
                     </a>
                   )}
 
                   {opp.analysis ? (
-                    <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-                      <p className="text-sm text-emerald-200 font-medium mb-2">Analysis:</p>
-                      <p className="text-xs text-slate-300 mb-2">{opp.analysis.summary}</p>
+                    <div className="mt-3 p-3 bg-lime-600/10 border border-lime-500/30 rounded-lg">
+                      <p className="text-sm text-lime-700 font-medium mb-2">Analysis:</p>
+                      <p className="text-xs text-stone-600 mb-2">{opp.analysis.summary}</p>
                       {opp.analysis.requirements && opp.analysis.requirements.length > 0 && (
-                        <div className="text-xs text-slate-400">
+                        <div className="text-xs text-stone-500">
                           <span className="font-medium">Requirements:</span>{" "}
                           {opp.analysis.requirements.join(", ")}
                         </div>

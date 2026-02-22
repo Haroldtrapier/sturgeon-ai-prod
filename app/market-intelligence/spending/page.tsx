@@ -38,53 +38,53 @@ export default function SpendingTrendsPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Spending Trends</h1><p className="text-slate-400 mt-1">Analyze federal spending patterns over time</p></div>
-      <form onSubmit={searchSpending} className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Spending Trends</h1><p className="text-stone-500 mt-1">Analyze federal spending patterns over time</p></div>
+      <form onSubmit={searchSpending} className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div><label className="block text-xs text-slate-400 mb-1">NAICS Code</label><input type="text" placeholder="e.g. 541512" value={naics} onChange={e => setNaics(e.target.value)} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
-          <div><label className="block text-xs text-slate-400 mb-1">Agency</label><input type="text" placeholder="e.g. Department of Defense" value={agency} onChange={e => setAgency(e.target.value)} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none" /></div>
+          <div><label className="block text-xs text-stone-500 mb-1">NAICS Code</label><input type="text" placeholder="e.g. 541512" value={naics} onChange={e => setNaics(e.target.value)} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
+          <div><label className="block text-xs text-stone-500 mb-1">Agency</label><input type="text" placeholder="e.g. Department of Defense" value={agency} onChange={e => setAgency(e.target.value)} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none" /></div>
         </div>
-        <button type="submit" disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{searching ? "Loading..." : "View Trends"}</button>
+        <button type="submit" disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{searching ? "Loading..." : "View Trends"}</button>
       </form>
       {data && (
         <div className="space-y-6">
           {data.summary && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {Object.entries(data.summary).map(([key, val]: [string, any]) => (
-                <div key={key} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-                  <p className="text-xl font-bold text-emerald-400">{typeof val === "number" ? (val > 1000 ? `$${(val / 1e9).toFixed(1)}B` : val.toLocaleString()) : String(val)}</p>
-                  <p className="text-xs text-slate-400 mt-1">{key.replace(/_/g, " ")}</p>
+                <div key={key} className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+                  <p className="text-xl font-bold text-lime-700">{typeof val === "number" ? (val > 1000 ? `$${(val / 1e9).toFixed(1)}B` : val.toLocaleString()) : String(val)}</p>
+                  <p className="text-xs text-stone-500 mt-1">{key.replace(/_/g, " ")}</p>
                 </div>
               ))}
             </div>
           )}
           {data.yearly_data && data.yearly_data.length > 0 && (
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+            <div className="p-6 bg-white border border-stone-200 rounded-xl">
               <h2 className="font-semibold mb-4">Yearly Breakdown</h2>
               <div className="space-y-2">{data.yearly_data.map((y: any, i: number) => (
-                <div key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
+                <div key={i} className="flex items-center justify-between py-2 border-b border-stone-200 last:border-0">
                   <span className="text-sm font-medium">FY {y.year || y.fiscal_year}</span>
                   <div className="flex items-center gap-6">
-                    <span className="text-sm text-slate-400">{y.contract_count?.toLocaleString() || "—"} contracts</span>
-                    <span className="text-sm text-emerald-400 font-medium">${y.total_spending ? Number(y.total_spending).toLocaleString() : "—"}</span>
+                    <span className="text-sm text-stone-500">{y.contract_count?.toLocaleString() || "—"} contracts</span>
+                    <span className="text-sm text-lime-700 font-medium">${y.total_spending ? Number(y.total_spending).toLocaleString() : "—"}</span>
                   </div>
                 </div>
               ))}</div>
             </div>
           )}
           {data.analysis && (
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-              <h2 className="font-semibold mb-3 text-emerald-400">AI Analysis</h2>
-              <pre className="text-sm text-slate-300 whitespace-pre-wrap">{typeof data.analysis === "string" ? data.analysis : JSON.stringify(data.analysis, null, 2)}</pre>
+            <div className="p-6 bg-white border border-stone-200 rounded-xl">
+              <h2 className="font-semibold mb-3 text-lime-700">AI Analysis</h2>
+              <pre className="text-sm text-stone-600 whitespace-pre-wrap">{typeof data.analysis === "string" ? data.analysis : JSON.stringify(data.analysis, null, 2)}</pre>
             </div>
           )}
         </div>
       )}
-      {!data && !searching && <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-xl"><p className="text-slate-400">Enter a NAICS code or agency to view spending trends</p></div>}
+      {!data && !searching && <div className="text-center py-16 bg-white border border-stone-200 rounded-xl"><p className="text-stone-500">Enter a NAICS code or agency to view spending trends</p></div>}
     </div>
   );
 }

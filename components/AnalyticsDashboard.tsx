@@ -43,14 +43,14 @@ export default function AnalyticsDashboard({ userId }: { userId: string }) {
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-32 bg-slate-800 rounded-lg"></div>
-        <div className="h-32 bg-slate-800 rounded-lg"></div>
+        <div className="h-32 bg-stone-100 rounded-lg"></div>
+        <div className="h-32 bg-stone-100 rounded-lg"></div>
       </div>
     )
   }
 
   if (!analytics) {
-    return <div className="text-slate-400">No analytics data available</div>
+    return <div className="text-stone-500">No analytics data available</div>
   }
 
   return (
@@ -62,7 +62,7 @@ export default function AnalyticsDashboard({ userId }: { userId: string }) {
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
           aria-label="Select time range"
-          className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-100"
+          className="px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg text-stone-700"
         >
           <option value="7d">Last 7 Days</option>
           <option value="30d">Last 30 Days</option>
@@ -125,18 +125,18 @@ export default function AnalyticsDashboard({ userId }: { userId: string }) {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-6">
+      <div className="bg-white/60 rounded-2xl border border-stone-200 p-6">
         <h3 className="text-xl font-semibold mb-4">Recent Activity</h3>
         <div className="space-y-3">
           {analytics.recentActivity.map((activity) => (
             <div
               key={activity.id}
-              className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg"
+              className="flex items-start gap-3 p-3 bg-stone-100 rounded-lg"
             >
-              <div className="w-2 h-2 mt-2 rounded-full bg-emerald-500"></div>
+              <div className="w-2 h-2 mt-2 rounded-full bg-lime-600"></div>
               <div className="flex-1">
-                <p className="text-slate-200">{activity.description}</p>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-stone-600">{activity.description}</p>
+                <p className="text-sm text-stone-8000 mt-1">
                   {new Date(activity.timestamp).toLocaleString()}
                 </p>
               </div>
@@ -147,16 +147,16 @@ export default function AnalyticsDashboard({ userId }: { userId: string }) {
 
       {/* Charts Placeholder */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-6">
+        <div className="bg-white/60 rounded-2xl border border-stone-200 p-6">
           <h3 className="text-xl font-semibold mb-4">Proposal Pipeline</h3>
-          <div className="h-64 flex items-center justify-center text-slate-500">
+          <div className="h-64 flex items-center justify-center text-stone-8000">
             Chart: Proposals by Status
           </div>
         </div>
         
-        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-6">
+        <div className="bg-white/60 rounded-2xl border border-stone-200 p-6">
           <h3 className="text-xl font-semibold mb-4">Activity Trend</h3>
-          <div className="h-64 flex items-center justify-center text-slate-500">
+          <div className="h-64 flex items-center justify-center text-stone-8000">
             Chart: Activity Over Time
           </div>
         </div>
@@ -175,11 +175,11 @@ type MetricCardProps = {
 
 function MetricCard({ title, value, icon, color, small }: MetricCardProps) {
   const colorClasses = {
-    blue: 'border-blue-700 bg-blue-900/20',
-    emerald: 'border-emerald-700 bg-emerald-900/20',
+    blue: 'border-blue-700 bg-blue-50',
+    emerald: 'border-lime-300 bg-lime-50',
     purple: 'border-purple-700 bg-purple-900/20',
     amber: 'border-amber-700 bg-amber-900/20',
-    slate: 'border-slate-700 bg-slate-900/40',
+    slate: 'border-stone-300 bg-stone-100/60',
   }
 
   return (
@@ -190,7 +190,7 @@ function MetricCard({ title, value, icon, color, small }: MetricCardProps) {
           {value}
         </div>
       </div>
-      <div className="text-sm text-slate-400">{title}</div>
+      <div className="text-sm text-stone-500">{title}</div>
     </div>
   )
 }

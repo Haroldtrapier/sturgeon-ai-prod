@@ -100,11 +100,11 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 p-6">
+    <div className="min-h-screen bg-sand-50 text-stone-800 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-emerald-400 mb-2">{sourceName}</h1>
-          <p className="text-slate-300 mb-4">{description}</p>
+          <h1 className="text-3xl font-bold text-lime-700 mb-2">{sourceName}</h1>
+          <p className="text-stone-600 mb-4">{description}</p>
           <a 
             href={loginUrl} 
             target="_blank" 
@@ -115,11 +115,11 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
           </a>
         </div>
 
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-4">
+        <div className="bg-white/70 border border-stone-200 rounded-xl p-6 space-y-4">
           <h2 className="text-xl font-semibold mb-4">Import Opportunity</h2>
           
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-stone-600 mb-2">
               Opportunity URL
             </label>
             <input
@@ -127,14 +127,14 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={`Paste ${sourceName} opportunity URL...`}
-              className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+              className="w-full px-4 py-3 bg-sand-50 border border-stone-300 rounded-lg text-stone-700 placeholder-slate-500 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/20 outline-none transition"
             />
           </div>
 
-          <div className="text-center text-slate-500 text-sm">OR</div>
+          <div className="text-center text-stone-8000 text-sm">OR</div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-stone-600 mb-2">
               Paste Opportunity Text
             </label>
             <textarea
@@ -142,14 +142,14 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
               onChange={(e) => setRawText(e.target.value)}
               placeholder="Copy and paste the full opportunity details here...\n\nInclude title, description, requirements, deadline, and any other relevant information."
               rows={10}
-              className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition resize-none"
+              className="w-full px-4 py-3 bg-sand-50 border border-stone-300 rounded-lg text-stone-700 placeholder-slate-500 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/20 outline-none transition resize-none"
             />
           </div>
 
           <button
             onClick={handleImport}
             disabled={loading || (!url.trim() && !rawText.trim())}
-            className="w-full px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
+            className="w-full px-6 py-3 bg-lime-700 hover:bg-lime-800 disabled:bg-stone-200 disabled:cursor-not-allowed rounded-lg font-semibold transition-colors"
           >
             {loading ? 'Saving...' : 'Save to Harpoon AI'}
           </button>
@@ -157,37 +157,37 @@ export default function MarketplaceImport({ source, sourceName, loginUrl, descri
           {status && (
             <div className={`p-3 rounded-lg text-sm ${
               status.startsWith('✅') 
-                ? 'bg-emerald-900/50 text-emerald-300 border border-emerald-800' 
+                ? 'bg-lime-50 text-lime-600 border border-lime-200' 
                 : status.startsWith('❌') 
-                ? 'bg-red-900/50 text-red-300 border border-red-800'
-                : 'bg-blue-900/50 text-blue-300 border border-blue-800'
+                ? 'bg-red-50 text-red-700 border border-red-200'
+                : 'bg-blue-50 text-blue-300 border border-blue-200'
             }`}>
               {status}
             </div>
           )}
         </div>
 
-        <div className="mt-8 bg-slate-900/50 border border-slate-800 rounded-xl p-6">
-          <h3 className="text-lg font-semibold mb-3 text-emerald-400">How It Works</h3>
-          <ol className="space-y-2 text-slate-300 text-sm">
+        <div className="mt-8 bg-stone-100 border border-stone-200 rounded-xl p-6">
+          <h3 className="text-lg font-semibold mb-3 text-lime-700">How It Works</h3>
+          <ol className="space-y-2 text-stone-600 text-sm">
             <li className="flex gap-2">
-              <span className="text-emerald-400 font-bold">1.</span>
+              <span className="text-lime-700 font-bold">1.</span>
               <span>Log into {sourceName} in a separate tab</span>
             </li>
             <li className="flex gap-2">
-              <span className="text-emerald-400 font-bold">2.</span>
+              <span className="text-lime-700 font-bold">2.</span>
               <span>Find an opportunity that matches your capabilities</span>
             </li>
             <li className="flex gap-2">
-              <span className="text-emerald-400 font-bold">3.</span>
+              <span className="text-lime-700 font-bold">3.</span>
               <span>Copy the URL or paste the full text above</span>
             </li>
             <li className="flex gap-2">
-              <span className="text-emerald-400 font-bold">4.</span>
+              <span className="text-lime-700 font-bold">4.</span>
               <span>Click "Save to Harpoon AI" to import it</span>
             </li>
             <li className="flex gap-2">
-              <span className="text-emerald-400 font-bold">5.</span>
+              <span className="text-lime-700 font-bold">5.</span>
               <span>Use the AI Assistant to analyze and draft responses</span>
             </li>
           </ol>

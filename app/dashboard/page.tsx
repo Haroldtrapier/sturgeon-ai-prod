@@ -54,11 +54,11 @@ export default function DashboardOverviewPage() {
     init();
   }, [router]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const quickLinks = [
     { label: "Search Opportunities", href: "/opportunities", color: "bg-blue-600" },
-    { label: "Create Proposal", href: "/proposals", color: "bg-emerald-600" },
+    { label: "Create Proposal", href: "/proposals", color: "bg-lime-700" },
     { label: "AI Chat", href: "/chat", color: "bg-purple-600" },
     { label: "Compliance Check", href: "/compliance", color: "bg-amber-600" },
     { label: "Market Intel", href: "/market-intelligence", color: "bg-cyan-600" },
@@ -71,21 +71,21 @@ export default function DashboardOverviewPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-slate-400 mt-1">Welcome back to Harpoon AI</p>
+        <p className="text-stone-500 mt-1">Welcome back to Harpoon AI</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
         {[
-          { label: "Proposals", value: stats.total_proposals || 0, color: "text-blue-400" },
+          { label: "Proposals", value: stats.total_proposals || 0, color: "text-blue-600" },
           { label: "Drafts", value: stats.draft_proposals || 0, color: "text-amber-400" },
-          { label: "Submitted", value: stats.submitted_proposals || 0, color: "text-emerald-400" },
-          { label: "Saved Opps", value: stats.saved_opportunities || 0, color: "text-purple-400" },
-          { label: "Active Certs", value: stats.active_certs || 0, color: "text-cyan-400" },
-          { label: "Notifications", value: stats.unread_notifications || 0, color: "text-red-400" },
+          { label: "Submitted", value: stats.submitted_proposals || 0, color: "text-lime-700" },
+          { label: "Saved Opps", value: stats.saved_opportunities || 0, color: "text-purple-600" },
+          { label: "Active Certs", value: stats.active_certs || 0, color: "text-cyan-600" },
+          { label: "Notifications", value: stats.unread_notifications || 0, color: "text-red-600" },
         ].map(s => (
-          <div key={s.label} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
+          <div key={s.label} className="p-4 bg-white border border-stone-200 rounded-xl text-center">
             <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-slate-400 mt-1">{s.label}</p>
+            <p className="text-xs text-stone-500 mt-1">{s.label}</p>
           </div>
         ))}
       </div>
@@ -97,40 +97,40 @@ export default function DashboardOverviewPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold">Recent Activity</h2>
-            <button onClick={() => router.push("/dashboard/activity")} className="text-xs text-emerald-400 hover:underline">View All</button>
+            <button onClick={() => router.push("/dashboard/activity")} className="text-xs text-lime-700 hover:underline">View All</button>
           </div>
           {recentActivity.length > 0 ? (
             <div className="space-y-3">{recentActivity.map((a, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
+              <div key={i} className="flex items-center justify-between py-2 border-b border-stone-200 last:border-0">
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full ${a.type === "proposal" ? "bg-blue-500" : "bg-purple-500"}`} />
-                  <div><p className="text-sm">{a.title}</p><p className="text-xs text-slate-500 capitalize">{a.type} &middot; {a.status}</p></div>
+                  <div><p className="text-sm">{a.title}</p><p className="text-xs text-stone-8000 capitalize">{a.type} &middot; {a.status}</p></div>
                 </div>
-                <span className="text-xs text-slate-500">{a.date ? new Date(a.date).toLocaleDateString() : ""}</span>
+                <span className="text-xs text-stone-8000">{a.date ? new Date(a.date).toLocaleDateString() : ""}</span>
               </div>
             ))}</div>
-          ) : <p className="text-sm text-slate-400">No recent activity</p>}
+          ) : <p className="text-sm text-stone-500">No recent activity</p>}
         </div>
 
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold">Upcoming Deadlines</h2>
-            <button onClick={() => router.push("/dashboard/calendar")} className="text-xs text-emerald-400 hover:underline">View Calendar</button>
+            <button onClick={() => router.push("/dashboard/calendar")} className="text-xs text-lime-700 hover:underline">View Calendar</button>
           </div>
           {upcomingDeadlines.length > 0 ? (
             <div className="space-y-3">{upcomingDeadlines.map((d, i) => {
               const daysLeft = Math.ceil((new Date(d.response_deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
               return (
-                <div key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
+                <div key={i} className="flex items-center justify-between py-2 border-b border-stone-200 last:border-0">
                   <p className="text-sm flex-1 truncate mr-3">{d.title}</p>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded ${daysLeft <= 3 ? "bg-red-900/30 text-red-400" : daysLeft <= 7 ? "bg-amber-900/30 text-amber-400" : "bg-emerald-900/30 text-emerald-400"}`}>{daysLeft}d left</span>
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded ${daysLeft <= 3 ? "bg-red-50 text-red-600" : daysLeft <= 7 ? "bg-amber-900/30 text-amber-400" : "bg-lime-50 text-lime-700"}`}>{daysLeft}d left</span>
                 </div>
               );
             })}</div>
-          ) : <p className="text-sm text-slate-400">No upcoming deadlines</p>}
+          ) : <p className="text-sm text-stone-500">No upcoming deadlines</p>}
         </div>
       </div>
 
@@ -141,9 +141,9 @@ export default function DashboardOverviewPage() {
           { label: "Activity Feed", href: "/dashboard/activity", desc: "Recent actions" },
           { label: "Calendar", href: "/dashboard/calendar", desc: "Deadline tracker" },
         ].map(link => (
-          <button key={link.label} onClick={() => router.push(link.href)} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-left hover:border-slate-700 transition-colors">
+          <button key={link.label} onClick={() => router.push(link.href)} className="p-4 bg-white border border-stone-200 rounded-xl text-left hover:border-stone-300 transition-colors">
             <p className="font-medium text-sm">{link.label}</p>
-            <p className="text-xs text-slate-400 mt-1">{link.desc}</p>
+            <p className="text-xs text-stone-500 mt-1">{link.desc}</p>
           </button>
         ))}
       </div>

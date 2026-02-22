@@ -51,7 +51,7 @@ export default function AgencySpendingPage() {
     setSearching(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const TOP_AGENCIES = [
     { name: "Department of Defense", abbr: "DoD" },
@@ -68,21 +68,21 @@ export default function AgencySpendingPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Agency Spending Analysis</h1>
-        <p className="text-slate-400 mt-1">Research federal agency procurement budgets and spending patterns</p>
+        <p className="text-stone-500 mt-1">Research federal agency procurement budgets and spending patterns</p>
       </div>
 
       <div className="flex gap-3 mb-6">
-        <input type="text" value={agency} onChange={e => setAgency(e.target.value)} onKeyDown={e => e.key === "Enter" && searchSpending("")} placeholder="Enter agency name..." className="flex-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
-        <button onClick={() => searchSpending("")} disabled={searching} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">
+        <input type="text" value={agency} onChange={e => setAgency(e.target.value)} onKeyDown={e => e.key === "Enter" && searchSpending("")} placeholder="Enter agency name..." className="flex-1 px-4 py-3 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
+        <button onClick={() => searchSpending("")} disabled={searching} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">
           {searching ? "Analyzing..." : "Analyze"}
         </button>
       </div>
 
       <div className="mb-6">
-        <p className="text-xs text-slate-400 mb-2">Quick Select:</p>
+        <p className="text-xs text-stone-500 mb-2">Quick Select:</p>
         <div className="flex flex-wrap gap-2">
           {TOP_AGENCIES.map(a => (
-            <button key={a.abbr} onClick={() => { setAgency(a.name); searchSpending(a.name); }} className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs hover:border-emerald-600 transition-colors">
+            <button key={a.abbr} onClick={() => { setAgency(a.name); searchSpending(a.name); }} className="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs hover:border-lime-600 transition-colors">
               {a.abbr}
             </button>
           ))}
@@ -90,14 +90,14 @@ export default function AgencySpendingPage() {
       </div>
 
       {results ? (
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <h2 className="font-semibold text-emerald-400 mb-3">Spending Analysis: {agency}</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{results}</pre>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
+          <h2 className="font-semibold text-lime-700 mb-3">Spending Analysis: {agency}</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{results}</pre>
         </div>
       ) : (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400">Enter an agency name to analyze spending data</p>
-          <p className="text-xs text-slate-500 mt-1">Data sourced from USASpending.gov and FPDS</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500">Enter an agency name to analyze spending data</p>
+          <p className="text-xs text-stone-8000 mt-1">Data sourced from USASpending.gov and FPDS</p>
         </div>
       )}
     </div>

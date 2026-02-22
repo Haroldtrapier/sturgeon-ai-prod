@@ -66,7 +66,7 @@ export default function OpportunityAnalysisPage() {
     setAnalyzing(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   const QUICK_ANALYSES = [
     "IT Services & Cybersecurity",
@@ -81,21 +81,21 @@ export default function OpportunityAnalysisPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Opportunity Analysis</h1>
-        <p className="text-slate-400 mt-1">AI-powered deep analysis of contracting opportunities</p>
+        <p className="text-stone-500 mt-1">AI-powered deep analysis of contracting opportunities</p>
       </div>
 
       <div className="flex gap-3 mb-6">
-        <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === "Enter" && analyzeByKeyword()} placeholder="Enter opportunity keyword or NAICS code..." className="flex-1 px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
-        <button onClick={analyzeByKeyword} disabled={analyzing} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">
+        <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => e.key === "Enter" && analyzeByKeyword()} placeholder="Enter opportunity keyword or NAICS code..." className="flex-1 px-4 py-3 bg-white border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
+        <button onClick={analyzeByKeyword} disabled={analyzing} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">
           {analyzing ? "Analyzing..." : "Analyze"}
         </button>
       </div>
 
       <div className="mb-6">
-        <p className="text-xs text-slate-400 mb-2">Quick Analysis:</p>
+        <p className="text-xs text-stone-500 mb-2">Quick Analysis:</p>
         <div className="flex flex-wrap gap-2">
           {QUICK_ANALYSES.map(q => (
-            <button key={q} onClick={() => { setKeyword(q); analyzeByKeyword(); }} className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs hover:border-emerald-600 transition-colors">{q}</button>
+            <button key={q} onClick={() => { setKeyword(q); analyzeByKeyword(); }} className="px-3 py-1.5 bg-white border border-stone-200 rounded-lg text-xs hover:border-lime-600 transition-colors">{q}</button>
           ))}
         </div>
       </div>
@@ -106,23 +106,23 @@ export default function OpportunityAnalysisPage() {
           { title: "Win Probability", desc: "Estimate win rates based on your profile match", icon: "🎯" },
           { title: "Pricing Intelligence", desc: "Market rates and pricing benchmarks", icon: "💰" },
         ].map(card => (
-          <div key={card.title} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={card.title} className="p-4 bg-white border border-stone-200 rounded-xl">
             <div className="text-2xl mb-2">{card.icon}</div>
             <h3 className="font-semibold text-sm">{card.title}</h3>
-            <p className="text-xs text-slate-400 mt-1">{card.desc}</p>
+            <p className="text-xs text-stone-500 mt-1">{card.desc}</p>
           </div>
         ))}
       </div>
 
       {analysis ? (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="font-semibold text-emerald-400 mb-3">Analysis Results</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{analysis}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="font-semibold text-lime-700 mb-3">Analysis Results</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap leading-relaxed">{analysis}</pre>
         </div>
       ) : !analyzing && (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400">Enter a keyword or select a quick analysis to get started</p>
-          <p className="text-xs text-slate-500 mt-1">Our AI analyzes market data, competition, and your profile to provide actionable insights</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500">Enter a keyword or select a quick analysis to get started</p>
+          <p className="text-xs text-stone-8000 mt-1">Our AI analyzes market data, competition, and your profile to provide actionable insights</p>
         </div>
       )}
     </div>

@@ -43,31 +43,31 @@ export default function SAMRegistrationPage() {
     setAsking(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">SAM.gov Registration Guide</h1><p className="text-slate-400 mt-1">Step-by-step guide to registering in the System for Award Management</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">SAM.gov Registration Guide</h1><p className="text-stone-500 mt-1">Step-by-step guide to registering in the System for Award Management</p></div>
       <div className="grid grid-cols-3 gap-3 mb-8">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">Free</p><p className="text-xs text-slate-400 mt-1">Registration Cost</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">7-10 Days</p><p className="text-xs text-slate-400 mt-1">Processing Time</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center"><p className="text-2xl font-bold text-emerald-400">Annual</p><p className="text-xs text-slate-400 mt-1">Renewal Required</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-lime-700">Free</p><p className="text-xs text-stone-500 mt-1">Registration Cost</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-lime-700">7-10 Days</p><p className="text-xs text-stone-500 mt-1">Processing Time</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl text-center"><p className="text-2xl font-bold text-lime-700">Annual</p><p className="text-xs text-stone-500 mt-1">Renewal Required</p></div>
       </div>
       {guidance && (
-        <div className="mb-6 p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-emerald-400">AI Guidance</h2><button onClick={() => setGuidance(null)} className="text-slate-500 hover:text-white">&times;</button></div>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{guidance}</pre>
+        <div className="mb-6 p-6 bg-white border border-lime-200 rounded-xl">
+          <div className="flex justify-between items-start mb-3"><h2 className="text-lg font-semibold text-lime-700">AI Guidance</h2><button onClick={() => setGuidance(null)} className="text-stone-8000 hover:text-stone-900">&times;</button></div>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{guidance}</pre>
         </div>
       )}
       <div className="space-y-4">
         {STEPS.map(s => (
-          <div key={s.step} className="p-5 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={s.step} className="p-5 bg-white border border-stone-200 rounded-xl">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0 font-bold text-lg">{s.step}</div>
+              <div className="w-10 h-10 rounded-full bg-lime-700 flex items-center justify-center flex-shrink-0 font-bold text-lg">{s.step}</div>
               <div className="flex-1">
-                <div className="flex items-center justify-between"><h3 className="font-semibold">{s.title}</h3><button onClick={() => getGuidance(s.title)} disabled={asking} className="px-3 py-1 bg-emerald-600/10 text-emerald-400 rounded text-xs hover:bg-emerald-600/20 disabled:opacity-50">Get Help</button></div>
-                <p className="text-sm text-slate-400 mt-1">{s.desc}</p>
-                <ul className="mt-2 space-y-1">{s.tips.map((t, i) => (<li key={i} className="text-xs text-slate-500 flex items-start gap-1"><span className="text-emerald-500 mt-0.5">&bull;</span>{t}</li>))}</ul>
+                <div className="flex items-center justify-between"><h3 className="font-semibold">{s.title}</h3><button onClick={() => getGuidance(s.title)} disabled={asking} className="px-3 py-1 bg-lime-700/10 text-lime-700 rounded text-xs hover:bg-lime-700/20 disabled:opacity-50">Get Help</button></div>
+                <p className="text-sm text-stone-500 mt-1">{s.desc}</p>
+                <ul className="mt-2 space-y-1">{s.tips.map((t, i) => (<li key={i} className="text-xs text-stone-8000 flex items-start gap-1"><span className="text-lime-600 mt-0.5">&bull;</span>{t}</li>))}</ul>
               </div>
             </div>
           </div>

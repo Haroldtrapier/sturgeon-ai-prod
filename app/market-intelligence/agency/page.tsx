@@ -47,24 +47,24 @@ export default function AgencyDeepDivePage() {
     setAnalyzing(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Agency Deep Dive</h1><p className="text-slate-400 mt-1">In-depth analysis of federal agency contracting patterns</p></div>
+      <div className="mb-8"><h1 className="text-3xl font-bold">Agency Deep Dive</h1><p className="text-stone-500 mt-1">In-depth analysis of federal agency contracting patterns</p></div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
         {AGENCIES.map(a => (
-          <button key={a.name} onClick={() => analyzeAgency(a.name)} disabled={analyzing} className={`p-4 bg-slate-900 border rounded-xl text-center hover:border-emerald-600 transition-colors ${agency === a.name ? "border-emerald-600" : "border-slate-800"}`}>
-            <p className="font-bold text-emerald-400 text-lg">{a.abbr}</p>
-            <p className="text-xs text-slate-400 mt-1">{a.budget}</p>
+          <button key={a.name} onClick={() => analyzeAgency(a.name)} disabled={analyzing} className={`p-4 bg-white border rounded-xl text-center hover:border-lime-600 transition-colors ${agency === a.name ? "border-lime-600" : "border-stone-200"}`}>
+            <p className="font-bold text-lime-700 text-lg">{a.abbr}</p>
+            <p className="text-xs text-stone-500 mt-1">{a.budget}</p>
           </button>
         ))}
       </div>
-      {analyzing && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400 mx-auto mb-3" /><p className="text-sm text-slate-400">Analyzing {agency}...</p></div>}
+      {analyzing && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-lime-500 mx-auto mb-3" /><p className="text-sm text-stone-500">Analyzing {agency}...</p></div>}
       {analysis && (
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4 text-emerald-400">{agency} Analysis</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{analysis}</pre>
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-4 text-lime-700">{agency} Analysis</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{analysis}</pre>
         </div>
       )}
     </div>

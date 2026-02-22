@@ -11,6 +11,8 @@ const NAV_SECTIONS = [
       { href: "/dashboard", label: "Dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4" },
       { href: "/opportunities", label: "Opportunities", icon: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" },
       { href: "/proposals", label: "Proposals", icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
+      { href: "/contacts", label: "Contacts", icon: "M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" },
+      { href: "/calls", label: "Bulk Calls", icon: "M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" },
       { href: "/agents", label: "AI Agents", icon: "M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 00.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-2.47 2.47a2.25 2.25 0 01-1.591.659H9.061a2.25 2.25 0 01-1.591-.659L5 14.5m14 0V19a2 2 0 01-2 2H7a2 2 0 01-2-2v-4.5" },
       { href: "/chat", label: "AI Chat", icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" },
     ],
@@ -57,7 +59,6 @@ const NAV_SECTIONS = [
   },
 ];
 
-// Routes that should NOT show the sidebar
 const PUBLIC_ROUTES = ["/", "/login", "/signup", "/forgot-password", "/auth"];
 
 function SvgIcon({ d }: { d: string }) {
@@ -86,7 +87,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   const sidebar = (
     <aside
-      className={`fixed top-16 left-0 bottom-0 z-40 bg-slate-900 border-r border-slate-800 overflow-y-auto transition-all duration-200 ${
+      className={`fixed top-16 left-0 bottom-0 z-40 bg-white border-r border-stone-200 overflow-y-auto transition-all duration-200 ${
         collapsed ? "w-16" : "w-56"
       }`}
     >
@@ -95,7 +96,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {NAV_SECTIONS.map((section) => (
             <div key={section.label}>
               {!collapsed && (
-                <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-stone-400">
                   {section.label}
                 </p>
               )}
@@ -107,8 +108,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     title={collapsed ? item.label : undefined}
                     className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                       isActive(item.href)
-                        ? "bg-emerald-900/30 text-emerald-400 font-medium"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                        ? "bg-lime-50 text-lime-800 font-medium"
+                        : "text-stone-500 hover:text-stone-800 hover:bg-stone-50"
                     }`}
                   >
                     <SvgIcon d={item.icon} />
@@ -120,10 +121,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        <div className="p-2 border-t border-slate-800">
+        <div className="p-2 border-t border-stone-200">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs text-stone-400 hover:text-stone-600 hover:bg-stone-50 transition-colors"
           >
             <svg className={`w-4 h-4 transition-transform ${collapsed ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
@@ -137,29 +138,25 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* Mobile menu button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="md:hidden fixed top-[18px] left-4 z-50 p-1 rounded-lg bg-slate-800 text-slate-300"
+        className="md:hidden fixed top-[18px] left-4 z-50 p-1 rounded-lg bg-white text-stone-600 shadow-sm"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d={mobileOpen ? "M6 18L18 6M6 6l12 12" : "M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"} />
         </svg>
       </button>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="md:hidden fixed inset-0 z-30 bg-black/50"
+          className="md:hidden fixed inset-0 z-30 bg-black/10"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* Sidebar - desktop always visible, mobile conditional */}
       <div className={`hidden md:block`}>{sidebar}</div>
       <div className={`md:hidden ${mobileOpen ? "block" : "hidden"}`}>{sidebar}</div>
 
-      {/* Main content with sidebar offset */}
       <div className={`transition-all duration-200 ${collapsed ? "md:ml-16" : "md:ml-56"}`}>
         {children}
       </div>

@@ -48,25 +48,25 @@ export default function CertDocumentsPage() {
     setUploading(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Certification Documents</h1><p className="text-slate-400 mt-1">Manage documentation for your certifications</p></div>
-      <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Certification Documents</h1><p className="text-stone-500 mt-1">Manage documentation for your certifications</p></div>
+      <div className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <h2 className="font-semibold mb-3">Upload Document</h2>
-        {message && <div className="mb-3 p-3 bg-slate-800 border border-slate-700 rounded-lg text-sm">{message}</div>}
-        <label className="flex items-center justify-center w-full p-6 border-2 border-dashed border-slate-700 rounded-lg cursor-pointer hover:border-emerald-600 transition-colors">
-          <div className="text-center"><p className="text-sm text-slate-300">{uploading ? "Uploading..." : "Click to upload a document"}</p><p className="text-xs text-slate-500 mt-1">PDF, DOC, DOCX, PNG, JPG up to 10MB</p></div>
+        {message && <div className="mb-3 p-3 bg-stone-100 border border-stone-300 rounded-lg text-sm">{message}</div>}
+        <label className="flex items-center justify-center w-full p-6 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer hover:border-lime-600 transition-colors">
+          <div className="text-center"><p className="text-sm text-stone-600">{uploading ? "Uploading..." : "Click to upload a document"}</p><p className="text-xs text-stone-8000 mt-1">PDF, DOC, DOCX, PNG, JPG up to 10MB</p></div>
           <input type="file" className="hidden" onChange={uploadDoc} disabled={uploading} accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" />
         </label>
       </div>
       {documents.length > 0 && (
-        <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-4">Uploaded Documents ({documents.length})</h2>
           <div className="space-y-2">{documents.map((d, i) => (
-            <div key={i} className="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-              <div><p className="text-sm font-medium">{d.file_name}</p><p className="text-xs text-slate-500">{new Date(d.created_at).toLocaleDateString()} &middot; {d.file_size ? `${(d.file_size / 1024).toFixed(0)} KB` : ""}</p></div>
+            <div key={i} className="flex items-center justify-between p-3 bg-stone-100 rounded-lg">
+              <div><p className="text-sm font-medium">{d.file_name}</p><p className="text-xs text-stone-8000">{new Date(d.created_at).toLocaleDateString()} &middot; {d.file_size ? `${(d.file_size / 1024).toFixed(0)} KB` : ""}</p></div>
             </div>
           ))}</div>
         </div>
@@ -74,12 +74,12 @@ export default function CertDocumentsPage() {
       <div className="space-y-6">
         <h2 className="text-lg font-semibold">Required Documents Checklist</h2>
         {DOC_CATEGORIES.map(cat => (
-          <div key={cat.category} className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-            <h3 className="font-semibold text-emerald-400 mb-3">{cat.category}</h3>
+          <div key={cat.category} className="p-6 bg-white border border-stone-200 rounded-xl">
+            <h3 className="font-semibold text-lime-700 mb-3">{cat.category}</h3>
             <div className="space-y-2">{cat.docs.map(doc => (
-              <div key={doc} className="flex items-center gap-3 p-2 bg-slate-800 rounded-lg">
-                <div className="w-4 h-4 rounded border border-slate-600 flex-shrink-0" />
-                <span className="text-sm text-slate-300">{doc}</span>
+              <div key={doc} className="flex items-center gap-3 p-2 bg-stone-100 rounded-lg">
+                <div className="w-4 h-4 rounded border border-stone-300 flex-shrink-0" />
+                <span className="text-sm text-stone-600">{doc}</span>
               </div>
             ))}</div>
           </div>

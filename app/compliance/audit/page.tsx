@@ -68,9 +68,9 @@ export default function ComplianceAuditPage() {
     setRunning(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
-  const statusColor = (s: string) => s === "pass" ? "bg-emerald-900/50 text-emerald-400" : s === "fail" ? "bg-red-900/50 text-red-400" : s === "warning" ? "bg-yellow-900/50 text-yellow-400" : "bg-slate-700 text-slate-400";
+  const statusColor = (s: string) => s === "pass" ? "bg-lime-50 text-lime-700" : s === "fail" ? "bg-red-50 text-red-600" : s === "warning" ? "bg-yellow-50 text-yellow-600" : "bg-stone-200 text-stone-500";
   const passCount = items.filter(i => i.status === "pass").length;
   const failCount = items.filter(i => i.status === "fail").length;
 
@@ -79,45 +79,45 @@ export default function ComplianceAuditPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold">Compliance Audit</h1>
-          <p className="text-slate-400 mt-1">AI-powered compliance health check across all areas</p>
+          <p className="text-stone-500 mt-1">AI-powered compliance health check across all areas</p>
         </div>
-        <button onClick={runAudit} disabled={running} className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium text-sm">
+        <button onClick={runAudit} disabled={running} className="px-6 py-2.5 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium text-sm">
           {running ? "Running Audit..." : "Run Full Audit"}
         </button>
       </div>
 
       {items.length > 0 && (
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-            <p className="text-2xl font-bold text-emerald-400">{passCount}</p>
-            <p className="text-xs text-slate-400">Passing</p>
+          <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+            <p className="text-2xl font-bold text-lime-700">{passCount}</p>
+            <p className="text-xs text-stone-500">Passing</p>
           </div>
-          <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-            <p className="text-2xl font-bold text-yellow-400">{items.filter(i => i.status === "warning").length}</p>
-            <p className="text-xs text-slate-400">Warnings</p>
+          <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+            <p className="text-2xl font-bold text-yellow-600">{items.filter(i => i.status === "warning").length}</p>
+            <p className="text-xs text-stone-500">Warnings</p>
           </div>
-          <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-            <p className="text-2xl font-bold text-red-400">{failCount}</p>
-            <p className="text-xs text-slate-400">Failing</p>
+          <div className="p-4 bg-white border border-stone-200 rounded-xl text-center">
+            <p className="text-2xl font-bold text-red-600">{failCount}</p>
+            <p className="text-xs text-stone-500">Failing</p>
           </div>
         </div>
       )}
 
       {items.length === 0 ? (
-        <div className="p-12 bg-slate-900 border border-slate-800 rounded-xl text-center">
-          <p className="text-slate-400 mb-2">No audit has been run yet</p>
-          <p className="text-xs text-slate-500">Click &quot;Run Full Audit&quot; to check your compliance posture across all areas</p>
+        <div className="p-12 bg-white border border-stone-200 rounded-xl text-center">
+          <p className="text-stone-500 mb-2">No audit has been run yet</p>
+          <p className="text-xs text-stone-8000">Click &quot;Run Full Audit&quot; to check your compliance posture across all areas</p>
         </div>
       ) : (
         <div className="space-y-3">
           {items.map(item => (
-            <div key={item.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+            <div key={item.id} className="p-4 bg-white border border-stone-200 rounded-xl">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-sm">{item.area}</h3>
                 <span className={`px-2 py-0.5 rounded text-xs font-medium capitalize ${statusColor(item.status)}`}>{item.status}</span>
               </div>
-              <p className="text-xs text-slate-400">{item.finding}</p>
-              <p className="text-xs text-emerald-400/70 mt-1">{item.recommendation}</p>
+              <p className="text-xs text-stone-500">{item.finding}</p>
+              <p className="text-xs text-lime-700/70 mt-1">{item.recommendation}</p>
             </div>
           ))}
         </div>

@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <div className="text-center">
           {/* Badge */}
-          <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+          <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700 dark:border-blue-200 dark:bg-blue-50 dark:text-blue-300">
             <Sparkles className="mr-2 h-4 w-4" />
             AI-Powered Government Contract Intelligence
           </div>

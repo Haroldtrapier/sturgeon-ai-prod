@@ -36,32 +36,32 @@ export default function WinThemesPage() {
     setGenerating(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Win Theme Generator</h1><p className="text-slate-400 mt-1">Develop compelling win themes and discriminators</p></div>
-      <form onSubmit={generateThemes} className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">Win Theme Generator</h1><p className="text-stone-500 mt-1">Develop compelling win themes and discriminators</p></div>
+      <form onSubmit={generateThemes} className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <div className="mb-4">
-          <label className="block text-sm text-slate-300 mb-2">RFP / Solicitation Text</label>
-          <textarea value={rfpText} onChange={e => setRfpText(e.target.value)} rows={6} placeholder="Paste the RFP requirements, evaluation criteria, and scope of work..." className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
+          <label className="block text-sm text-stone-600 mb-2">RFP / Solicitation Text</label>
+          <textarea value={rfpText} onChange={e => setRfpText(e.target.value)} rows={6} placeholder="Paste the RFP requirements, evaluation criteria, and scope of work..." className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
         </div>
         <div className="mb-4">
-          <label className="block text-sm text-slate-300 mb-2">Your Company Strengths (optional)</label>
-          <textarea value={companyStrengths} onChange={e => setCompanyStrengths(e.target.value)} rows={3} placeholder="Past performance highlights, certifications, unique capabilities, key personnel..." className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" />
+          <label className="block text-sm text-stone-600 mb-2">Your Company Strengths (optional)</label>
+          <textarea value={companyStrengths} onChange={e => setCompanyStrengths(e.target.value)} rows={3} placeholder="Past performance highlights, certifications, unique capabilities, key personnel..." className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm" />
         </div>
-        <button type="submit" disabled={generating} className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{generating ? "Generating Win Themes..." : "Generate Win Themes"}</button>
+        <button type="submit" disabled={generating} className="px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{generating ? "Generating Win Themes..." : "Generate Win Themes"}</button>
       </form>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl"><h3 className="font-semibold text-blue-400 text-sm mb-1">Win Themes</h3><p className="text-xs text-slate-400">Core messages that resonate with evaluators</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl"><h3 className="font-semibold text-purple-400 text-sm mb-1">Discriminators</h3><p className="text-xs text-slate-400">What sets you apart from competitors</p></div>
-        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl"><h3 className="font-semibold text-amber-400 text-sm mb-1">Ghost Themes</h3><p className="text-xs text-slate-400">Competitor weaknesses to exploit</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl"><h3 className="font-semibold text-blue-600 text-sm mb-1">Win Themes</h3><p className="text-xs text-stone-500">Core messages that resonate with evaluators</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl"><h3 className="font-semibold text-purple-600 text-sm mb-1">Discriminators</h3><p className="text-xs text-stone-500">What sets you apart from competitors</p></div>
+        <div className="p-4 bg-white border border-stone-200 rounded-xl"><h3 className="font-semibold text-amber-400 text-sm mb-1">Ghost Themes</h3><p className="text-xs text-stone-500">Competitor weaknesses to exploit</p></div>
       </div>
-      {generating && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400 mx-auto mb-3" /><p className="text-sm text-slate-400">Analyzing RFP and generating win themes...</p></div>}
+      {generating && <div className="text-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-lime-500 mx-auto mb-3" /><p className="text-sm text-stone-500">Analyzing RFP and generating win themes...</p></div>}
       {themes && (
-        <div className="p-6 bg-slate-900 border border-emerald-800 rounded-xl">
-          <h2 className="text-lg font-semibold mb-4 text-emerald-400">Win Themes & Strategy</h2>
-          <pre className="text-sm text-slate-300 whitespace-pre-wrap">{themes}</pre>
+        <div className="p-6 bg-white border border-lime-200 rounded-xl">
+          <h2 className="text-lg font-semibold mb-4 text-lime-700">Win Themes & Strategy</h2>
+          <pre className="text-sm text-stone-600 whitespace-pre-wrap">{themes}</pre>
         </div>
       )}
     </div>

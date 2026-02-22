@@ -35,35 +35,35 @@ export default function ChatCustomizationPage() {
     setSaving(false);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">Chat Customization</h1><p className="text-slate-400 mt-1">Configure AI agent behavior and preferences</p></div>
-      {message && <div className="mb-6 p-3 bg-slate-900 border border-slate-800 rounded-lg text-sm">{message}</div>}
+      <div className="mb-8"><h1 className="text-3xl font-bold">Chat Customization</h1><p className="text-stone-500 mt-1">Configure AI agent behavior and preferences</p></div>
+      {message && <div className="mb-6 p-3 bg-white border border-stone-200 rounded-lg text-sm">{message}</div>}
       <div className="space-y-6">
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-4">Default Agent</h2>
-          <select value={settings.default_agent} onChange={e => setSettings((s: any) => ({ ...s, default_agent: e.target.value }))} className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
+          <select value={settings.default_agent} onChange={e => setSettings((s: any) => ({ ...s, default_agent: e.target.value }))} className="w-full px-4 py-3 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm">
             <option value="general">General Assistant</option><option value="research">Research Agent</option><option value="opportunity">Opportunity Analyst</option><option value="compliance">Compliance Specialist</option><option value="proposal">Proposal Assistant</option><option value="market">Market Analyst</option>
           </select>
         </div>
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-4">Response Style</h2>
           <div className="space-y-4">
-            <div><label className="block text-sm text-slate-300 mb-1">Tone</label>
-              <select value={settings.tone} onChange={e => setSettings((s: any) => ({ ...s, tone: e.target.value }))} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
+            <div><label className="block text-sm text-stone-600 mb-1">Tone</label>
+              <select value={settings.tone} onChange={e => setSettings((s: any) => ({ ...s, tone: e.target.value }))} className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm">
                 <option value="professional">Professional</option><option value="casual">Casual</option><option value="technical">Technical</option><option value="executive">Executive Brief</option>
               </select>
             </div>
-            <div><label className="block text-sm text-slate-300 mb-1">Response Length</label>
-              <select value={settings.response_length} onChange={e => setSettings((s: any) => ({ ...s, response_length: e.target.value }))} className="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
+            <div><label className="block text-sm text-stone-600 mb-1">Response Length</label>
+              <select value={settings.response_length} onChange={e => setSettings((s: any) => ({ ...s, response_length: e.target.value }))} className="w-full px-4 py-2 bg-stone-100 border border-stone-300 rounded-lg focus:ring-2 focus:ring-lime-500 focus:outline-none text-sm">
                 <option value="concise">Concise</option><option value="detailed">Detailed</option><option value="comprehensive">Comprehensive</option>
               </select>
             </div>
           </div>
         </div>
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
+        <div className="p-6 bg-white border border-stone-200 rounded-xl">
           <h2 className="font-semibold mb-4">Features</h2>
           <div className="space-y-3">
             {[
@@ -71,14 +71,14 @@ export default function ChatCustomizationPage() {
               { key: "include_recommendations", label: "Include Recommendations", desc: "Add actionable next steps to responses" },
               { key: "auto_save_chats", label: "Auto-Save Conversations", desc: "Automatically save chat history" },
             ].map(f => (
-              <div key={f.key} className="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                <div><p className="text-sm font-medium">{f.label}</p><p className="text-xs text-slate-400">{f.desc}</p></div>
-                <button onClick={() => setSettings((s: any) => ({ ...s, [f.key]: !s[f.key] }))} className={`w-12 h-6 rounded-full transition-colors relative ${settings[f.key] ? "bg-emerald-600" : "bg-slate-600"}`}><div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${settings[f.key] ? "translate-x-6" : "translate-x-0.5"}`} /></button>
+              <div key={f.key} className="flex items-center justify-between p-3 bg-stone-100 rounded-lg">
+                <div><p className="text-sm font-medium">{f.label}</p><p className="text-xs text-stone-500">{f.desc}</p></div>
+                <button onClick={() => setSettings((s: any) => ({ ...s, [f.key]: !s[f.key] }))} className={`w-12 h-6 rounded-full transition-colors relative ${settings[f.key] ? "bg-lime-700" : "bg-slate-600"}`}><div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${settings[f.key] ? "translate-x-6" : "translate-x-0.5"}`} /></button>
               </div>
             ))}
           </div>
         </div>
-        <button onClick={save} disabled={saving} className="w-full px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 font-medium">{saving ? "Saving..." : "Save Preferences"}</button>
+        <button onClick={save} disabled={saving} className="w-full px-6 py-3 bg-lime-700 text-white rounded-lg hover:bg-lime-800 disabled:opacity-50 font-medium">{saving ? "Saving..." : "Save Preferences"}</button>
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ export default function Features() {
                 key={feature.title}
                 className="relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
               >
-                <div className="inline-flex rounded-lg bg-blue-50 p-3 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="inline-flex rounded-lg bg-blue-50 p-3 text-blue-600 dark:bg-blue-50 dark:text-blue-600">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">

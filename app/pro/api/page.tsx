@@ -46,37 +46,37 @@ export default function APIDocumentationPage() {
     setApiKey(key);
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-500" /></div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8"><h1 className="text-3xl font-bold">API Documentation</h1><p className="text-slate-400 mt-1">Integrate Harpoon AI into your workflows</p></div>
-      <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8"><h1 className="text-3xl font-bold">API Documentation</h1><p className="text-stone-500 mt-1">Integrate Harpoon AI into your workflows</p></div>
+      <div className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <h2 className="font-semibold mb-3">API Key</h2>
         {apiKey ? (
           <div className="flex items-center gap-3">
-            <code className="flex-1 px-4 py-2 bg-slate-800 rounded-lg text-sm font-mono">{showKey ? apiKey : "sk_harpoon_" + "•".repeat(32)}</code>
-            <button onClick={() => setShowKey(!showKey)} className="px-3 py-2 bg-slate-800 text-slate-300 rounded text-xs hover:bg-slate-700">{showKey ? "Hide" : "Show"}</button>
+            <code className="flex-1 px-4 py-2 bg-stone-100 rounded-lg text-sm font-mono">{showKey ? apiKey : "sk_harpoon_" + "•".repeat(32)}</code>
+            <button onClick={() => setShowKey(!showKey)} className="px-3 py-2 bg-stone-100 text-stone-600 rounded text-xs hover:bg-stone-200">{showKey ? "Hide" : "Show"}</button>
           </div>
         ) : (
-          <button onClick={generateKey} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700">Generate API Key</button>
+          <button onClick={generateKey} className="px-4 py-2 bg-lime-700 text-white rounded-lg text-sm hover:bg-lime-800">Generate API Key</button>
         )}
       </div>
-      <div className="mb-8 p-6 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="mb-8 p-6 bg-white border border-stone-200 rounded-xl">
         <h2 className="font-semibold mb-3">Authentication</h2>
-        <p className="text-sm text-slate-400 mb-3">Include your API key in the Authorization header:</p>
-        <code className="block px-4 py-2 bg-slate-800 rounded-lg text-sm font-mono text-emerald-400">Authorization: Bearer YOUR_API_KEY</code>
+        <p className="text-sm text-stone-500 mb-3">Include your API key in the Authorization header:</p>
+        <code className="block px-4 py-2 bg-stone-100 rounded-lg text-sm font-mono text-lime-700">Authorization: Bearer YOUR_API_KEY</code>
       </div>
       <div>
         <h2 className="text-lg font-semibold mb-4">Endpoints</h2>
         <div className="space-y-3">{ENDPOINTS.map(e => (
-          <div key={e.path} className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div key={e.path} className="p-4 bg-white border border-stone-200 rounded-xl">
             <div className="flex items-center gap-3 mb-1">
-              <span className={`px-2 py-0.5 rounded text-xs font-bold ${e.method === "GET" ? "bg-blue-900/30 text-blue-400" : "bg-emerald-900/30 text-emerald-400"}`}>{e.method}</span>
+              <span className={`px-2 py-0.5 rounded text-xs font-bold ${e.method === "GET" ? "bg-blue-50 text-blue-600" : "bg-lime-50 text-lime-700"}`}>{e.method}</span>
               <code className="text-sm font-mono">{e.path}</code>
             </div>
-            <p className="text-xs text-slate-400">{e.desc}</p>
-            <p className="text-xs text-slate-500 mt-1">Params: {e.params}</p>
+            <p className="text-xs text-stone-500">{e.desc}</p>
+            <p className="text-xs text-stone-8000 mt-1">Params: {e.params}</p>
           </div>
         ))}</div>
       </div>
