@@ -1,6 +1,6 @@
 // lib/usage-tracker.ts
 // Adapted from GovCon Command Center for Sturgeon AI
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 
 interface UsageEvent {
   user_id: string

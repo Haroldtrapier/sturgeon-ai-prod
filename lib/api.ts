@@ -16,9 +16,9 @@ export async function apiFetch<T>(
     ? path 
     : `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(options.headers || {}),
+    ...(options.headers as Record<string, string> || {}),
   };
 
   if (authToken) {
