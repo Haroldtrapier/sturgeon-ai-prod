@@ -2,10 +2,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { hasModuleAccess, MODULES } from '@/lib/modules'
+import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
 
     // Get authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
