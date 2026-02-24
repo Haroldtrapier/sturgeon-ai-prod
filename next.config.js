@@ -1,13 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Environment variables available at build time
+  poweredByHeader: false,
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  // Note: Rewrites to external URLs don't work on Vercel for serverless functions
-  // Instead, we use Next.js API routes in /app/api and /pages/api to proxy requests
-  // The backend URL is configured via BACKEND_URL environment variable
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@heroicons/react', 'recharts', 'date-fns'],
+  },
 }
 
 module.exports = nextConfig

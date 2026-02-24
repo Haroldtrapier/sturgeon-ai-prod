@@ -7,12 +7,12 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -22,6 +22,7 @@
       }
     ],
     "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
@@ -36,6 +37,7 @@
   "exclude": [
     "node_modules",
     "frontend",
+    "backend",
     "**/*.test.ts",
     "**/*.test.tsx",
     "__tests__"
