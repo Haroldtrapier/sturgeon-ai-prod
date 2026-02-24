@@ -66,6 +66,9 @@ jobs:
             exit 0
           fi
           echo "Deploying backend to Railway..."
+          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
+            railway link ${{ secrets.RAILWAY_PROJECT_ID }} 2>/dev/null || true
+          fi
           railway up --detach || echo "Railway deployment failed (non-fatal)"
 
       - name: Post Deployment Notification
