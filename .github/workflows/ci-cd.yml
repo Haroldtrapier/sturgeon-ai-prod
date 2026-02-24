@@ -13,14 +13,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v4
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: '*/requirements.txt'
+          cache-dependency-path: 'backend/requirements.txt'
 
       - name: Install dependencies
         run: |
@@ -39,7 +39,7 @@ jobs:
           pytest --cov=. --cov-report=xml --cov-report=html || true
 
       - name: Deploy Frontend to Vercel
-        if: success()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
           vercel-args: '--prod'
 
       - name: Deploy Backend to Railway
-        if: success()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: bervProject/railway-deploy@main
         with:
           railway_token: ${{ secrets.RAILWAY_TOKEN }}
@@ -57,8 +57,8 @@ jobs:
           RAILWAY_SERVICE: backend
 
       - name: Post Deployment Notification
-        if: success()
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          echo "✅ Frontend deployed to Vercel!"
-          echo "✅ Backend deployed to Railway!"
-          echo "🚀 Full deployment complete!"
+          echo "Frontend deployed to Vercel"
+          echo "Backend deployed to Railway"
+          echo "Full deployment complete"
