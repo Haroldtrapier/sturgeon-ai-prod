@@ -1,1 +1,0 @@
-Removed backend,  backend/api/ and all type files. Server is now Node.js (Next.JS).
