@@ -6,6 +6,7 @@ load_dotenv()
 class Config:
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
     SAM_GOV_API_KEY = os.getenv("SAM_GOV_API_KEY", "")
 
     # Database

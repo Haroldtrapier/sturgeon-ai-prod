@@ -14,7 +14,8 @@ from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 
-# Rate limiter
+APP_VERSION = "9.1.0"
+
 limiter = Limiter(key_func=get_remote_address)
 
 
@@ -45,7 +46,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Sturgeon AI Backend",
     description="AI-powered government contracting intelligence platform",
-    version="9.0.0",
+    version=APP_VERSION,
     lifespan=lifespan,
 )
 
@@ -124,7 +125,7 @@ def health_check():
     return {
         "ok": True,
         "service": "sturgeon-ai-backend",
-        "version": "9.0.0",
+        "version": APP_VERSION,
         "status": "healthy",
         "routers_loaded": routers_loaded,
         "routers_count": len(routers_loaded),
@@ -142,7 +143,7 @@ def health_check():
 def root():
     return {
         "service": "Sturgeon AI API",
-        "version": "9.0.0",
+        "version": APP_VERSION,
         "status": "operational",
         "docs": "/docs",
         "health": "/health",
