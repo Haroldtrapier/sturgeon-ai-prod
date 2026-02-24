@@ -7,18 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
 
       - name: Setup Python 3.12
         uses: actions/setup-python@v5
@@ -43,8 +37,16 @@ jobs:
           cd backend
           pytest --cov=. --cov-report=xml --cov-report=html || true
 
+  deploy-vercel:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Deploy Frontend to Vercel
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -52,27 +54,30 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
+  deploy-railway:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install Railway CLI
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: npm install -g @railway/cli
 
       - name: Deploy Backend to Railway
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           if [ -z "$RAILWAY_TOKEN" ]; then
-            echo "RAILWAY_TOKEN not set, skipping Railway deployment"
+            echo "RAILWAY_TOKEN not set, skipping"
             exit 0
           fi
           echo "Deploying backend to Railway..."
-          if [ -n "${{ secrets.RAILWAY_PROJECT_ID }}" ]; then
-            railway link ${{ secrets.RAILWAY_PROJECT_ID }} 2>/dev/null || true
-          fi
-          railway up --detach || echo "Railway deployment failed (non-fatal)"
-
-      - name: Post Deployment Notification
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          echo "Frontend deployed to Vercel"
-          echo "Backend deployment initiated on Railway"
+          railway up --detach
