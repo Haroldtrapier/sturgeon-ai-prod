@@ -226,3 +226,4 @@ backend/.env.*
 # Vercel
 .vercel
 Downloads/
+sturgeon-ai-prod/
