@@ -80,4 +80,4 @@ jobs:
             exit 0
           fi
           echo "Deploying backend to Railway..."
-          railway up --detach --service 1ce158c6-0221-4e90-ac41-5fc70e29d678
+          railway up --detach --service 1ce158c6-0221-4e90-ac41-5fc70e29d678 --dockerfile Dockerfile
