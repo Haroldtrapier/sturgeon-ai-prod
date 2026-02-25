@@ -80,4 +80,4 @@ jobs:
             exit 0
           fi
           echo "Deploying backend to Railway..."
-          railway up --detach
+          railway up --detach --service backend || railway up --detach --service web
