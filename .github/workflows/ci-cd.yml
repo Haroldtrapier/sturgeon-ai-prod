@@ -80,11 +80,4 @@ jobs:
             exit 0
           fi
           echo "Deploying backend to Railway..."
-          echo "Available services:"
-          railway service list 2>&1 || true
-          railway status 2>&1 || true
-          railway up --detach --service sturgeon-ai-prod 2>/dev/null \
-            || railway up --detach --service app 2>/dev/null \
-            || railway up --detach --service server 2>/dev/null \
-            || railway up --detach --service sturgeon 2>/dev/null \
-            || railway up --detach 2>&1
+          railway up --detach
