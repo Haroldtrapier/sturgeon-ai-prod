@@ -9,7 +9,7 @@ export default function CTA() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-24">
       <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:3rem_3rem]" />
-      
+
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -17,6 +17,10 @@ export default function CTA() {
           viewport={{ once: true }}
           className="text-center"
         >
+          <p className="text-sm font-bold tracking-wider text-blue-100 uppercase mb-4">
+            VETERAN BUILT • VETERAN OWNED
+          </p>
+
           <h2 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
             Ready to win more contracts?
           </h2>
@@ -40,7 +44,7 @@ export default function CTA() {
             </Link>
           </div>
           <p className="mt-6 text-sm text-blue-100">
-            No credit card required • 14-day free trial • Cancel anytime
+            14-day free trial • Cancel anytime
           </p>
         </motion.div>
       </div>
