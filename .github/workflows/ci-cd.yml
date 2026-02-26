@@ -80,4 +80,5 @@ jobs:
             exit 0
           fi
           echo "Deploying backend/ directory to Railway..."
-          railway up --service 1ce158c6-0221-4e90-ac41-5fc70e29d678 --detach backend
+          cd backend
+          railway up --service 1ce158c6-0221-4e90-ac41-5fc70e29d678 --detach
