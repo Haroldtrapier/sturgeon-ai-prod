@@ -58,7 +58,26 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    timeout-minutes: 1
+    timeout-minutes: 15
     steps:
-      - name: Railway Deploy
-        run: echo "Railway deploys automatically via GitHub integration using Dockerfile builder"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy Backend to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "RAILWAY_TOKEN not set, skipping"
+            exit 0
+          fi
+          echo "Deploying backend/ directory to Railway..."
+          railway up --service 1ce158c6-0221-4e90-ac41-5fc70e29d678 --detach backend
