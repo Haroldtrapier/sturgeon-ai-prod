@@ -1,9 +1,10 @@
 // components/landing/Pricing.tsx
-"use client"
+"use client";
 
-import { Check } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
+import Link from 'next/link';
 
 const plans = [
   {
@@ -16,6 +17,7 @@ const plans = [
       'Email support',
       '1 user seat',
       'Dashboard access',
+      '3 marketplace integrations',
     ],
     cta: 'Start Free Trial',
     href: '/signup?plan=starter',
@@ -31,6 +33,7 @@ const plans = [
       '5 user seats',
       'Advanced analytics',
       'API access',
+      'All 11 marketplace integrations',
       'Custom integrations',
     ],
     cta: 'Start Free Trial',
@@ -54,21 +57,32 @@ const plans = [
     cta: 'Contact Sales',
     href: '/contact?plan=enterprise',
   },
-]
+];
 
 export default function Pricing() {
-  const [annual, setAnnual] = useState(false)
+  const [annual, setAnnual] = useState(false);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-800 py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+          >
             Simple, transparent pricing
-          </h2>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="mt-4 text-lg text-gray-600 dark:text-gray-300"
+          >
             Choose the plan that's right for your business
-          </p>
+          </motion.p>
 
           {/* Billing Toggle */}
           <div className="mt-8 flex items-center justify-center gap-4">
@@ -92,9 +106,13 @@ export default function Pricing() {
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <div
+          {plans.map((plan, index) => (
+            <motion.div
               key={plan.name}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`relative rounded-2xl border ${
                 plan.popular
                   ? 'border-blue-600 shadow-xl ring-2 ring-blue-600 dark:border-blue-500'
@@ -137,10 +155,10 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
