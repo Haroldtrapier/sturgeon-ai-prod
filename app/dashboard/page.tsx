@@ -1,151 +1,319 @@
+// app/dashboard/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { motion } from 'framer-motion';
+import { 
+  TrendingUp, DollarSign, Target, Award, Calendar, 
+  ArrowRight, Clock, CheckCircle, AlertCircle 
+} from 'lucide-react';
+import Link from 'next/link';
 
-export default function DashboardOverviewPage() {
-  const router = useRouter();
-  const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<any>({});
-  const [recentActivity, setRecentActivity] = useState<any[]>([]);
-  const [upcomingDeadlines, setUpcomingDeadlines] = useState<any[]>([]);
-  const API = process.env.NEXT_PUBLIC_API_URL || "";
+// Mock data - replace with real data from API
+const stats = [
+  { 
+    label: 'Active Opportunities', 
+    value: '47', 
+    change: '+12%', 
+    trend: 'up',
+    icon: Target,
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+  },
+  { 
+    label: 'Proposals in Progress', 
+    value: '8', 
+    change: '+3', 
+    trend: 'up',
+    icon: Clock,
+    color: 'text-yellow-600',
+    bgColor: 'bg-yellow-50',
+  },
+  { 
+    label: 'Win Rate (30d)', 
+    value: '47%', 
+    change: '+5%', 
+    trend: 'up',
+    icon: Award,
+    color: 'text-green-600',
+    bgColor: 'bg-green-50',
+  },
+  { 
+    label: 'Pipeline Value', 
+    value: '$2.3M', 
+    change: '+18%', 
+    trend: 'up',
+    icon: DollarSign,
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+  },
+];
 
-  useEffect(() => {
-    const init = async () => {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { router.push("/login"); return; }
-      setToken(session.access_token);
-      const userId = session.user.id;
+const recentOpportunities = [
+  {
+    id: 1,
+    title: 'IT Infrastructure Modernization',
+    agency: 'Department of Defense',
+    value: '$450K',
+    deadline: '2026-03-15',
+    match: 94,
+    status: 'new',
+  },
+  {
+    id: 2,
+    title: 'Cybersecurity Assessment Services',
+    agency: 'Department of Homeland Security',
+    value: '$280K',
+    deadline: '2026-03-20',
+    match: 89,
+    status: 'reviewing',
+  },
+  {
+    id: 3,
+    title: 'Cloud Migration Services',
+    agency: 'General Services Administration',
+    value: '$620K',
+    deadline: '2026-03-25',
+    match: 92,
+    status: 'new',
+  },
+];
 
-      const [proposalsRes, oppsRes, certsRes, notifsRes] = await Promise.all([
-        supabase.from("proposals").select("id, status, title, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
-        supabase.from("saved_opportunities").select("id, title, response_deadline, match_score").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
-        supabase.from("certifications").select("id, type, status, expiration_date").eq("user_id", userId),
-        supabase.from("notifications").select("id, title, type, created_at, read").eq("user_id", userId).eq("read", false).order("created_at", { ascending: false }).limit(5),
-      ]);
+const upcomingDeadlines = [
+  { title: 'Proposal: Network Security Upgrade', date: '2026-03-01', daysLeft: 3 },
+  { title: 'Certification Renewal: 8(a)', date: '2026-03-05', daysLeft: 7 },
+  { title: 'Proposal: Data Analytics Platform', date: '2026-03-08', daysLeft: 10 },
+];
 
-      const proposals = proposalsRes.data || [];
-      const opps = oppsRes.data || [];
-      const certs = certsRes.data || [];
-      const notifs = notifsRes.data || [];
+const quickActions = [
+  { label: 'Search Opportunities', href: '/opportunities', icon: Target, color: 'blue' },
+  { label: 'Create Proposal', href: '/proposals/create', icon: CheckCircle, color: 'green' },
+  { label: 'AI Chat Assistant', href: '/chat', icon: TrendingUp, color: 'purple' },
+  { label: 'Compliance Check', href: '/compliance', icon: AlertCircle, color: 'orange' },
+];
 
-      setStats({
-        total_proposals: proposals.length,
-        draft_proposals: proposals.filter(p => p.status === "draft").length,
-        submitted_proposals: proposals.filter(p => p.status === "submitted").length,
-        saved_opportunities: opps.length,
-        active_certs: certs.filter(c => c.status === "active").length,
-        unread_notifications: notifs.length,
-      });
-
-      setRecentActivity([
-        ...proposals.slice(0, 3).map(p => ({ type: "proposal", title: p.title || "Untitled Proposal", status: p.status, date: p.created_at })),
-        ...opps.slice(0, 3).map(o => ({ type: "opportunity", title: o.title || "Saved Opportunity", status: `${o.match_score || 0}% match`, date: o.response_deadline })),
-      ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5));
-
-      setUpcomingDeadlines(opps.filter(o => o.response_deadline && new Date(o.response_deadline) > new Date()).sort((a, b) => new Date(a.response_deadline).getTime() - new Date(b.response_deadline).getTime()).slice(0, 5));
-
-      setLoading(false);
-    };
-    init();
-  }, [router]);
-
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400" /></div>;
-
-  const quickLinks = [
-    { label: "Search Opportunities", href: "/opportunities", color: "bg-blue-600" },
-    { label: "Create Proposal", href: "/proposals", color: "bg-emerald-600" },
-    { label: "AI Chat", href: "/chat", color: "bg-purple-600" },
-    { label: "Compliance Check", href: "/compliance", color: "bg-amber-600" },
-    { label: "Market Intel", href: "/market-intelligence", color: "bg-cyan-600" },
-    { label: "ContractMatch", href: "/contract-match", color: "bg-red-600" },
-    { label: "Certifications", href: "/certifications", color: "bg-indigo-600" },
-    { label: "Settings", href: "/settings", color: "bg-slate-600" },
-  ];
-
+export default function Dashboard() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-slate-400 mt-1">Welcome back to Sturgeon AI</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-gray-800">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl font-bold text-gray-900 dark:text-white"
+          >
+            Welcome back! 👋
+          </motion.h1>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
+            Here's what's happening with your contracts today
+          </p>
+        </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-        {[
-          { label: "Proposals", value: stats.total_proposals || 0, color: "text-blue-400" },
-          { label: "Drafts", value: stats.draft_proposals || 0, color: "text-amber-400" },
-          { label: "Submitted", value: stats.submitted_proposals || 0, color: "text-emerald-400" },
-          { label: "Saved Opps", value: stats.saved_opportunities || 0, color: "text-purple-400" },
-          { label: "Active Certs", value: stats.active_certs || 0, color: "text-cyan-400" },
-          { label: "Notifications", value: stats.unread_notifications || 0, color: "text-red-400" },
-        ].map(s => (
-          <div key={s.label} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-center">
-            <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-slate-400 mt-1">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-        {quickLinks.map(link => (
-          <button key={link.label} onClick={() => router.push(link.href)} className={`p-4 ${link.color} rounded-xl text-white text-sm font-medium hover:opacity-90 transition-opacity`}>{link.label}</button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Recent Activity</h2>
-            <button onClick={() => router.push("/dashboard/activity")} className="text-xs text-emerald-400 hover:underline">View All</button>
-          </div>
-          {recentActivity.length > 0 ? (
-            <div className="space-y-3">{recentActivity.map((a, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${a.type === "proposal" ? "bg-blue-500" : "bg-purple-500"}`} />
-                  <div><p className="text-sm">{a.title}</p><p className="text-xs text-slate-500 capitalize">{a.type} &middot; {a.status}</p></div>
+        {/* Stats Grid */}
+        <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
+              >
+                <div className="flex items-center justify-between">
+                  <div className={`rounded-lg ${stat.bgColor} p-3`}>
+                    <Icon className={`h-6 w-6 ${stat.color}`} />
+                  </div>
+                  <span className={`text-sm font-semibold ${
+                    stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {stat.change}
+                  </span>
                 </div>
-                <span className="text-xs text-slate-500">{a.date ? new Date(a.date).toLocaleDateString() : ""}</span>
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                  <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">
+                    {stat.value}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {/* Main Content - 2 columns */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Quick Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                Quick Actions
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                {quickActions.map((action, index) => {
+                  const Icon = action.icon;
+                  const colorMap = {
+                    blue: 'from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
+                    green: 'from-green-500 to-green-600 hover:from-green-600 hover:to-green-700',
+                    purple: 'from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
+                    orange: 'from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',
+                  };
+                  return (
+                    <Link
+                      key={index}
+                      href={action.href}
+                      className={`group flex items-center justify-between rounded-xl bg-gradient-to-r ${colorMap[action.color]} p-6 text-white shadow-lg transition hover:shadow-xl`}
+                    >
+                      <div>
+                        <p className="font-semibold">{action.label}</p>
+                      </div>
+                      <Icon className="h-6 w-6 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  );
+                })}
               </div>
-            ))}</div>
-          ) : <p className="text-sm text-slate-400">No recent activity</p>}
-        </div>
+            </motion.div>
 
-        <div className="p-6 bg-slate-900 border border-slate-800 rounded-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">Upcoming Deadlines</h2>
-            <button onClick={() => router.push("/dashboard/calendar")} className="text-xs text-emerald-400 hover:underline">View Calendar</button>
+            {/* Recent Opportunities */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Top Matched Opportunities
+                </h2>
+                <Link
+                  href="/opportunities"
+                  className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                >
+                  View All →
+                </Link>
+              </div>
+              <div className="space-y-4">
+                {recentOpportunities.map((opp) => (
+                  <div
+                    key={opp.id}
+                    className="flex items-start justify-between rounded-lg border border-gray-200 p-4 transition hover:border-blue-300 hover:shadow-sm dark:border-gray-700 dark:hover:border-blue-600"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {opp.title}
+                        </h3>
+                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                          opp.status === 'new' 
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                        }`}>
+                          {opp.status}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        {opp.agency}
+                      </p>
+                      <div className="mt-2 flex items-center gap-4 text-sm">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          💰 {opp.value}
+                        </span>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          📅 {opp.deadline}
+                        </span>
+                        <span className="font-semibold text-green-600 dark:text-green-400">
+                          {opp.match}% Match
+                        </span>
+                      </div>
+                    </div>
+                    <Link
+                      href={`/opportunities/${opp.id}`}
+                      className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                    >
+                      View
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
-          {upcomingDeadlines.length > 0 ? (
-            <div className="space-y-3">{upcomingDeadlines.map((d, i) => {
-              const daysLeft = Math.ceil((new Date(d.response_deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-              return (
-                <div key={i} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                  <p className="text-sm flex-1 truncate mr-3">{d.title}</p>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded ${daysLeft <= 3 ? "bg-red-900/30 text-red-400" : daysLeft <= 7 ? "bg-amber-900/30 text-amber-400" : "bg-emerald-900/30 text-emerald-400"}`}>{daysLeft}d left</span>
-                </div>
-              );
-            })}</div>
-          ) : <p className="text-sm text-slate-400">No upcoming deadlines</p>}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "Analytics", href: "/dashboard/analytics", desc: "Performance metrics" },
-          { label: "Pipeline", href: "/dashboard/pipeline", desc: "Proposal pipeline" },
-          { label: "Activity Feed", href: "/dashboard/activity", desc: "Recent actions" },
-          { label: "Calendar", href: "/dashboard/calendar", desc: "Deadline tracker" },
-        ].map(link => (
-          <button key={link.label} onClick={() => router.push(link.href)} className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-left hover:border-slate-700 transition-colors">
-            <p className="font-medium text-sm">{link.label}</p>
-            <p className="text-xs text-slate-400 mt-1">{link.desc}</p>
-          </button>
-        ))}
+          {/* Sidebar - 1 column */}
+          <div className="space-y-6">
+            {/* Upcoming Deadlines */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  Upcoming Deadlines
+                </h2>
+                <Calendar className="h-5 w-5 text-gray-400" />
+              </div>
+              <div className="space-y-3">
+                {upcomingDeadlines.map((deadline, index) => (
+                  <div
+                    key={index}
+                    className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-3 dark:bg-blue-900/20"
+                  >
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                      {deadline.title}
+                    </p>
+                    <div className="mt-1 flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
+                      <span>{deadline.date}</span>
+                      <span className="font-semibold text-blue-600 dark:text-blue-400">
+                        {deadline.daysLeft} days left
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link
+                href="/calendar"
+                className="mt-4 block text-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+              >
+                View Calendar →
+              </Link>
+            </motion.div>
+
+            {/* AI Insights */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50 p-6 dark:border-purple-800 dark:from-purple-900/20 dark:to-blue-900/20"
+            >
+              <h2 className="mb-3 text-lg font-bold text-gray-900 dark:text-white">
+                🤖 AI Insights
+              </h2>
+              <div className="space-y-3">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  • 3 new opportunities match your capabilities
+                </p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  • Your win rate is 12% above industry average
+                </p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  • Competitor "TechDefense" won 2 similar contracts
+                </p>
+              </div>
+              <Link
+                href="/chat"
+                className="mt-4 inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400"
+              >
+                Ask AI for more insights <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );
