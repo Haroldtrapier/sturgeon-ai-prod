@@ -1,89 +1,105 @@
-// app/api/chat/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
+import { NextResponse } from 'next/server';
+import { OpenAI } from 'openai';
+import { Anthropic } from '@anthropic-ai/sdk';
 
-const SYSTEM_PROMPT = `You are the AI assistant for Sturgeon AI — an advanced government contract intelligence platform that monitors 10,000+ opportunities daily across SAM.gov, GovWin, BidNet, FPDS, and 7+ other marketplaces.
+// DEMO MODE CHECK
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-CRITICAL RULES:
-- NEVER tell users to "go to SAM.gov" or "search manually." That's what OUR platform does automatically.
-- NEVER give vague advice. Provide specific, actionable intelligence.
-- Always position Sturgeon AI as the intelligent solution that saves time and wins contracts.
-- When relevant, encourage users to try advanced features (AI Proposal Generator, Compliance Checker, etc.)
+// Mock responses for demo mode (no API charges)
+const DEMO_RESPONSES = {
+  'gpt-4': "📝 **[DEMO MODE - GPT-4]** This is a simulated response. In production, GPT-4 Turbo would provide intelligent analysis of government contracts, proposals, and compliance requirements. To enable real AI responses, set `NEXT_PUBLIC_DEMO_MODE=false` and add your OpenAI API key to `.env.local`.",
+  'claude': "📝 **[DEMO MODE - Claude]** This is a simulated response. In production, Claude 3.5 Sonnet would provide cost-effective AI assistance for your government contracting needs. Claude is 3x cheaper than GPT-4 for input tokens! To enable real AI responses, set `NEXT_PUBLIC_DEMO_MODE=false` and add your Anthropic API key to `.env.local`."
+};
 
-Your expertise includes:
-- SAM.gov opportunity intelligence
-- NAICS code selection (541512, 541519, 541690, 336411, 336413, etc.)
-- Set-aside categories (8(a), HUBZone, SDVOSB, WOSB, EDWOSB)
-- Proposal writing strategies and win themes
-- FAR/DFARS compliance requirements
-- GSA Schedules, IDIQs, GWACs
-- Past performance narratives
-- Small business certifications
-- Teaming and subcontracting strategies
-- Price-to-win analysis
-- Competitive intelligence
+// Initialize clients (only if not in demo mode)
+const openai = !DEMO_MODE && process.env.OPENAI_API_KEY 
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
-You help contractors:
-- Find perfect-fit opportunities with AI matching
-- Write winning proposals 3x faster
-- Ensure compliance with automated checking
-- Track competitors and agency spending
-- Forecast awards and pipeline management`;
+const anthropic = !DEMO_MODE && process.env.ANTHROPIC_API_KEY
+  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  : null;
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const { messages, model = 'gpt-4' } = await request.json();
+    const { messages, model = 'claude' } = await request.json();
 
-    if (!messages || messages.length === 0) {
-      return NextResponse.json({ error: 'Messages are required' }, { status: 400 });
+    // DEMO MODE: Return mock response immediately
+    if (DEMO_MODE) {
+      console.log('🔧 DEMO MODE: Returning mock response for', model);
+      return NextResponse.json({
+        message: DEMO_RESPONSES[model] || DEMO_RESPONSES['claude'],
+        model: model,
+        demo: true
+      });
     }
 
-    // Use Claude (cost-effective) or GPT-4 (powerful)
-    if (model === 'claude' || model === 'claude-3-5-sonnet-20241022') {
-      const anthropic = new Anthropic({
-        apiKey: process.env.ANTHROPIC_API_KEY,
-      });
+    // PRODUCTION MODE: Use real APIs
+    const userMessage = messages[messages.length - 1]?.content || '';
 
-      const response = await anthropic.messages.create({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 4096,
-        system: SYSTEM_PROMPT,
-        messages: messages.filter((m: any) => m.role !== 'system'),
-      });
+    if (model === 'gpt-4') {
+      if (!openai) {
+        return NextResponse.json(
+          { error: 'OpenAI API key not configured. Add OPENAI_API_KEY to .env.local' },
+          { status: 500 }
+        );
+      }
 
-      return NextResponse.json({
-        role: 'assistant',
-        content: response.content[0].text,
-        model: 'claude-3-5-sonnet',
-      });
-    } else {
-      const openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
-      });
-
-      const fullMessages = [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...messages
-      ];
-
-      const response = await openai.chat.completions.create({
+      const completion = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
-        messages: fullMessages,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a government contracting expert assistant. Provide clear, actionable advice on federal contracts, proposals, compliance, and SAM.gov opportunities.'
+          },
+          ...messages
+        ],
         temperature: 0.7,
-        max_tokens: 2048,
+        max_tokens: 1000,
       });
 
       return NextResponse.json({
-        role: 'assistant',
-        content: response.choices[0].message.content,
-        model: 'gpt-4-turbo',
+        message: completion.choices[0]?.message?.content || 'No response',
+        model: 'gpt-4',
+        demo: false
+      });
+    } 
+
+    else if (model === 'claude') {
+      if (!anthropic) {
+        return NextResponse.json(
+          { error: 'Anthropic API key not configured. Add ANTHROPIC_API_KEY to .env.local' },
+          { status: 500 }
+        );
+      }
+
+      const completion = await anthropic.messages.create({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 1024,
+        messages: [
+          ...messages.map((m: any) => ({
+            role: m.role,
+            content: m.content
+          }))
+        ],
+      });
+
+      return NextResponse.json({
+        message: completion.content[0]?.text || 'No response',
+        model: 'claude',
+        demo: false
       });
     }
-  } catch (error: any) {
-    console.error('Chat API error:', error);
+
     return NextResponse.json(
-      { error: 'Failed to process chat request', details: error.message },
+      { error: 'Invalid model specified' },
+      { status: 400 }
+    );
+
+  } catch (error: any) {
+    console.error('Chat API Error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to process request' },
       { status: 500 }
     );
   }
